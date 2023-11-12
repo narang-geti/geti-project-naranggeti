@@ -40,6 +40,9 @@ fun Navi(){
                 composable("start") {
                     StartScreen(navController)
                 }
+                composable("detect") {
+                    DetectScreen(navController)
+                }
             }
 
         }

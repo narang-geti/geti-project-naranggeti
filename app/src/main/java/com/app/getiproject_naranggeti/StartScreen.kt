@@ -12,8 +12,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -25,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 
@@ -76,6 +81,20 @@ fun StartScreen(navController: NavController) {
                         .size(width = 600.dp, height = 250.dp)
                 )
             }
+
+            Button(onClick = {
+                navController.navigate("detect")
+            },
+                modifier = Modifier
+                    .width(200.dp) // 원하는 너비
+                    .height(100.dp) // 원하는 높이
+            ) {
+                Text(
+                    text = "START",
+                    fontSize = 40.sp
+                )
+            }
+
         }
 
 
