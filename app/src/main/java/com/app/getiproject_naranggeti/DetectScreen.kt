@@ -30,10 +30,10 @@ fun DetectScreen(navController: NavController) {
             Button(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
-                    .width(150.dp) // Desired width
-                    .height(80.dp) // Desired height
-                    .padding(4.dp), // Optional padding
-                shape = RectangleShape // Use RectangleShape to make the button rectangular
+                    .width(150.dp)
+                    .height(80.dp)
+                    .padding(4.dp),
+                shape = RectangleShape
             ) {
                 Text(
                     text = "Image",
@@ -46,10 +46,10 @@ fun DetectScreen(navController: NavController) {
             Button(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
-                    .width(150.dp) // Desired width
-                    .height(80.dp) // Desired height
-                    .padding(4.dp), // Optional padding
-                shape = RectangleShape // Use RectangleShape to make the button rectangular
+                    .width(150.dp)
+                    .height(80.dp)
+                    .padding(4.dp),
+                shape = RectangleShape
             ) {
                 Text(
                     text = "Detect",

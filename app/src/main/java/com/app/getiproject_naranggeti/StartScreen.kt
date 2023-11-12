@@ -86,8 +86,8 @@ fun StartScreen(navController: NavController) {
                 navController.navigate("detect")
             },
                 modifier = Modifier
-                    .width(200.dp) // 원하는 너비
-                    .height(100.dp) // 원하는 높이
+                    .width(200.dp)
+                    .height(100.dp)
             ) {
                 Text(
                     text = "START",
