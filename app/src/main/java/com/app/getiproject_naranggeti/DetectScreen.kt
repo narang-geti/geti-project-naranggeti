@@ -16,7 +16,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asAndroidBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -32,11 +35,14 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 
+import androidx.core.graphics.drawable.toBitmap
+
+
 
 @Composable
 fun DetectScreen(navController: NavController) {
 
-    val bitmap: Bitmap = BitmapFactory.decodeResource(resources, R.drawable.apple)
+
 
 
     val conditions = CustomModelDownloadConditions.Builder()
@@ -46,7 +52,7 @@ fun DetectScreen(navController: NavController) {
         .getModel("your_model", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND,
             conditions)
         .addOnSuccessListener { model: CustomModel? ->
-            val bitmap = Bitmap.createScaledBitmap(bitmap, 224, 224, true)
+            val bitmap = Bitmap.createScaledBitmap(imageBitmap, 224, 224, true)
             val input = ByteBuffer.allocateDirect(224*224*3*4).order(ByteOrder.nativeOrder())
             for (y in 0 until 224) {
                 for (x in 0 until 224) {
