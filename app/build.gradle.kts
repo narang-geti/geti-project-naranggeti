@@ -74,4 +74,8 @@ dependencies {
 
     //firebase_ml
     implementation ("com.google.firebase:firebase-ml-model-interpreter:22.0.3")
+
+    //firebase
+    implementation(platform("com.google.firebase:firebase-bom:32.5.0"))
+    implementation("com.google.firebase:firebase-analytics")
 }
