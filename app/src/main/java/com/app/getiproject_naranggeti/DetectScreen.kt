@@ -40,8 +40,10 @@ fun DetectScreen(navController: NavController) {
     val context = LocalContext.current
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var interpreter by remember { mutableStateOf<Interpreter?>(null) }
+    var abc by remember{ mutableStateOf("") }
     val bitmapFromResource: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.apple)
-
+    
+    
     DisposableEffect(Unit) {
         val modelConditions = CustomModelDownloadConditions.Builder()
             .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
@@ -76,6 +78,7 @@ fun DetectScreen(navController: NavController) {
                             val label: String = reader.readLine()
                             val probability = probabilities.get(i)
                             println("$label: $probability")
+                            abc = probability.toString()
                         }
                     } catch (e: IOException) {
                         // Handle the exception
@@ -142,9 +145,11 @@ fun DetectScreen(navController: NavController) {
                     modifier = Modifier.fillMaxSize()
                 )
             } ?: Text(
-                text = "Image not loaded",
+                text = "Image not loacded",
                 color = MaterialTheme.colorScheme.onSurface
             )
+            
+            Text(text = abc)
         }
     }
 }
