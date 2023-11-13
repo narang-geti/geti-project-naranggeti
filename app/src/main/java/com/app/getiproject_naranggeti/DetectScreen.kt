@@ -57,7 +57,7 @@ fun DetectScreen(navController: NavController) {
 
                 val bitmap = bitmapFromResource
 
-                if (bitmap != null) {
+
                     val input = preprocessImage(bitmap)
 
                     val bufferSize = 2 * java.lang.Float.SIZE / java.lang.Byte.SIZE
@@ -81,7 +81,7 @@ fun DetectScreen(navController: NavController) {
                         // Handle the exception
                         e.printStackTrace()
                     }
-                }
+
             }
 
         // Clean up resources when the composable is disposed
