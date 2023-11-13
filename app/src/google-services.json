@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "801148721359",
+    "project_id": "getiproject-naranggeti",
+    "storage_bucket": "getiproject-naranggeti.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:801148721359:android:c8b2c1ac9c4e6c57f4bfba",
+        "android_client_info": {
+          "package_name": "com.app.getiproject_naranggeti"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-Nx2r-dR0rY_n0wdiH8V0Sxku7fkkmiI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
