@@ -50,6 +50,10 @@ fun DetectScreen(navController: NavController) {
         FirebaseModelDownloader.getInstance()
             .getModel("test1113", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
+                val modelFile = model?.file
+                if (modelFile != null) {
+                    interpreter = Interpreter(modelFile)
+                }
 
                 val bitmap = bitmapFromResource
 
@@ -172,6 +176,10 @@ private fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     }
     return input
 }
+
+
+
+
 
 //
 //@Preview(showBackground = true)
