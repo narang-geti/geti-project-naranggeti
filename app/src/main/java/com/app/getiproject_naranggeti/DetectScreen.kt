@@ -50,10 +50,14 @@ fun DetectScreen(navController: NavController) {
         FirebaseModelDownloader.getInstance()
             .getModel("test1113", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
+                val modelFile = model?.file
+                if (modelFile != null) {
+                    interpreter = Interpreter(modelFile)
+                }
 
                 val bitmap = bitmapFromResource
 
-                if (bitmap != null) {
+
                     val input = preprocessImage(bitmap)
 
                     val bufferSize = 2 * java.lang.Float.SIZE / java.lang.Byte.SIZE
@@ -77,7 +81,7 @@ fun DetectScreen(navController: NavController) {
                         // Handle the exception
                         e.printStackTrace()
                     }
-                }
+
             }
 
         // Clean up resources when the composable is disposed
@@ -172,6 +176,10 @@ private fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     }
     return input
 }
+
+
+
+
 
 //
 //@Preview(showBackground = true)
