@@ -18,15 +18,15 @@ import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       setContent {
-           Navi()
+        setContent {
+            Navi()
 
-       }
+        }
     }
 }
 
 @Composable
-fun Navi(){
+fun Navi() {
 
     GetiProject_naranggetiTheme {
         // A surface container using the 'background' color from the theme
@@ -36,7 +36,7 @@ fun Navi(){
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start"){
+            NavHost(navController = navController, startDestination = "start") {
                 composable("start") {
                     StartScreen(navController)
                 }
