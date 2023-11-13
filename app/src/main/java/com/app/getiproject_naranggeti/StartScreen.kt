@@ -82,9 +82,10 @@ fun StartScreen(navController: NavController) {
                 )
             }
 
-            Button(onClick = {
-                navController.navigate("detect")
-            },
+            Button(
+                onClick = {
+                    navController.navigate("detect")
+                },
                 modifier = Modifier
                     .width(200.dp)
                     .height(100.dp)
