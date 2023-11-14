@@ -39,7 +39,6 @@ android {
     }
     buildFeatures {
         compose = true
-        mlModelBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.1"
@@ -72,6 +71,9 @@ dependencies {
 
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.6.0")
+
+    //firebase_ml
+    implementation ("com.google.firebase:firebase-ml-model-interpreter:22.0.3")
 
     //firebase
     implementation("com.google.firebase:firebase-analytics")

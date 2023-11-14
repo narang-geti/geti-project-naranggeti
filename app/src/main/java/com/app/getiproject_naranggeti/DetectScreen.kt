@@ -224,9 +224,6 @@ private fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
 }
 
 
-
-
-
 //
 //@Preview(showBackground = true)
 //@Composable
