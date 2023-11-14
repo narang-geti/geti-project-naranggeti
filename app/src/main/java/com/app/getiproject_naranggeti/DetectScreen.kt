@@ -1,18 +1,11 @@
 package com.app.getiproject_naranggeti
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -40,7 +33,17 @@ fun DetectScreen(navController: NavController) {
     val context = LocalContext.current
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var interpreter by remember { mutableStateOf<Interpreter?>(null) }
-    val bitmapFromResource: Bitmap = BitmapFactory.decodeResource(context.resources, R.drawable.apple)
+    var prediction1 by remember { mutableStateOf("") }
+    var label1 by remember { mutableStateOf("") }
+    var prediction2 by remember { mutableStateOf("") }
+    var label2 by remember { mutableStateOf("") }
+    var prediction3 by remember { mutableStateOf("") }
+    val bitmapFromResource1: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.paper)
+    val bitmapFromResource2: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.apple)
+    val bitmapFromResource3: Bitmap =
+        BitmapFactory.decodeResource(context.resources, R.drawable.plastic)
 
     DisposableEffect(Unit) {
         val modelConditions = CustomModelDownloadConditions.Builder()
@@ -55,33 +58,70 @@ fun DetectScreen(navController: NavController) {
                     interpreter = Interpreter(modelFile)
                 }
 
-                val bitmap = bitmapFromResource
+                val bitmap1 = bitmapFromResource1
+                val bitmap2 = bitmapFromResource2
+                val bitmap3 = bitmapFromResource3
 
-
-                    val input = preprocessImage(bitmap)
+                if (bitmap1 != null && bitmap2 != null && bitmap3 != null) {
+                    val input1 = preprocessImage(bitmap1)
+                    val input2 = preprocessImage(bitmap2)
+                    val input3 = preprocessImage(bitmap3)
 
                     val bufferSize = 2 * java.lang.Float.SIZE / java.lang.Byte.SIZE
-                    val modelOutput = ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
-                    interpreter?.run(input, modelOutput)
+                    val modelOutput1 =
+                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
+                    val modelOutput2 =
+                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
+                    val modelOutput3 =
+                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
 
-                    modelOutput.rewind()
-                    val probabilities = modelOutput.asFloatBuffer()
+
+                    interpreter?.run(input1, modelOutput1)
+                    interpreter?.run(input2, modelOutput2)
+                    interpreter?.run(input3, modelOutput3)
+
+                    modelOutput1.rewind()
+                    val probabilities1 = modelOutput1.asFloatBuffer()
                     try {
                         val reader = BufferedReader(
                             InputStreamReader(context.resources.openRawResource(R.raw.organic))
                         )
 //                        val inputStream = context.resources.openRawResource("organic.txt")
 //                        val reader = BufferedReader(InputStreamReader(inputStream))
-                        for (i in 0 until probabilities.capacity()) {
+                        for (i in 0 until probabilities1.capacity()) {
                             val label: String = reader.readLine()
-                            val probability = probabilities.get(i)
+                            val probability = probabilities1.get(i)
                             println("$label: $probability")
+                            label1 = label
+                            prediction1 = probability.toString()
                         }
                     } catch (e: IOException) {
                         // Handle the exception
                         e.printStackTrace()
                     }
 
+                    modelOutput2.rewind()
+                    val probabilities2 = modelOutput2.asFloatBuffer()
+                    try {
+                        val reader = BufferedReader(
+                            InputStreamReader(context.resources.openRawResource(R.raw.organic))
+                        )
+//                        val inputStream = context.resources.openRawResource("organic.txt")
+//                        val reader = BufferedReader(InputStreamReader(inputStream))
+                        for (i in 0 until probabilities2.capacity()) {
+                            val label: String = reader.readLine()
+                            val probability = probabilities2.get(i)
+                            println("$label: $probability")
+                            label2 = label
+                            prediction2 = probability.toString()
+                        }
+                    } catch (e: IOException) {
+                        // Handle the exception
+                        e.printStackTrace()
+                    }
+
+
+                }
             }
 
         // Clean up resources when the composable is disposed
@@ -142,9 +182,15 @@ fun DetectScreen(navController: NavController) {
                     modifier = Modifier.fillMaxSize()
                 )
             } ?: Text(
-                text = "Image not loaded",
+                text = "Image not loacded",
                 color = MaterialTheme.colorScheme.onSurface
             )
+
+            Text(text = "1번째 $label1: $prediction1")
+
+            Text(text = "2번째 $label2: $prediction2")
+
+            Text(text = "3번째 $prediction3")
         }
     }
 }
