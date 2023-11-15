@@ -55,36 +55,21 @@ fun DetectScreen(navController: NavController) {
     val bitmapFromResource3: Bitmap =
         BitmapFactory.decodeResource(context.resources, R.drawable.plastic)
 
-    var selectUri by remember {
-        mutableStateOf<Uri?>(null)
-    }
-    // 기본 사진 앱 비트맵 객체
-    var takenPhoto by remember {
-        mutableStateOf<Bitmap?>(null)
-    }
-    // 갤러리 이미지 런쳐
+    var image2 by remember { mutableStateOf<Bitmap?>(null)}
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            selectUri = uri
-            takenPhoto = null
+            image2  = uriToBitmap(uri!!, context)
         }
     )
-    // 비트맵 변환 변수
-    val bitmap: Bitmap? = selectUri?.let { uriToBitmap(it, context) } ?: takenPhoto
-    // 이미지 == null일 때 이미지
-    val resources = context.resources
-//    val defaultImageBitmap =
-//        BitmapFactory.decodeResource(resources, R.drawable.no_image).asImageBitmap()
-    // 카메라 이미지 런쳐
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview(),
         onResult = { photo ->
-            takenPhoto = photo
-            selectUri = bitmapToUri(context, takenPhoto!!)
+            image2 = photo
         }
     )
-
+    val resources = context.resources
+    val defaultImageBitmap = BitmapFactory.decodeResource(resources, R.drawable.camera).asImageBitmap()
     DisposableEffect(Unit) {
         val modelConditions = CustomModelDownloadConditions.Builder()
             .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
@@ -176,11 +161,14 @@ fun DetectScreen(navController: NavController) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(modifier = Modifier
+                .size(100.dp),
+                bitmap = image2?.asImageBitmap() ?: defaultImageBitmap, contentDescription = "image")
+
             Row {
                 Button(
                     onClick = { cameraLauncher.launch(null) },
@@ -278,16 +266,6 @@ private fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     }
     return input
 }
-fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
-    return try {
-        val inputStream = context.contentResolver.openInputStream(uri)
-        BitmapFactory.decodeStream(inputStream)
-    } catch (e: FileNotFoundException) {
-        e.printStackTrace()
-        null
-    }
-}
-
 fun bitmapToUri(context: Context, bitmap: Bitmap): Uri? {
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -308,6 +286,16 @@ fun bitmapToUri(context: Context, bitmap: Bitmap): Uri? {
 
     return uri
 }
+fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
+    return try {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        BitmapFactory.decodeStream(inputStream)
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+        null
+    }
+}
+
 //
 //@Preview(showBackground = true)
 //@Composable
