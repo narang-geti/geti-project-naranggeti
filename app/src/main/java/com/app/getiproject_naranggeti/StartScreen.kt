@@ -2,7 +2,6 @@ package com.app.getiproject_naranggeti
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -46,7 +45,6 @@ fun StartScreen(navController: NavController) {
     }
 
     Box() {
-
         Image(
             painter = painterResource(id = R.drawable.bg1),
             contentDescription = null,
@@ -55,8 +53,6 @@ fun StartScreen(navController: NavController) {
                 .fillMaxWidth()
                 .fillMaxHeight()
                 .background(MaterialTheme.colorScheme.primary)
-
-
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -81,7 +77,6 @@ fun StartScreen(navController: NavController) {
                         .size(width = 600.dp, height = 250.dp)
                 )
             }
-
             Button(
                 onClick = {
                     navController.navigate("detect")
@@ -97,9 +92,5 @@ fun StartScreen(navController: NavController) {
             }
 
         }
-
-
     }
-
-
 }

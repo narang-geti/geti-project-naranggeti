@@ -1,5 +1,8 @@
 package com.app.getiproject_naranggeti
 
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -21,12 +24,19 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
+import android.provider.MediaStore
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import java.io.FileNotFoundException
 
 @Composable
 fun DetectScreen(navController: NavController) {
@@ -45,6 +55,21 @@ fun DetectScreen(navController: NavController) {
     val bitmapFromResource3: Bitmap =
         BitmapFactory.decodeResource(context.resources, R.drawable.plastic)
 
+    var image2 by remember { mutableStateOf<Bitmap?>(null)}
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            image2  = uriToBitmap(uri!!, context)
+        }
+    )
+    val cameraLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { photo ->
+            image2 = photo
+        }
+    )
+    val resources = context.resources
+    val defaultImageBitmap = BitmapFactory.decodeResource(resources, R.drawable.camera).asImageBitmap()
     DisposableEffect(Unit) {
         val modelConditions = CustomModelDownloadConditions.Builder()
             .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
@@ -136,23 +161,42 @@ fun DetectScreen(navController: NavController) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
                 .padding(16.dp),
-            verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Image(modifier = Modifier
+                .size(100.dp),
+                bitmap = image2?.asImageBitmap() ?: defaultImageBitmap, contentDescription = "image")
+
             Row {
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { cameraLauncher.launch(null) },
                     modifier = Modifier
-                        .width(150.dp)
+                        .width(100.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape
+                ) {
+                    Text(
+                        text = "Camera",
+                        fontSize = 10.sp
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    onClick = { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    modifier = Modifier
+                        .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
                     shape = RectangleShape
                 ) {
                     Text(
                         text = "Image",
-                        fontSize = 30.sp
+                        fontSize = 10.sp
                     )
                 }
 
@@ -161,14 +205,14 @@ fun DetectScreen(navController: NavController) {
                 Button(
                     onClick = { /*TODO*/ },
                     modifier = Modifier
-                        .width(150.dp)
+                        .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
                     shape = RectangleShape
                 ) {
                     Text(
                         text = "Detect",
-                        fontSize = 30.sp
+                        fontSize = 10.sp
                     )
                 }
             }
@@ -222,6 +266,37 @@ private fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     }
     return input
 }
+fun bitmapToUri(context: Context, bitmap: Bitmap): Uri? {
+    val contentValues = ContentValues().apply {
+        put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
+    }
+
+    val uri = context.contentResolver.insert(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        contentValues
+    )
+
+    uri?.let {
+        context.contentResolver.openOutputStream(it).use { outputStream ->
+            if (!bitmap.compress(Bitmap.CompressFormat.JPEG, 90, outputStream!!)) {
+                return null
+            }
+        }
+    }
+
+    return uri
+}
+fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
+    return try {
+        val inputStream = context.contentResolver.openInputStream(uri)
+        BitmapFactory.decodeStream(inputStream)
+    } catch (e: FileNotFoundException) {
+        e.printStackTrace()
+        null
+    }
+}
+
+
 
 
 //
