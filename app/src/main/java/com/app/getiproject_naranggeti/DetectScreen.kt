@@ -65,7 +65,9 @@ fun DetectScreen(navController: NavController) {
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview(),
         onResult = { photo ->
-            image2 = photo
+            if(photo != null){
+                image2 = photo
+            }
         }
     )
     val resources = context.resources
@@ -235,6 +237,12 @@ fun DetectScreen(navController: NavController) {
             Text(text = "2번째 $label2: $prediction2")
 
             Text(text = "3번째 $prediction3")
+
+            Button(onClick = {
+                navController.navigate("customer") 
+            }) {
+                Text(text = "고객평가")    
+            }
         }
     }
 }
