@@ -49,7 +49,7 @@ fun DetectScreen(navController: NavController) {
     var label2 by remember { mutableStateOf("") }
     var prediction3 by remember { mutableStateOf("") }
     val bitmapFromResource1: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.paper)
+        BitmapFactory.decodeResource(context.resources, R.drawable.ip01)
     val bitmapFromResource2: Bitmap =
         BitmapFactory.decodeResource(context.resources, R.drawable.apple)
     val bitmapFromResource3: Bitmap =
@@ -76,7 +76,7 @@ fun DetectScreen(navController: NavController) {
             .build()
 
         FirebaseModelDownloader.getInstance()
-            .getModel("test1113", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .getModel("ipf1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
                 val modelFile = model?.file
                 if (modelFile != null) {
@@ -92,7 +92,7 @@ fun DetectScreen(navController: NavController) {
                     val input2 = preprocessImage(bitmap2)
                     val input3 = preprocessImage(bitmap3)
 
-                    val bufferSize = 2 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+                    val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
                     val modelOutput1 =
                         ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
                     val modelOutput2 =
