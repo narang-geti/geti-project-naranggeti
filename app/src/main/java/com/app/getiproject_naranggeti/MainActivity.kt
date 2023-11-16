@@ -43,10 +43,12 @@ fun Navi() {
                 composable("detect") {
                     DetectScreen(navController)
                 }
+                composable("login"){
+                    LoginScreen(LoginViewModel(), {}, navController)
+                }
             }
 
         }
     }
-
 }
 

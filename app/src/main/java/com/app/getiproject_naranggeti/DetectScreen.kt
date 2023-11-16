@@ -29,7 +29,11 @@ import android.provider.MediaStore
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.outlined.Star
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -68,6 +72,7 @@ fun DetectScreen(navController: NavController) {
             image2 = photo
         }
     )
+
     val resources = context.resources
     val defaultImageBitmap = BitmapFactory.decodeResource(resources, R.drawable.camera).asImageBitmap()
     DisposableEffect(Unit) {
@@ -203,7 +208,7 @@ fun DetectScreen(navController: NavController) {
                 Spacer(modifier = Modifier.width(16.dp))
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { navController.navigate("CustomerEvaluation") },
                     modifier = Modifier
                         .width(100.dp)
                         .height(80.dp)
@@ -295,9 +300,6 @@ fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
         null
     }
 }
-
-
-
 
 //
 //@Preview(showBackground = true)
