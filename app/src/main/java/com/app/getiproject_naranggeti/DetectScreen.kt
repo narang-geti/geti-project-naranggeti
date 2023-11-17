@@ -53,9 +53,9 @@ fun DetectScreen(navController: NavController) {
     var label2 by remember { mutableStateOf("") }
     var prediction3 by remember { mutableStateOf("") }
     val bitmapFromResource1: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.paper)
+        BitmapFactory.decodeResource(context.resources, R.drawable.banana)
     val bitmapFromResource2: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.apple)
+        BitmapFactory.decodeResource(context.resources, R.drawable.plastic)
     val bitmapFromResource3: Bitmap =
         BitmapFactory.decodeResource(context.resources, R.drawable.plastic)
 
@@ -63,13 +63,17 @@ fun DetectScreen(navController: NavController) {
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            image2  = uriToBitmap(uri!!, context)
+            if (uri != null) {
+                image2 = uriToBitmap(uri!!, context)
+            }
         }
     )
     val cameraLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview(),
         onResult = { photo ->
-            image2 = photo
+            if (photo != null) {
+                image2 = photo
+            }
         }
     )
 
@@ -81,7 +85,7 @@ fun DetectScreen(navController: NavController) {
             .build()
 
         FirebaseModelDownloader.getInstance()
-            .getModel("test1113", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .getModel("test1116", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
                 val modelFile = model?.file
                 if (modelFile != null) {

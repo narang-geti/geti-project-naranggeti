@@ -46,6 +46,9 @@ fun Navi() {
                 composable("login"){
                     LoginScreen(LoginViewModel(), {}, navController)
                 }
+                composable("Sign Up"){
+                    SignupScreen(navController)
+                }
             }
 
         }
