@@ -1,5 +1,6 @@
 package com.app.getiproject_naranggeti
 
+import CustomerEvaluation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -48,6 +49,9 @@ fun Navi() {
                 }
                 composable("Sign Up"){
                     SignupScreen(navController)
+                }
+                composable("customer"){
+                    CustomerEvaluation(navController)
                 }
 
             }
