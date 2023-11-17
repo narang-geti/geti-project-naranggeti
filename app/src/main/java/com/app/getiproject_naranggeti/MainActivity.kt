@@ -43,9 +43,7 @@ fun Navi() {
                 composable("detect") {
                     DetectScreen(navController)
                 }
-                composable("evaluation"){
-                    CustomerEvaluation(navController)
-                }
+
             }
 
         }
