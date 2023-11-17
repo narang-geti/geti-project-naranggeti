@@ -51,8 +51,12 @@ fun Navi() {
                 composable("Sign Up"){
                     SignupScreen(navController)
                 }
-                composable("review") {
-                    ReviewScreen(navController)
+                composable("review/{prediction1}/{prediction2}") { backStackEntry ->
+                    ReviewScreen(
+                        navController = navController,
+                        prediction1 = backStackEntry.arguments?.getString("prediction1") ?: "",
+                        prediction2 = backStackEntry.arguments?.getString("prediction2") ?: ""
+                    )
                 }
             }
 

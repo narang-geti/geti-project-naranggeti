@@ -277,9 +277,9 @@ fun DetectScreen(navController: NavController) {
                             prediction2 = predictedClassLabel2
 
                         }
-                        val predictions = Pair(prediction1, prediction2)
+//                        val predictions = Pair(prediction1, prediction2)
 
-                        navController.navigate("review/${predictions}")
+                        navController.navigate("review/$prediction1/$prediction2")
                     },
                     modifier = Modifier
                         .width(100.dp)
