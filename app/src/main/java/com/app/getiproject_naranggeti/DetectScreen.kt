@@ -26,6 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,6 +37,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.io.FileNotFoundException
 import java.lang.Math.exp
 import java.nio.FloatBuffer
@@ -44,14 +49,29 @@ import kotlin.math.exp
 
 @Composable
 fun DetectScreen(navController: NavController) {
+
+    val db = Firebase.firestore
+    val userUID = Firebase.auth.currentUser?.uid
+
     val context = LocalContext.current
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var interpreter by remember { mutableStateOf<Interpreter?>(null) }
     var prediction1 by remember { mutableStateOf("") }
     var label1 by remember { mutableStateOf("") }
     var prediction2 by remember { mutableStateOf("") }
-
     var prediction3 by remember { mutableStateOf("") }
+
+    userUID?.let { uid ->
+        val userData = hashMapOf(
+            "front" to prediction1,
+            "back"  to prediction3
+        )
+
+        db.collection("user").document(uid)
+            .set(userData, SetOptions.merge())
+            .addOnSuccessListener { Log.d("Firestore", "성공") }
+            .addOnFailureListener { e -> Log.w("Firestore", "에러", e) }
+    }
 
     var label2 by remember { mutableStateOf("") }
     var predictionNew by remember { mutableStateOf("") }
@@ -304,6 +324,9 @@ fun DetectScreen(navController: NavController) {
 
             Button(onClick = { navController.navigate("evaluation") }) {
                 Text(text = "고객만족평가")
+            }
+            Button(onClick = { navController.navigate("grade") }) {
+                Text(text = "당신의 등급은?")
             }
         }
     }
