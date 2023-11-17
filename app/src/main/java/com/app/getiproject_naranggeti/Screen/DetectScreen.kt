@@ -1,8 +1,7 @@
-package com.app.getiproject_naranggeti
+package com.app.getiproject_naranggeti.Screen
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -37,12 +36,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import com.app.getiproject_naranggeti.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.FileNotFoundException
-import java.lang.Math.exp
 import java.nio.FloatBuffer
 import kotlin.math.exp
 

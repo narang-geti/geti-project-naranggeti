@@ -1,4 +1,4 @@
-package com.app.getiproject_naranggeti
+package com.app.getiproject_naranggeti.Screen
 
 import android.util.Log
 import androidx.compose.foundation.Image
@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.app.getiproject_naranggeti.R
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
