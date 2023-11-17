@@ -89,7 +89,7 @@ fun DetectScreen(navController: NavController) {
 
 
         FirebaseModelDownloader.getInstance()
-            .getModel("ipf1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .getModel("ipb1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
                 val modelFile = model?.file
                 if (modelFile != null) {
