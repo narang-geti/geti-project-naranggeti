@@ -60,6 +60,38 @@ fun GradeScreen(navController: NavController) {
         }
     }
 
+//    val imageResource = when {
+//        ipFront == "S" || ipBack == "S" -> R.drawable.s_grade
+//        ipFront == "S" || ipBack == "A" -> R.drawable.s_grade
+//        ipFront == "S" || ipBack == "B" -> R.drawable.s_grade
+//        ipFront == "A" || ipBack == "S" -> R.drawable.s_grade
+//        ipFront == "S" || ipBack == "F" -> R.drawable.a_grade
+//        ipFront == "A" || ipBack == "A" -> R.drawable.a_grade
+//        ipFront == "A" || ipBack == "B" -> R.drawable.a_grade
+//        ipFront == "B" || ipBack == "S" -> R.drawable.a_grade
+//        ipFront == "A" || ipBack == "F" -> R.drawable.b_grade
+//        ipFront == "B" || ipBack == "A" -> R.drawable.b_grade
+//        ipFront == "B" || ipBack == "B" -> R.drawable.b_grade
+//        ipFront == "F" || ipBack == "S" -> R.drawable.b_grade
+//        ipFront == "B" || ipBack == "F" -> R.drawable.f_grade
+//        ipFront == "F" || ipBack == "A" -> R.drawable.f_grade
+//        ipFront == "F" || ipBack == "B" -> R.drawable.f_grade
+//        ipFront == "F" || ipBack == "F" -> R.drawable.f_grade
+//        else -> R.drawable.somac_logo
+//    }
+
+
+    val gradeScores = mapOf("S" to 100, "A" to 80, "B" to 60, "F" to 40)
+
+    val weightedScore = (gradeScores[ipFront] ?: 0) * 0.7 + (gradeScores[ipBack] ?: 0) * 0.3
+
+    val imageResource = when {
+        weightedScore >= 86 -> R.drawable.s_grade
+        weightedScore >= 74 -> R.drawable.a_grade
+        weightedScore >= 58 -> R.drawable.b_grade
+        else -> R.drawable.f_grade
+    }
+
 
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -68,7 +100,7 @@ fun GradeScreen(navController: NavController) {
             modifier = Modifier.padding(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "전면 등급: ${ipFront ?: "Loading..."}")
+            Text(text = "전면 등급: ${ipFront ?: ""}")
 
             ipFront?.let {
                 Image(
@@ -77,7 +109,7 @@ fun GradeScreen(navController: NavController) {
                 )
             }
 
-            Text(text = "후면 등급: ${ipBack?: "Loading..."}")
+            Text(text = "후면 등급: ${ipBack?: ""}")
 
             ipBack?.let {
                 Image(
@@ -85,6 +117,12 @@ fun GradeScreen(navController: NavController) {
                     contentDescription = "후면 등급 이미지"
                 )
             }
+            Text(text = "총점 등급: ${ipFront}${ipBack}")
+
+            Image(
+                painter = painterResource(id = imageResource),
+                contentDescription = "총점 이미지"
+            )
         }
     }
 }
