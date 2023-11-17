@@ -39,6 +39,7 @@ android {
     }
     buildFeatures {
         compose = true
+        mlModelBinding = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.4.1"
@@ -60,7 +61,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
-    implementation("com.google.firebase:firebase-auth:22.2.0")
+    implementation("com.google.firebase:firebase-auth-ktx:22.2.0")
 //    implementation("com.google.firebase:firebase-ml-vision:24.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -73,11 +74,10 @@ dependencies {
     //Navigation
     implementation("androidx.navigation:navigation-compose:2.6.0")
 
-    //firebase_ml
-    implementation ("com.google.firebase:firebase-ml-model-interpreter:22.0.3")
-
     //firebase
     implementation("com.google.firebase:firebase-analytics")
+    implementation("com.google.firebase:firebase-firestore-ktx")
+
 
     // Import the BoM for the Firebase platform
     implementation(platform("com.google.firebase:firebase-bom:32.5.0"))

@@ -1,5 +1,6 @@
 package com.app.getiproject_naranggeti
 
+import CustomerEvaluation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -39,17 +40,26 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start") {
+            NavHost(navController = navController, startDestination = "detect") {
                 composable("start") {
                     StartScreen(navController)
                 }
                 composable("detect") {
                     DetectScreen(navController)
                 }
+                composable("login"){
+                    LoginScreen(LoginViewModel(), {}, navController)
+                }
+                composable("Sign Up"){
+                    SignupScreen(navController)
+                }
+                composable("customer"){
+                    CustomerEvaluation(navController)
+                }
+
             }
 
         }
     }
-
 }
 

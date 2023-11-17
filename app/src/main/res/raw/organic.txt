@@ -1,2 +1,7 @@
 horse,
-apple
+apple,
+banana,
+love,
+heart,
+sight,
+seoul

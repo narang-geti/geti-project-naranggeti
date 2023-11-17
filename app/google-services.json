@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "801148721359-c43mlqfj5ng6p6m32l3o0eeoqm9sgcvq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.app.getiproject_naranggeti",
+            "certificate_hash": "e39f815fe7928bb76656303cccb4a535a99cbc15"
+          }
+        },
+        {
           "client_id": "801148721359-nb8gpqmv2u9k0655gv9m5289trufc499.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
