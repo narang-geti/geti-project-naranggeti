@@ -1,3 +1,14 @@
+//<<<<<<< HEAD
+//package com.app.getiproject_naranggeti
+//
+//import androidx.compose.runtime.Composable
+//import androidx.navigation.NavController
+//
+//@Composable
+//fun CustomerEvaluation(navController: NavController){
+//
+//}
+//=======
 //package com.app.getiproject_naranggeti
 //
 //import androidx.compose.foundation.layout.Arrangement
@@ -55,3 +66,4 @@
 //        }
 //    }
 //}
+//>>>>>>> origin/master
