@@ -15,6 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +51,9 @@ fun Navi() {
                 composable("Sign Up"){
                     SignupScreen(navController)
                 }
-
+                composable("review") {
+                    ReviewScreen(navController)
+                }
             }
 
         }
