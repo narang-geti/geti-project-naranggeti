@@ -49,6 +49,7 @@ fun Navi() {
                 composable("Sign Up"){
                     SignupScreen(navController)
                 }
+
             }
 
         }
