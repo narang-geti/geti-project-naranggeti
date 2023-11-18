@@ -1,6 +1,5 @@
 package com.app.getiproject_naranggeti
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -40,7 +39,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -53,7 +51,7 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 
@@ -277,6 +275,7 @@ fun SignupScreen(navController: NavController) {
     var signupErrorMessage by remember { mutableStateOf("") }
     val auth: FirebaseAuth = Firebase.auth
 
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -368,7 +367,6 @@ fun SignupScreen(navController: NavController) {
         ) {
             Text("회원가입")
         }
-
         if (signupErrorMessage.isNotEmpty()) {
             Text(
                 text = signupErrorMessage,
@@ -378,6 +376,21 @@ fun SignupScreen(navController: NavController) {
         }
     }
 }
+//data class Review(
+//    val userId: String,
+//    val userName: String,
+//    val userUid: String,
+//    val textReview: String
+//)
+//fun writeReview(review: Review) {
+//    val database = Firebase.database
+//    val reviewsRef = database.getReference("reviews")
+//    val newReviewRef = reviewsRef.push()
+//    newReviewRef.setValue(review)
+//}
+
+
+
 fun navigateToDetectScreen(navController: NavController) {
     navController.navigate("detect")
 }
