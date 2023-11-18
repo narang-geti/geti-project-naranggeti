@@ -22,6 +22,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -34,6 +35,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.io.FileNotFoundException
 import java.nio.FloatBuffer
 import kotlin.math.exp
@@ -45,22 +50,31 @@ fun DetectScreen(navController: NavController) {
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var interpreterf by remember { mutableStateOf<Interpreter?>(null) }
     var interpreterb by remember { mutableStateOf<Interpreter?>(null) }
-    var prediction1 by remember { mutableStateOf("") }
-    var prediction2 by remember { mutableStateOf("") }
+    var predictionf by remember { mutableStateOf("") }
+    var predictionb by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
-
-    val bitmapFromResource1: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.aphone)
-    val bitmapFromResource2: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.fphoto)
-    val bitmapFromResource3: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.bphone)
 
     var imagef by remember { mutableStateOf<Bitmap?>(null) }
     var imageb by remember { mutableStateOf<Bitmap?>(null) }
     var imagefp by remember { mutableStateOf<Bitmap?>(null) }
     var imagebp by remember { mutableStateOf<Bitmap?>(null) }
+
+    val db = Firebase.firestore
+    val userUID = Firebase.auth.currentUser?.uid
+
+    userUID?.let { uid ->
+        val userData = hashMapOf(
+            "front" to predictionf,
+            "back"  to predictionb
+        )
+
+        db.collection("user").document(uid)
+            .set(userData, SetOptions.merge())
+            .addOnSuccessListener { Log.d("Firestore", "성공") }
+            .addOnFailureListener { e -> Log.w("Firestore", "에러", e) }
+    }
+
 
     val launcher1 = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
@@ -149,54 +163,6 @@ fun DetectScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.width(16.dp))
 
-//                    Button(
-//                        onClick = {
-//                            if (imagef != null && imageb != null) {
-//                                imagefp = imagef as Bitmap
-//                                imagebp = imageb as Bitmap
-//
-//                                val input1 = preprocessImage(imagefp!!)
-//                                val input2 = preprocessImage(imagebp!!)
-//
-//                                val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
-//                                val modelOutput1 =
-//                                    ByteBuffer.allocateDirect(bufferSize)
-//                                        .order(ByteOrder.nativeOrder())
-//                                val modelOutput2 =
-//                                    ByteBuffer.allocateDirect(bufferSize)
-//                                        .order(ByteOrder.nativeOrder())
-//
-//                                interpreter?.run(input1, modelOutput1)
-//                                interpreter?.run(input2, modelOutput2)
-//
-//                                modelOutput1.rewind()
-//                                val probabilities1 = FloatArray(4)
-//                                softmax(modelOutput1.asFloatBuffer(), probabilities1)
-//                                val predictedClassIndex1 = findIndexOfMax(probabilities1)
-//                                val classLabels = arrayOf("S", "A", "B", "F")
-//                                val predictedClassLabel1 = classLabels[predictedClassIndex1]
-//                                prediction1 = predictedClassLabel1
-//
-//                                modelOutput2.rewind()
-//                                val probabilities2 = FloatArray(4)
-//                                softmax(modelOutput2.asFloatBuffer(), probabilities2)
-//                                val predictedClassIndex2 = findIndexOfMax(probabilities2)
-//                                val predictedClassLabel2 = classLabels[predictedClassIndex2]
-//                                prediction2 = predictedClassLabel2
-//
-//                            }
-//                        },
-//                        modifier = Modifier
-//                            .width(100.dp)
-//                            .height(80.dp)
-//                            .padding(4.dp),
-//                        shape = RectangleShape
-//                    ) {
-//                        Text(
-//                            text = "Detect",
-//                            fontSize = 10.sp
-//                        )
-//                    }
                 }
             }
 
@@ -267,19 +233,18 @@ fun DetectScreen(navController: NavController) {
                             val predictedClassIndex1 = findIndexOfMax(probabilities1)
                             val classLabels = arrayOf("S", "A", "B", "F")
                             val predictedClassLabel1 = classLabels[predictedClassIndex1]
-                            prediction1 = predictedClassLabel1
+                            predictionf = predictedClassLabel1
 
                             modelOutput2.rewind()
                             val probabilities2 = FloatArray(4)
                             softmax(modelOutput2.asFloatBuffer(), probabilities2)
                             val predictedClassIndex2 = findIndexOfMax(probabilities2)
                             val predictedClassLabel2 = classLabels[predictedClassIndex2]
-                            prediction2 = predictedClassLabel2
+                            predictionb = predictedClassLabel2
 
                         }
-//                        val predictions = Pair(prediction1, prediction2)
 
-                        navController.navigate("review/$prediction1/$prediction2")
+//                        navController.navigate("review/$prediction1/$prediction2")
                     },
                     modifier = Modifier
                         .width(100.dp)
@@ -308,14 +273,18 @@ fun DetectScreen(navController: NavController) {
                 color = MaterialTheme.colorScheme.onSurface
             )
 
-            Text(text = "앞면 : $prediction1")
+            Text(text = "앞면 : $predictionf")
 
-            Text(text = "후면 : $prediction2")
+            Text(text = "후면 : $predictionb")
+
+            Button(onClick={navController.navigate("evaluation")}){
+                Text(text="고객만족평가")
+            }
+            Button(onClick={navController.navigate("grade")}){
+                Text(text="당신의등급은?")
+            }
 
 
-//            Button(onClick = { navController.navigate("evaluation") }) {
-//                Text(text = "고객만족평가")
-//            }
         }
     }
 
@@ -343,20 +312,17 @@ fun DetectScreen(navController: NavController) {
                     interpreterf?.run(input1, modelOutput1)
 
                     modelOutput1.rewind()
-//                    val probabilities1 = modelOutput1.asFloatBuffer()
                     // 소프트맥스 함수를 사용하여 확률 벡터 얻기
                     val probabilities1 = FloatArray(4)
                     softmax(modelOutput1.asFloatBuffer(), probabilities1)
 
                     // 최대 확률을 가진 클래스 선택
-//                    val maxProbability = probabilities1.maxOrNull()
-//                    val predictedClassIndex = probabilities1.indexOf(maxProbability)
                     val predictedClassIndex1 = findIndexOfMax(probabilities1)
 
                     // 클래스 레이블 매핑
                     val classLabels = arrayOf("S", "A", "B", "F")
                     val predictedClassLabel1 = classLabels[predictedClassIndex1]
-                    prediction1 = predictedClassLabel1
+                    predictionf = predictedClassLabel1
                 }
             }
 
@@ -391,20 +357,18 @@ fun DetectScreen(navController: NavController) {
                     interpreterb?.run(input2, modelOutput2)
 
                     modelOutput2.rewind()
-//                    val probabilities1 = modelOutput1.asFloatBuffer()
+
                     // 소프트맥스 함수를 사용하여 확률 벡터 얻기
                     val probabilities2 = FloatArray(4)
                     softmax(modelOutput2.asFloatBuffer(), probabilities2)
 
                     // 최대 확률을 가진 클래스 선택
-//                    val maxProbability = probabilities1.maxOrNull()
-//                    val predictedClassIndex = probabilities1.indexOf(maxProbability)
                     val predictedClassIndex2 = findIndexOfMax(probabilities2)
 
                     // 클래스 레이블 매핑
                     val classLabels = arrayOf("S", "A", "B", "F")
                     val predictedClassLabel2 = classLabels[predictedClassIndex2]
-                    prediction2 = predictedClassLabel2
+                    predictionb = predictedClassLabel2
                 }
             }
 
@@ -474,27 +438,6 @@ fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
     }
 }
 
-//fun softmax(input: FloatArray, output: FloatArray) {
-//    if (input.size != output.size) {
-//        throw IllegalArgumentException("Input and output arrays must have the same size.")
-//    }
-//
-//    // Find the maximum value in the input array for numerical stability
-//    val maxInput = input.maxOrNull() ?: 0.0f
-//
-//    // Calculate the exponential of each element and the sum of exponentials
-//    var sumExp = 0.0f
-//    for (i in input.indices) {
-//        val expValue = exp(input[i] - maxInput)
-//        output[i] = expValue
-//        sumExp += expValue
-//    }
-//
-//    // Normalize by dividing each element by the sum of exponentials
-//    for (i in output.indices) {
-//        output[i] /= sumExp
-//    }
-//}
 
 fun softmax(input: FloatBuffer, output: FloatArray) {
     if (input.capacity() != output.size) {
@@ -534,11 +477,3 @@ fun findIndexOfMax(array: FloatArray): Int {
 
     return maxIndex
 }
-
-
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun DetectScreenPreview() {
-//    DetectScreen(navController = rememberNavController())
-//}

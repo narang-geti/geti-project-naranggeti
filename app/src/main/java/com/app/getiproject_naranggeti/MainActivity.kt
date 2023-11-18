@@ -16,7 +16,6 @@ import androidx.navigation.compose.rememberNavController
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 
 
-
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,28 +37,27 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "detect") {
+            NavHost(navController = navController, startDestination = "start") {
                 composable("start") {
                     StartScreen(navController)
                 }
                 composable("detect") {
                     DetectScreen(navController)
                 }
-                composable("login"){
+                composable("login") {
                     LoginScreen(LoginViewModel(), {}, navController)
                 }
-                composable("Sign Up"){
+                composable("Sign Up") {
                     SignupScreen(navController)
                 }
-                composable("review/{prediction1}/{prediction2}") { backStackEntry ->
-                    ReviewScreen(
-                        navController = navController,
-                        prediction1 = backStackEntry.arguments?.getString("prediction1") ?: "",
-                        prediction2 = backStackEntry.arguments?.getString("prediction2") ?: ""
-                    )
+                composable("customer") {
+                    CustomerEvaluation(navController)
                 }
-            }
+                composable("grade") {
+                    GradeScreen(navController)
+                }
 
+            }
         }
     }
 }
