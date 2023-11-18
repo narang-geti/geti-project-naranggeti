@@ -12,6 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.getiproject_naranggeti.DetectScreen
+import com.app.getiproject_naranggeti.LoginScreen
+import com.app.getiproject_naranggeti.LoginViewModel
+import com.app.getiproject_naranggeti.SignupScreen
+import com.app.getiproject_naranggeti.StartScreen
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 
 class MainActivity : ComponentActivity() {

@@ -26,10 +26,12 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -38,6 +40,8 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.FileNotFoundException
 import java.lang.Math.exp
@@ -184,107 +188,98 @@ fun DetectScreen(navController: NavController) {
     }
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+        modifier=Modifier.fillMaxSize(),
+        color=MaterialTheme.colorScheme.background
+    ){
         Column(
-            modifier = Modifier
+            modifier=Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(300.dp),
-                bitmap = image2?.asImageBitmap() ?: defaultImageBitmap, contentDescription = "image"
+            horizontalAlignment=Alignment.CenterHorizontally
+        ){
+            Image(modifier=Modifier
+                .size(300.dp),
+                bitmap=image2?.asImageBitmap()?:defaultImageBitmap,contentDescription="image"
             )
 
-            Row {
+            Row{
                 Button(
-                    onClick = { cameraLauncher.launch(null) },
-                    modifier = Modifier
+                    onClick={cameraLauncher.launch(null)},
+                    modifier=Modifier
                         .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                            Color(0xFFbfd2e9),
-                    contentColor = Color.White
-                )
-                ) {
+                    shape=RectangleShape
+                ){
                     Text(
-                        text = "Camera",
-                        fontSize = 10.sp
+                        text="Camera",
+                        fontSize=10.sp
                     )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+
+                Spacer(modifier=Modifier.width(16.dp))
 
                 Button(
-                    onClick = { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-                    modifier = Modifier
+                    onClick={launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},
+                    modifier=Modifier
                         .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        Color(0xFFbfd2e9),
-                        contentColor = Color.White
-                    )
-                ) {
+                    shape=RectangleShape
+                ){
                     Text(
-                        text = "Image",
-                        fontSize = 10.sp
+                        text="Image",
+                        fontSize=10.sp
                     )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+
+                Spacer(modifier=Modifier.width(16.dp))
 
                 Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
+                    onClick={/*TODO*/},
+                    modifier=Modifier
                         .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        Color(0xFFbfd2e9),
-                        contentColor = Color.White
-                    )
-                ) {
+                    shape=RectangleShape
+                ){
                     Text(
-                        text = "Detect",
-                        fontSize = 10.sp
+                        text="Detect",
+                        fontSize=10.sp
                     )
                 }
             }
 
+            Spacer(modifier=Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            imageBitmap?.let { bitmap ->
+            imageBitmap?.let{bitmap->
                 Image(
-                    bitmap = bitmap,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    bitmap=bitmap,
+                    contentDescription=null,
+                    modifier=Modifier.fillMaxSize()
                 )
-            } ?: Text(
-                text = "Image not loacded",
-                color = MaterialTheme.colorScheme.onSurface
+            }?:Text(
+                text="Imagenotloacded",
+                color=MaterialTheme.colorScheme.onSurface
             )
 
-            Text(text = "1번째 $label1: $prediction1")
+            Text(text="1번째$label1:$prediction1")
 
-            Text(text = "2번째 $label2: $prediction2")
+            Text(text="2번째$label2:$prediction2")
 
-            Text(text = "3번째 $prediction3")
+            Text(text="3번째$prediction3")
+
+
+            Button(onClick={navController.navigate("evaluation")}){
+                Text(text="고객만족평가")
             }
-            Button(onClick = { navController.navigate("evaluation") }) {
-            Text(text = "고객만족평가")
-            }
-            Button(onClick = { navController.navigate("grade") }) {
-                Text(text = "당신의 등급은?")
+            Button(onClick={navController.navigate("grade")}){
+                Text(text="당신의등급은?")
             }
         }
     }
+}
+
 
 
 
