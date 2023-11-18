@@ -439,22 +439,4 @@ fun findIndexOfMax(array: FloatArray): Int {
 //    modifier = Modifier
 //    .width(200.dp)
 //    .height(100.dp)
-//    ) {
-//        Text(
-//            text = "리뷰 작성",
-//            fontSize = 20.sp
-//        )
-//    }
 //
-//data class Review(
-//    val userId: String = "",
-//    val userUid: String = "",
-//    val textReview: String = ""
-//)
-//
-//fun writeReview(review: Review) {
-//    val database = FirebaseDatabase.getInstance()
-//    val reviewsRef: DatabaseReference = database.getReference("reviews")
-//    val newReviewRef = reviewsRef.push()
-//    newReviewRef.setValue(review)
-//}
