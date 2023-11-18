@@ -277,7 +277,7 @@ fun DetectScreen(navController: NavController) {
 
             Text(text = "후면 : $predictionb")
 
-            Button(onClick={navController.navigate("evaluation")}){
+            Button(onClick={navController.navigate("customer")}){
                 Text(text="고객만족평가")
             }
             Button(onClick={navController.navigate("grade")}){
