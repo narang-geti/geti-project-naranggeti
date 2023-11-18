@@ -40,7 +40,7 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start") {
+            NavHost(navController = navController, startDestination = "customer") {
                 composable("start") {
                     StartScreen(navController)
                 }

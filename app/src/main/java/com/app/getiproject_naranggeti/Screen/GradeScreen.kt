@@ -27,13 +27,8 @@ fun GradeScreen(navController: NavController) {
 
     var ipFront by remember { mutableStateOf<String?>(null) }
     var ipBack by remember { mutableStateOf<String?>(null) }
-
-
     val db = Firebase.firestore
-
-
     val userUID = Firebase.auth.currentUser?.uid
-
 
     userUID?.let { uid ->
         db.collection("user").document(uid).get()

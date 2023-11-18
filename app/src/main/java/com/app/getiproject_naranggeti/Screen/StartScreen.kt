@@ -1,6 +1,5 @@
 package com.app.getiproject_naranggeti
 
-import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -52,13 +51,11 @@ import androidx.navigation.NavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 
 @Composable
 fun StartScreen(navController: NavController) {
-
     var shouldAnimate by remember { mutableStateOf(true) }
 
     LaunchedEffect(shouldAnimate) {

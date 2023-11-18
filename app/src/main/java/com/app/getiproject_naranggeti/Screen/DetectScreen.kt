@@ -54,7 +54,6 @@ fun DetectScreen(navController: NavController) {
     var userTextReview by remember { mutableStateOf("") }
     var selectedRating by remember { mutableStateOf(0) }
     val auth: FirebaseAuth = Firebase.auth
-
     val db = Firebase.firestore
     val userUID = Firebase.auth.currentUser?.uid
 
@@ -270,7 +269,7 @@ fun DetectScreen(navController: NavController) {
             Text(text="3번째$prediction3")
 
 
-            Button(onClick={navController.navigate("evaluation")}){
+            Button(onClick={navController.navigate("customer")}){
                 Text(text="고객만족평가")
             }
             Button(onClick={navController.navigate("grade")}){
@@ -376,102 +375,3 @@ fun findIndexOfMax(array: FloatArray): Int {
 }
 
 
-//    RatingBar(
-//    rating = rating.value ,
-//    onRatingChanged = {
-//        newRating ->
-//        rating.value = newRating
-//    }
-//    )
-//    Button(
-//    onClick = {
-//        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-//        reference.child(uid).setValue(rating.value)
-//    },
-//    modifier = Modifier.padding(bottom = 16.dp),
-//    colors = ButtonDefaults.buttonColors(
-//    Color(0xFFbfd2e9),
-//    contentColor = Color.White
-//    )
-//    ) {
-//        Text(text = "저장")
-//    }
-//@Composable
-//fun RatingBar(
-//    rating: Float,
-//    onRatingChanged: (Float) -> Unit
-//) {
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(start = 16.dp)
-//    ) {
-//        for (i in 0 until 5) {
-//            val starRating = i + 1
-//            val isSelected = starRating <= rating
-//            val iconColor = if (isSelected) Color(0XFFEDD500) else Color.Gray
-//
-//            IconButton(
-//                onClick = { onRatingChanged(starRating.toFloat()) },
-//                modifier = Modifier.size(30.dp)
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.Star,
-//                    contentDescription = "별점 $starRating",
-//                    tint = iconColor
-//                )
-//            }
-//        }
-//    }
-//}
-//val rating: MutableState<Float> = mutableStateOf(0.0f)
-//val database = FirebaseDatabase.getInstance()
-//val reference = database.getReference("ratings")
-//
-//
-
-//텍스트 리뷰임 !!!!!!!!
-//    OutlinedTextField(
-//    value = userTextReview,
-//    onValueChange = { userTextReview = it },
-//    label = { Text("텍스트 리뷰 작성") },
-//    modifier = Modifier
-//    .fillMaxWidth()
-//    .padding(16.dp)
-//    )
-//
-//    Button(
-//    onClick = {
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            val review = Review(
-//                userId = currentUser.displayName ?: "",
-//                userUid = currentUser.uid,
-//                textReview = userTextReview
-//            )
-//            // writeReview 함수 호출
-//            writeReview(review)
-//        }
-//    },
-//    modifier = Modifier
-//    .width(200.dp)
-//    .height(100.dp)
-//    ) {
-//        Text(
-//            text = "리뷰 작성",
-//            fontSize = 20.sp
-//        )
-//    }
-//
-//data class Review(
-//    val userId: String = "",
-//    val userUid: String = "",
-//    val textReview: String = ""
-//)
-//
-//fun writeReview(review: Review) {
-//    val database = FirebaseDatabase.getInstance()
-//    val reviewsRef: DatabaseReference = database.getReference("reviews")
-//    val newReviewRef = reviewsRef.push()
-//    newReviewRef.setValue(review)
-//}
