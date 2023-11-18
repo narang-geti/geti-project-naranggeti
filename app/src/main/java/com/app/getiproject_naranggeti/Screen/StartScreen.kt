@@ -1,5 +1,6 @@
-package com.app.getiproject_naranggeti.Screen
+package com.app.getiproject_naranggeti
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -48,10 +49,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
-import com.app.getiproject_naranggeti.R
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 
@@ -376,6 +377,21 @@ fun SignupScreen(navController: NavController) {
         }
     }
 }
+//data class Review(
+//    val userId: String,
+//    val userName: String,
+//    val userUid: String,
+//    val textReview: String
+//)
+//fun writeReview(review: Review) {
+//    val database = Firebase.database
+//    val reviewsRef = database.getReference("reviews")
+//    val newReviewRef = reviewsRef.push()
+//    newReviewRef.setValue(review)
+//}
+
+
+
 fun navigateToDetectScreen(navController: NavController) {
     navController.navigate("detect")
 }
