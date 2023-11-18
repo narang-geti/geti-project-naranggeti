@@ -77,6 +77,8 @@ dependencies {
     //firebase
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-database-ktx")
+
 
 
     // Import the BoM for the Firebase platform
