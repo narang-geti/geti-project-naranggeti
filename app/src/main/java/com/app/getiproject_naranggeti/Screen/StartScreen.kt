@@ -1,5 +1,6 @@
 package com.app.getiproject_naranggeti
 
+import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
@@ -274,7 +275,6 @@ fun SignupScreen(navController: NavController) {
     var signupErrorMessage by remember { mutableStateOf("") }
     val auth: FirebaseAuth = Firebase.auth
 
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -366,6 +366,7 @@ fun SignupScreen(navController: NavController) {
         ) {
             Text("회원가입")
         }
+
         if (signupErrorMessage.isNotEmpty()) {
             Text(
                 text = signupErrorMessage,

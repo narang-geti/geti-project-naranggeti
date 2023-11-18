@@ -2,6 +2,7 @@ package com.app.getiproject_naranggeti
 
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -25,6 +26,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.provider.MediaStore
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,8 +40,11 @@ import androidx.core.graphics.green
 import androidx.core.graphics.red
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.io.FileNotFoundException
+import java.lang.Math.exp
 import java.nio.FloatBuffer
 import kotlin.math.exp
 
@@ -49,6 +54,10 @@ fun DetectScreen(navController: NavController) {
     var userTextReview by remember { mutableStateOf("") }
     var selectedRating by remember { mutableStateOf(0) }
     val auth: FirebaseAuth = Firebase.auth
+
+    val db = Firebase.firestore
+    val userUID = Firebase.auth.currentUser?.uid
+
     val context = LocalContext.current
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var interpreter by remember { mutableStateOf<Interpreter?>(null) }
@@ -56,6 +65,19 @@ fun DetectScreen(navController: NavController) {
     var label1 by remember { mutableStateOf("") }
     var prediction2 by remember { mutableStateOf("") }
     var prediction3 by remember { mutableStateOf("") }
+
+    userUID?.let { uid ->
+        val userData = hashMapOf(
+            "front" to prediction1,
+            "back"  to prediction3
+        )
+
+        db.collection("user").document(uid)
+            .set(userData, SetOptions.merge())
+            .addOnSuccessListener { Log.d("Firestore", "성공") }
+            .addOnFailureListener { e -> Log.w("Firestore", "에러", e) }
+    }
+
     var label2 by remember { mutableStateOf("") }
     var predictionNew by remember { mutableStateOf("") }
     val bitmapFromResource1: Bitmap =
@@ -89,7 +111,7 @@ fun DetectScreen(navController: NavController) {
             .requireWifi()
             .build()
         FirebaseModelDownloader.getInstance()
-            .getModel("ipf1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .getModel("ipb1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
                 val modelFile = model?.file
                 if (modelFile != null) {
@@ -166,101 +188,98 @@ fun DetectScreen(navController: NavController) {
     }
 
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
-    ) {
+        modifier=Modifier.fillMaxSize(),
+        color=MaterialTheme.colorScheme.background
+    ){
         Column(
-            modifier = Modifier
+            modifier=Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                modifier = Modifier
-                    .size(300.dp),
-                bitmap = image2?.asImageBitmap() ?: defaultImageBitmap, contentDescription = "image"
+            horizontalAlignment=Alignment.CenterHorizontally
+        ){
+            Image(modifier=Modifier
+                .size(300.dp),
+                bitmap=image2?.asImageBitmap()?:defaultImageBitmap,contentDescription="image"
             )
 
-            Row {
+            Row{
                 Button(
-                    onClick = { cameraLauncher.launch(null) },
-                    modifier = Modifier
+                    onClick={cameraLauncher.launch(null)},
+                    modifier=Modifier
                         .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                            Color(0xFFbfd2e9),
-                    contentColor = Color.White
-                )
-                ) {
+                    shape=RectangleShape
+                ){
                     Text(
-                        text = "Camera",
-                        fontSize = 10.sp
+                        text="Camera",
+                        fontSize=10.sp
                     )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+
+                Spacer(modifier=Modifier.width(16.dp))
 
                 Button(
-                    onClick = { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-                    modifier = Modifier
+                    onClick={launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},
+                    modifier=Modifier
                         .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        Color(0xFFbfd2e9),
-                        contentColor = Color.White
-                    )
-                ) {
+                    shape=RectangleShape
+                ){
                     Text(
-                        text = "Image",
-                        fontSize = 10.sp
+                        text="Image",
+                        fontSize=10.sp
                     )
                 }
-                Spacer(modifier = Modifier.width(16.dp))
+
+                Spacer(modifier=Modifier.width(16.dp))
 
                 Button(
-                    onClick = { /*TODO*/ },
-                    modifier = Modifier
+                    onClick={/*TODO*/},
+                    modifier=Modifier
                         .width(100.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape,
-                    colors = ButtonDefaults.buttonColors(
-                        Color(0xFFbfd2e9),
-                        contentColor = Color.White
-                    )
-                ) {
+                    shape=RectangleShape
+                ){
                     Text(
-                        text = "Detect",
-                        fontSize = 10.sp
+                        text="Detect",
+                        fontSize=10.sp
                     )
                 }
             }
 
+            Spacer(modifier=Modifier.height(16.dp))
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            imageBitmap?.let { bitmap ->
+            imageBitmap?.let{bitmap->
                 Image(
-                    bitmap = bitmap,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                    bitmap=bitmap,
+                    contentDescription=null,
+                    modifier=Modifier.fillMaxSize()
                 )
-            } ?: Text(
-                text = "Image not loacded",
-                color = MaterialTheme.colorScheme.onSurface
+            }?:Text(
+                text="Imagenotloacded",
+                color=MaterialTheme.colorScheme.onSurface
             )
 
-            Text(text = "1번째 $label1: $prediction1")
+            Text(text="1번째$label1:$prediction1")
 
-            Text(text = "2번째 $label2: $prediction2")
+            Text(text="2번째$label2:$prediction2")
 
-            Text(text = "3번째 $prediction3")
+            Text(text="3번째$prediction3")
+
+
+            Button(onClick={navController.navigate("evaluation")}){
+                Text(text="고객만족평가")
+            }
+            Button(onClick={navController.navigate("grade")}){
+                Text(text="당신의등급은?")
             }
         }
     }
+}
+
 
 
 

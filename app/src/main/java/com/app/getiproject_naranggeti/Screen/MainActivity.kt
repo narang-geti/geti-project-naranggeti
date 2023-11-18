@@ -1,4 +1,4 @@
-package com.app.getiproject_naranggeti
+package com.app.getiproject_naranggeti.Screen
 
 import CustomerEvaluation
 import android.os.Bundle
@@ -12,6 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.app.getiproject_naranggeti.DetectScreen
+import com.app.getiproject_naranggeti.LoginScreen
+import com.app.getiproject_naranggeti.LoginViewModel
+import com.app.getiproject_naranggeti.SignupScreen
+import com.app.getiproject_naranggeti.StartScreen
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 import com.google.firebase.auth.FirebaseAuth
 
@@ -38,7 +43,7 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "detect") {
+            NavHost(navController = navController, startDestination = "start") {
                 composable("start") {
                     StartScreen(navController)
                 }
@@ -53,6 +58,9 @@ fun Navi() {
                 }
                 composable("customer"){
                     CustomerEvaluation(navController)
+                }
+                composable("grade"){
+                    GradeScreen(navController)
                 }
 
             }
