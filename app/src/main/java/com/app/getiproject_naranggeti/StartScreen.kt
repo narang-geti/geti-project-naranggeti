@@ -8,6 +8,7 @@ import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -235,29 +236,24 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: (Boolean) -> Unit, na
                 )
             }
 
-            val transition = rememberInfiniteTransition()
-            val alpha by transition.animateFloat(
-                initialValue = 0f,
-                targetValue = 1f,
-                animationSpec = infiniteRepeatable(
-                    tween(1000, easing = LinearEasing, delayMillis = 300),
-                    repeatMode = RepeatMode.Reverse
-                )
-            )
+
 
             AnimatedVisibility(
                 visible = !shouldAnimate,
+                enter = slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(durationMillis = 1000, delayMillis = 300)
+                ),
                 modifier = Modifier
                     .fillMaxWidth()
                     .align(Alignment.CenterHorizontally)
-                    .alpha(alpha)
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.somac_logo),
                     contentDescription = null,
                     modifier = Modifier
                         .clip(MaterialTheme.shapes.medium)
-                        .size(width = 600.dp, height = 250.dp)
+                        .size(width = 300.dp, height = 250.dp)
                 )
             }
 
