@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.app.getiproject_naranggeti.R
+import com.app.getiproject_naranggeti.ui.theme.Purple40
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -93,7 +96,8 @@ fun GradeScreen(navController: NavController) {
 
 
     Surface(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
+        color = Purple40
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -120,7 +124,10 @@ fun GradeScreen(navController: NavController) {
 
             Image(
                 painter = painterResource(id = imageResource),
-                contentDescription = "총점 이미지"
+                contentDescription = "총점 이미지",
+                modifier = Modifier
+                    .width(700.dp)
+                    .height(1000.dp)
             )
         }
     }
