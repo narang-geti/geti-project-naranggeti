@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
+import com.app.getiproject_naranggeti.ui.theme.Purple40
 
 
 class MainActivity : ComponentActivity() {
@@ -33,11 +34,11 @@ fun Navi() {
         // A surface container using the 'background' color from the theme
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = MaterialTheme.colorScheme.background
+            color = Purple40
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start") {
+            NavHost(navController = navController, startDestination = "detect") {
                 composable("start") {
                     StartScreen(navController)
                 }

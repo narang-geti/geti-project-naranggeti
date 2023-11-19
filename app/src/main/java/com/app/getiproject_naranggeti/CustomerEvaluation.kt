@@ -31,9 +31,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.app.getiproject_naranggeti.ui.theme.Purple40
+import com.app.getiproject_naranggeti.ui.theme.elice
 import com.google.android.libraries.places.api.model.Review
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
@@ -50,10 +53,11 @@ fun CustomerEvaluation(navController: NavController) {
     val database = FirebaseDatabase.getInstance()
     val reviewsRef: DatabaseReference = database.getReference("reviews")
     val rating: MutableState<Float> = remember { mutableStateOf(0.0f) }
+    val CustomColor = Color(0xFF608EBD)
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = Purple40
     ) {
         Column(
             modifier = Modifier
@@ -70,7 +74,7 @@ fun CustomerEvaluation(navController: NavController) {
             OutlinedTextField(
                 value = userTextReview,
                 onValueChange = { userTextReview = it },
-                label = { Text("등급 만족 하셨나요?") },
+                label = { Text("소맥 등급 분류 서비스에 대한 리뷰를 남겨주세요 :) ") },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
@@ -93,11 +97,14 @@ fun CustomerEvaluation(navController: NavController) {
                 },
                 modifier = Modifier
                     .width(150.dp)
-                    .height(100.dp)
+                    .height(100.dp),
+                colors = ButtonDefaults.buttonColors(CustomColor)
             ) {
                 Text(
                     text = "리뷰 작성",
-                    fontSize = 20.sp
+                    fontSize = 20.sp,
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Bold
                 )
             }
 

@@ -29,12 +29,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
+import com.app.getiproject_naranggeti.ui.theme.Purple40
+import com.app.getiproject_naranggeti.ui.theme.elice
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
@@ -66,7 +70,7 @@ fun DetectScreen(navController: NavController) {
     userUID?.let { uid ->
         val userData = hashMapOf(
             "front" to predictionf,
-            "back"  to predictionb
+            "back" to predictionb
         )
 
         db.collection("user").document(uid)
@@ -107,10 +111,12 @@ fun DetectScreen(navController: NavController) {
     val defaultImageBitmap =
         BitmapFactory.decodeResource(resources, R.drawable.camera).asImageBitmap()
 
+    val CustomColor = Color(0xFF608EBD)
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        color = Purple40
     ) {
         Column(
             modifier = Modifier
@@ -134,14 +140,20 @@ fun DetectScreen(navController: NavController) {
                     Button(
                         onClick = { cameraLauncher1.launch(null) },
                         modifier = Modifier
-                            .width(100.dp)
+                            .width(150.dp)
                             .height(80.dp)
                             .padding(4.dp),
-                        shape = RectangleShape
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            CustomColor,
+                            contentColor = Color.White
+                        )
                     ) {
                         Text(
                             text = "Camera",
-                            fontSize = 10.sp
+                            fontSize = 20.sp,
+                            fontFamily = elice,
+                            fontWeight = FontWeight.Medium
                         )
                     }
 
@@ -150,14 +162,20 @@ fun DetectScreen(navController: NavController) {
                     Button(
                         onClick = { launcher1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                         modifier = Modifier
-                            .width(100.dp)
+                            .width(150.dp)
                             .height(80.dp)
                             .padding(4.dp),
-                        shape = RectangleShape
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            CustomColor,
+                            contentColor = Color.White
+                        )
                     ) {
                         Text(
                             text = "Image",
-                            fontSize = 10.sp
+                            fontSize = 20.sp,
+                            fontFamily = elice,
+                            fontWeight = FontWeight.Medium
                         )
                     }
 
@@ -178,14 +196,17 @@ fun DetectScreen(navController: NavController) {
                 Button(
                     onClick = { cameraLauncher2.launch(null) },
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(150.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
                 ) {
                     Text(
                         text = "Camera",
-                        fontSize = 10.sp
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
                     )
                 }
 
@@ -194,69 +215,127 @@ fun DetectScreen(navController: NavController) {
                 Button(
                     onClick = { launcher2.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
                     modifier = Modifier
-                        .width(100.dp)
+                        .width(150.dp)
                         .height(80.dp)
                         .padding(4.dp),
-                    shape = RectangleShape
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
                 ) {
                     Text(
                         text = "Image",
-                        fontSize = 10.sp
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
                     )
                 }
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-                Button(
-                    onClick = {
-                        if (imagef != null && imageb != null) {
-                            imagefp = imagef as Bitmap
-                            imagebp = imageb as Bitmap
+//                Button(
+//                    onClick = {
+//                        if (imagef != null && imageb != null) {
+//                            imagefp = imagef as Bitmap
+//                            imagebp = imageb as Bitmap
+//
+//                            val input1 = preprocessImage(imagefp!!)
+//                            val input2 = preprocessImage(imagebp!!)
+//
+//                            val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+//                            val modelOutput1 =
+//                                ByteBuffer.allocateDirect(bufferSize)
+//                                    .order(ByteOrder.nativeOrder())
+//                            val modelOutput2 =
+//                                ByteBuffer.allocateDirect(bufferSize)
+//                                    .order(ByteOrder.nativeOrder())
+//
+//                            interpreterf?.run(input1, modelOutput1)
+//                            interpreterb?.run(input2, modelOutput2)
+//
+//                            modelOutput1.rewind()
+//                            val probabilities1 = FloatArray(4)
+//                            softmax(modelOutput1.asFloatBuffer(), probabilities1)
+//                            val predictedClassIndex1 = findIndexOfMax(probabilities1)
+//                            val classLabels = arrayOf("S", "A", "B", "F")
+//                            val predictedClassLabel1 = classLabels[predictedClassIndex1]
+//                            predictionf = predictedClassLabel1
+//
+//                            modelOutput2.rewind()
+//                            val probabilities2 = FloatArray(4)
+//                            softmax(modelOutput2.asFloatBuffer(), probabilities2)
+//                            val predictedClassIndex2 = findIndexOfMax(probabilities2)
+//                            val predictedClassLabel2 = classLabels[predictedClassIndex2]
+//                            predictionb = predictedClassLabel2
+//
+//                        }
+//
+////                        navController.navigate("review/$prediction1/$prediction2")
+//                    },
+//                    modifier = Modifier
+//                        .width(100.dp)
+//                        .height(80.dp)
+//                        .padding(4.dp),
+//                    shape = RectangleShape,
+//                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+//                ) {
+//                    Text(
+//                        text = "Detect",
+//                        fontSize = 20.sp
+//                    )
+//                }
+            }
 
-                            val input1 = preprocessImage(imagefp!!)
-                            val input2 = preprocessImage(imagebp!!)
+            Button(
+                onClick = {
+                    if (imagef != null && imageb != null) {
+                        imagefp = imagef as Bitmap
+                        imagebp = imageb as Bitmap
 
-                            val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
-                            val modelOutput1 =
-                                ByteBuffer.allocateDirect(bufferSize)
-                                    .order(ByteOrder.nativeOrder())
-                            val modelOutput2 =
-                                ByteBuffer.allocateDirect(bufferSize)
-                                    .order(ByteOrder.nativeOrder())
+                        val input1 = preprocessImage(imagefp!!)
+                        val input2 = preprocessImage(imagebp!!)
 
-                            interpreterf?.run(input1, modelOutput1)
-                            interpreterb?.run(input2, modelOutput2)
+                        val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+                        val modelOutput1 =
+                            ByteBuffer.allocateDirect(bufferSize)
+                                .order(ByteOrder.nativeOrder())
+                        val modelOutput2 =
+                            ByteBuffer.allocateDirect(bufferSize)
+                                .order(ByteOrder.nativeOrder())
 
-                            modelOutput1.rewind()
-                            val probabilities1 = FloatArray(4)
-                            softmax(modelOutput1.asFloatBuffer(), probabilities1)
-                            val predictedClassIndex1 = findIndexOfMax(probabilities1)
-                            val classLabels = arrayOf("S", "A", "B", "F")
-                            val predictedClassLabel1 = classLabels[predictedClassIndex1]
-                            predictionf = predictedClassLabel1
+                        interpreterf?.run(input1, modelOutput1)
+                        interpreterb?.run(input2, modelOutput2)
 
-                            modelOutput2.rewind()
-                            val probabilities2 = FloatArray(4)
-                            softmax(modelOutput2.asFloatBuffer(), probabilities2)
-                            val predictedClassIndex2 = findIndexOfMax(probabilities2)
-                            val predictedClassLabel2 = classLabels[predictedClassIndex2]
-                            predictionb = predictedClassLabel2
+                        modelOutput1.rewind()
+                        val probabilities1 = FloatArray(4)
+                        softmax(modelOutput1.asFloatBuffer(), probabilities1)
+                        val predictedClassIndex1 = findIndexOfMax(probabilities1)
+                        val classLabels = arrayOf("S", "A", "B", "F")
+                        val predictedClassLabel1 = classLabels[predictedClassIndex1]
+                        predictionf = predictedClassLabel1
 
-                        }
+                        modelOutput2.rewind()
+                        val probabilities2 = FloatArray(4)
+                        softmax(modelOutput2.asFloatBuffer(), probabilities2)
+                        val predictedClassIndex2 = findIndexOfMax(probabilities2)
+                        val predictedClassLabel2 = classLabels[predictedClassIndex2]
+                        predictionb = predictedClassLabel2
+
+                    }
 
 //                        navController.navigate("review/$prediction1/$prediction2")
-                    },
-                    modifier = Modifier
-                        .width(100.dp)
-                        .height(80.dp)
-                        .padding(4.dp),
-                    shape = RectangleShape
-                ) {
-                    Text(
-                        text = "Detect",
-                        fontSize = 10.sp
-                    )
-                }
+                },
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(80.dp)
+                    .padding(4.dp),
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "Detect",
+                    fontSize = 20.sp,
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium
+                )
             }
 
 
@@ -269,7 +348,7 @@ fun DetectScreen(navController: NavController) {
                     modifier = Modifier.fillMaxSize()
                 )
             } ?: Text(
-                text = "Image not loacded",
+                text = "아이폰 이미지를 등록해주세요.",
                 color = MaterialTheme.colorScheme.onSurface
             )
 
@@ -277,11 +356,27 @@ fun DetectScreen(navController: NavController) {
 
             Text(text = "후면 : $predictionb")
 
-            Button(onClick={navController.navigate("customer")}){
-                Text(text="고객만족평가")
+            Button(
+                onClick =
+                { navController.navigate("customer") },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "고객만족평가",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium
+                )
             }
-            Button(onClick={navController.navigate("grade")}){
-                Text(text="당신의등급은?")
+            Button(
+                onClick = {
+                    navController.navigate("grade")
+                },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "당신의 등급은?",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium)
             }
 
 
