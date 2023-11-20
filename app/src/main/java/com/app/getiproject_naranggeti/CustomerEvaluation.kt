@@ -1,7 +1,5 @@
 package com.app.getiproject_naranggeti
 
-import android.util.Log
-import android.widget.RatingBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +9,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
@@ -18,7 +18,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -37,13 +36,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.app.getiproject_naranggeti.ui.theme.Purple40
 import com.app.getiproject_naranggeti.ui.theme.elice
-import com.google.android.libraries.places.api.model.Review
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -53,6 +48,9 @@ fun CustomerEvaluation(navController: NavController) {
     val database = FirebaseDatabase.getInstance()
     val reviewsRef: DatabaseReference = database.getReference("reviews")
     val rating: MutableState<Float> = remember { mutableStateOf(0.0f) }
+
+    val scrollState = rememberScrollState()
+
     val CustomColor = Color(0xFF608EBD)
 
     Surface(
@@ -62,9 +60,11 @@ fun CustomerEvaluation(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+                .padding(16.dp)
+                .verticalScroll(scrollState),
+                    horizontalAlignment = Alignment . CenterHorizontally,
+
+            ) {
             RatingBar(
                 rating = rating.value,
                 onRatingChanged = { newRating ->

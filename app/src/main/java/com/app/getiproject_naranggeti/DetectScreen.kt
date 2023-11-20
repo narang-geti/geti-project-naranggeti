@@ -443,6 +443,28 @@ fun DetectScreen(navController: NavController) {
                     fontFamily = elice,
                     fontWeight = FontWeight.Medium)
             }
+            Button(
+                onClick = {
+                    navController.navigate("description")
+                },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "등급 분류 기준",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium)
+            }
+            Button(
+                onClick = {
+                    navController.navigate("customer")
+                },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "고객 리뷰",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium)
+            }
 
 
         }
