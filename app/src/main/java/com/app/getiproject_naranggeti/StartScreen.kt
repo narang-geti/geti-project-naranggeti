@@ -116,7 +116,7 @@ fun StartScreen(navController: NavController) {
             ) {
                 Text(
                     text = "START",
-                    fontSize = 40.sp,
+                    fontSize = 30.sp,
                     fontFamily = elice,
                     fontWeight = FontWeight.Bold,
 

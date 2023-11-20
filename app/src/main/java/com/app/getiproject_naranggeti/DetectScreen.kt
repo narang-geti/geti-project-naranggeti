@@ -137,8 +137,10 @@ fun DetectScreen(navController: NavController) {
         }
     )
     val resources = context.resources
-    val defaultImageBitmap =
-        BitmapFactory.decodeResource(resources, R.drawable.camera).asImageBitmap()
+    val defaultImageBitmapf =
+        BitmapFactory.decodeResource(resources, R.drawable.f).asImageBitmap()
+    val defaultImageBitmapb=
+        BitmapFactory.decodeResource(resources, R.drawable.b).asImageBitmap()
 
     val CustomColor = Color(0xFF608EBD)
 
@@ -197,7 +199,7 @@ fun DetectScreen(navController: NavController) {
                 Image(
                     modifier = Modifier
                         .size(300.dp),
-                    bitmap = imagef?.asImageBitmap() ?: defaultImageBitmap,
+                    bitmap = imagef?.asImageBitmap() ?: defaultImageBitmapf,
                     contentDescription = "image"
                 )
 
@@ -253,7 +255,7 @@ fun DetectScreen(navController: NavController) {
             Image(
                 modifier = Modifier
                     .size(300.dp),
-                bitmap = imageb?.asImageBitmap() ?: defaultImageBitmap,
+                bitmap = imageb?.asImageBitmap() ?: defaultImageBitmapb,
                 contentDescription = "image"
             )
 
