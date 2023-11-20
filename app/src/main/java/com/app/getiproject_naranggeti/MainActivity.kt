@@ -57,7 +57,7 @@ fun Navi() {
                 composable("description"){
                     DescriptionScreen(navController)
                 }
-                composable("customer"){
+                composable("customerReviews"){
                     CustomerReviewScreen(navController)
                 }
 

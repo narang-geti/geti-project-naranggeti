@@ -456,7 +456,7 @@ fun DetectScreen(navController: NavController) {
             }
             Button(
                 onClick = {
-                    navController.navigate("customer")
+                    navController.navigate("customerReviews")
                 },
                 colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
             ) {

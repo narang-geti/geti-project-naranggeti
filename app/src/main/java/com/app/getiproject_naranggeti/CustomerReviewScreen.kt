@@ -54,6 +54,8 @@ fun ReviewItem(review: Review) {
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+
         Card(
             modifier = Modifier
                 .fillMaxWidth()
