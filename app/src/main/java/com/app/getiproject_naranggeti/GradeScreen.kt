@@ -2,6 +2,7 @@ package com.app.getiproject_naranggeti
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -52,15 +53,15 @@ fun GradeScreen(navController: NavController) {
             }
     }
 
-    fun getImageResource(grade: String?): Int {
-        return when (grade) {
-            "S" -> R.drawable.s_grade
-            "A" -> R.drawable.a_grade
-            "B" -> R.drawable.b_grade
-            "F" -> R.drawable.f_grade
-            else -> R.drawable.somac_logo
-        }
-    }
+//    fun getImageResource(grade: String?): Int {
+//        return when (grade) {
+//            "S" -> R.drawable.s_grade
+//            "A" -> R.drawable.a_grade
+//            "B" -> R.drawable.b_grade
+//            "F" -> R.drawable.f_grade
+//            else -> R.drawable.somac_logo
+//        }
+//    }
 
 //    val imageResource = when {
 //        ipFront == "S" || ipBack == "S" -> R.drawable.s_grade
@@ -95,40 +96,35 @@ fun GradeScreen(navController: NavController) {
     }
 
 
-    Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = Purple40
-    ) {
-        Column(
+
+        Box(
             modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "전면 등급: ${ipFront ?: ""}")
 
-            ipFront?.let {
-                Image(
-                    painter = painterResource(id = getImageResource(it)),
-                    contentDescription = "전면 등급 이미지"
-                )
-            }
-
-            Text(text = "후면 등급: ${ipBack?: ""}")
-
-            ipBack?.let {
-                Image(
-                    painter = painterResource(id = getImageResource(it)),
-                    contentDescription = "후면 등급 이미지"
-                )
-            }
-            Text(text = "총점 등급: ${ipFront}${ipBack}")
 
             Image(
                 painter = painterResource(id = imageResource),
                 contentDescription = "총점 이미지",
-                modifier = Modifier
-                    .width(700.dp)
-                    .height(1000.dp)
+                modifier = Modifier.fillMaxSize()
             )
         }
     }
-}
+
+//            Text(text = "전면 등급: ${ipFront ?: ""}")
+//
+//            ipFront?.let {
+//                Image(
+//                    painter = painterResource(id = getImageResource(it)),
+//                    contentDescription = "전면 등급 이미지"
+//                )
+//            }
+//
+//            Text(text = "후면 등급: ${ipBack?: ""}")
+//
+//            ipBack?.let {
+//                Image(
+//                    painter = painterResource(id = getImageResource(it)),
+//                    contentDescription = "후면 등급 이미지"
+//                )
+//            }
+//            Text(text = "총점 등급: ${ipFront}${ipBack}")

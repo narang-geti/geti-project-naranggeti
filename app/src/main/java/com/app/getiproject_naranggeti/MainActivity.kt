@@ -35,7 +35,7 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start") {
+            NavHost(navController = navController, startDestination = "grade") {
                 composable("start") {
                     StartScreen(navController)
                 }
