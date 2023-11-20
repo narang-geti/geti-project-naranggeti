@@ -2,7 +2,13 @@ package com.app.getiproject_naranggeti
 
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,9 +44,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -49,6 +57,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import com.app.getiproject_naranggeti.ui.theme.elice
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
@@ -57,6 +66,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun StartScreen(navController: NavController) {
+
 
     var shouldAnimate by remember { mutableStateOf(true) }
 
@@ -75,7 +85,6 @@ fun StartScreen(navController: NavController) {
                 .fillMaxSize()
                 .fillMaxWidth()
                 .fillMaxHeight()
-                .background(MaterialTheme.colorScheme.primary)
         )
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -100,17 +109,23 @@ fun StartScreen(navController: NavController) {
                         .size(width = 600.dp, height = 250.dp)
                 )
             }
+            val CustomColor = Color(0xFF608EBD) // 색상 정의
+
             Button(
                 onClick = {
                     navController.navigate("login")
                 },
                 modifier = Modifier
                     .width(200.dp)
-                    .height(100.dp)
+                    .height(100.dp),
+                colors = ButtonDefaults.buttonColors(CustomColor),
+
             ) {
                 Text(
                     text = "START",
-                    fontSize = 40.sp
+                    fontSize = 40.sp,
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -121,6 +136,15 @@ fun StartScreen(navController: NavController) {
 fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: (Boolean) -> Unit, navController: NavController) {
     val emailState = remember { mutableStateOf("") }
     val passwordState = remember { mutableStateOf("") }
+
+    var shouldAnimate by remember { mutableStateOf(true) }
+
+    LaunchedEffect(shouldAnimate) {
+        if (shouldAnimate) {
+            delay(300)
+            shouldAnimate = false
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -155,6 +179,8 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: (Boolean) -> Unit, na
                 .padding(8.dp)
         )
 
+        val CustomColor = Color(0xFF608EBD)
+
         Row(
             horizontalArrangement = Arrangement.spacedBy(4.dp)
         ) {
@@ -168,10 +194,8 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: (Boolean) -> Unit, na
                         }
                     }
                 },
-                colors = ButtonDefaults.buttonColors(
-                    Color.Black,
-                    contentColor = Color.White
-                )
+
+                colors = ButtonDefaults.buttonColors(CustomColor,contentColor = Color.White)
             ) {
                 Text(text = "Sign In")
             }
@@ -180,10 +204,7 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: (Boolean) -> Unit, na
                 onClick = {
                     navController.navigate("Sign Up")
                 },
-                colors = ButtonDefaults.buttonColors(
-                    Color.Black,
-                    contentColor = Color.White
-                )
+                colors = ButtonDefaults.buttonColors(CustomColor,contentColor = Color.White)
             ) {
                 Text(text = "Sign Up")
             }
@@ -212,6 +233,29 @@ fun LoginScreen(viewModel: LoginViewModel, onLoginSuccess: (Boolean) -> Unit, na
                     fontWeight = FontWeight.Bold
                 )
             }
+
+
+
+            AnimatedVisibility(
+                visible = !shouldAnimate,
+                enter = slideInHorizontally(
+                    initialOffsetX = { fullWidth -> fullWidth },
+                    animationSpec = tween(durationMillis = 1000, delayMillis = 300)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.CenterHorizontally)
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.somac_logo),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.medium)
+                        .size(width = 300.dp, height = 250.dp)
+                )
+            }
+
+
         }
 
         if (viewModel.errorMessage.isNotEmpty()) {

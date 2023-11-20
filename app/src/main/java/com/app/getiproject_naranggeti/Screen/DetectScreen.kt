@@ -2,26 +2,6 @@ package com.app.getiproject_naranggeti
 
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.navigation.NavController
-import com.google.firebase.ml.modeldownloader.CustomModel
-import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions
-import com.google.firebase.ml.modeldownloader.DownloadType
-import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader
-import org.tensorflow.lite.Interpreter
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
-import java.nio.ByteBuffer
-import java.nio.ByteOrder
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
@@ -30,46 +10,96 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.blue
 import androidx.core.graphics.green
 import androidx.core.graphics.red
-import com.google.firebase.auth.FirebaseAuth
+import androidx.navigation.NavController
+import com.app.getiproject_naranggeti.ui.theme.Purple40
+import com.app.getiproject_naranggeti.ui.theme.elice
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.ml.modeldownloader.CustomModel
+import com.google.firebase.ml.modeldownloader.CustomModelDownloadConditions
+import com.google.firebase.ml.modeldownloader.DownloadType
+import com.google.firebase.ml.modeldownloader.FirebaseModelDownloader
+import kotlinx.coroutines.delay
+import org.tensorflow.lite.Interpreter
 import java.io.FileNotFoundException
-import java.lang.Math.exp
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.nio.FloatBuffer
 import kotlin.math.exp
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun DetectScreen(navController: NavController) {
-    var userTextReview by remember { mutableStateOf("") }
-    var selectedRating by remember { mutableStateOf(0) }
-    val auth: FirebaseAuth = Firebase.auth
+    val context = LocalContext.current
+    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
+    var interpreterf by remember { mutableStateOf<Interpreter?>(null) }
+    var interpreterb by remember { mutableStateOf<Interpreter?>(null) }
+    var predictionf by remember { mutableStateOf("") }
+    var predictionb by remember { mutableStateOf("") }
+
+    val scrollState = rememberScrollState()
+
+    var imagef by remember { mutableStateOf<Bitmap?>(null) }
+    var imageb by remember { mutableStateOf<Bitmap?>(null) }
+    var imagefp by remember { mutableStateOf<Bitmap?>(null) }
+    var imagebp by remember { mutableStateOf<Bitmap?>(null) }
 
     val db = Firebase.firestore
     val userUID = Firebase.auth.currentUser?.uid
 
-    val context = LocalContext.current
-    var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
-    var interpreter by remember { mutableStateOf<Interpreter?>(null) }
-    var prediction1 by remember { mutableStateOf("") }
-    var label1 by remember { mutableStateOf("") }
-    var prediction2 by remember { mutableStateOf("") }
-    var prediction3 by remember { mutableStateOf("") }
-
     userUID?.let { uid ->
         val userData = hashMapOf(
-            "front" to prediction1,
-            "back"  to prediction3
+            "front" to predictionf,
+            "back" to predictionb
         )
 
         db.collection("user").document(uid)
@@ -78,210 +108,458 @@ fun DetectScreen(navController: NavController) {
             .addOnFailureListener { e -> Log.w("Firestore", "에러", e) }
     }
 
-    var label2 by remember { mutableStateOf("") }
-    var predictionNew by remember { mutableStateOf("") }
-    val bitmapFromResource1: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.aphone)
-    val bitmapFromResource2: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.fphoto)
-    val bitmapFromResource3: Bitmap =
-        BitmapFactory.decodeResource(context.resources, R.drawable.bphone)
-    var image2 by remember { mutableStateOf<Bitmap?>(null) }
 
-
-    val launcher = rememberLauncherForActivityResult(
+    val launcher1 = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
-            image2 = uriToBitmap(uri!!, context)
+            imagef = uriToBitmap(uri!!, context)
         }
     )
 
-    val cameraLauncher = rememberLauncherForActivityResult(
+    val cameraLauncher1 = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicturePreview(),
         onResult = { photo ->
-            image2 = photo
+            imagef = photo
+        }
+    )
+
+    val launcher2 = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            imageb = uriToBitmap(uri!!, context)
+        }
+    )
+
+    val cameraLauncher2 = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { photo ->
+            imageb = photo
         }
     )
     val resources = context.resources
     val defaultImageBitmap =
         BitmapFactory.decodeResource(resources, R.drawable.camera).asImageBitmap()
 
+    val CustomColor = Color(0xFF608EBD)
+
+    var shouldAnimate by remember { mutableStateOf(true) }
+
+    LaunchedEffect(shouldAnimate) {
+        if (shouldAnimate) {
+            delay(300)
+            shouldAnimate = false
+        }
+    }
+
+
+    Surface(
+        modifier = Modifier.fillMaxSize(),
+        color = Purple40
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+
+                val transition = rememberInfiniteTransition()
+                val alpha by transition.animateFloat(
+                    initialValue = 0f,
+                    targetValue = 1f,
+                    animationSpec = infiniteRepeatable(
+                        tween(1000, easing = LinearEasing, delayMillis = 500),
+                        repeatMode = RepeatMode.Reverse
+                    )
+                )
+
+                AnimatedVisibility(
+                    visible = !shouldAnimate,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.CenterHorizontally)
+                        .alpha(alpha)
+                ) {
+                    Image(
+                        painter = painterResource(id = R.drawable.somac_logo),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.medium)
+                            .size(width = 80.dp, height = 50.dp)
+                    )
+                }
+
+                Image(
+                    modifier = Modifier
+                        .size(300.dp),
+                    bitmap = imagef?.asImageBitmap() ?: defaultImageBitmap,
+                    contentDescription = "image"
+                )
+
+                Row {
+                    Button(
+                        onClick = { cameraLauncher1.launch(null) },
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(80.dp)
+                            .padding(4.dp),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            CustomColor,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text(
+                            text = "Camera",
+                            fontSize = 20.sp,
+                            fontFamily = elice,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                    Button(
+                        onClick = { launcher1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                        modifier = Modifier
+                            .width(150.dp)
+                            .height(80.dp)
+                            .padding(4.dp),
+                        shape = RectangleShape,
+                        colors = ButtonDefaults.buttonColors(
+                            CustomColor,
+                            contentColor = Color.White
+                        )
+                    ) {
+                        Text(
+                            text = "Image",
+                            fontSize = 20.sp,
+                            fontFamily = elice,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.width(16.dp))
+
+                }
+            }
+
+
+            Image(
+                modifier = Modifier
+                    .size(300.dp),
+                bitmap = imageb?.asImageBitmap() ?: defaultImageBitmap,
+                contentDescription = "image"
+            )
+
+            Row {
+                Button(
+                    onClick = { cameraLauncher2.launch(null) },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                ) {
+                    Text(
+                        text = "Camera",
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    onClick = { launcher2.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                ) {
+                    Text(
+                        text = "Image",
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+//                Button(
+//                    onClick = {
+//                        if (imagef != null && imageb != null) {
+//                            imagefp = imagef as Bitmap
+//                            imagebp = imageb as Bitmap
+//
+//                            val input1 = preprocessImage(imagefp!!)
+//                            val input2 = preprocessImage(imagebp!!)
+//
+//                            val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+//                            val modelOutput1 =
+//                                ByteBuffer.allocateDirect(bufferSize)
+//                                    .order(ByteOrder.nativeOrder())
+//                            val modelOutput2 =
+//                                ByteBuffer.allocateDirect(bufferSize)
+//                                    .order(ByteOrder.nativeOrder())
+//
+//                            interpreterf?.run(input1, modelOutput1)
+//                            interpreterb?.run(input2, modelOutput2)
+//
+//                            modelOutput1.rewind()
+//                            val probabilities1 = FloatArray(4)
+//                            softmax(modelOutput1.asFloatBuffer(), probabilities1)
+//                            val predictedClassIndex1 = findIndexOfMax(probabilities1)
+//                            val classLabels = arrayOf("S", "A", "B", "F")
+//                            val predictedClassLabel1 = classLabels[predictedClassIndex1]
+//                            predictionf = predictedClassLabel1
+//
+//                            modelOutput2.rewind()
+//                            val probabilities2 = FloatArray(4)
+//                            softmax(modelOutput2.asFloatBuffer(), probabilities2)
+//                            val predictedClassIndex2 = findIndexOfMax(probabilities2)
+//                            val predictedClassLabel2 = classLabels[predictedClassIndex2]
+//                            predictionb = predictedClassLabel2
+//
+//                        }
+//
+////                        navController.navigate("review/$prediction1/$prediction2")
+//                    },
+//                    modifier = Modifier
+//                        .width(100.dp)
+//                        .height(80.dp)
+//                        .padding(4.dp),
+//                    shape = RectangleShape,
+//                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+//                ) {
+//                    Text(
+//                        text = "Detect",
+//                        fontSize = 20.sp
+//                    )
+//                }
+            }
+
+            Button(
+                onClick = {
+                    if (imagef != null && imageb != null) {
+                        imagefp = imagef as Bitmap
+                        imagebp = imageb as Bitmap
+
+                        val input1 = preprocessImage(imagefp!!)
+                        val input2 = preprocessImage(imagebp!!)
+
+                        val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+                        val modelOutput1 =
+                            ByteBuffer.allocateDirect(bufferSize)
+                                .order(ByteOrder.nativeOrder())
+                        val modelOutput2 =
+                            ByteBuffer.allocateDirect(bufferSize)
+                                .order(ByteOrder.nativeOrder())
+
+                        interpreterf?.run(input1, modelOutput1)
+                        interpreterb?.run(input2, modelOutput2)
+
+                        modelOutput1.rewind()
+                        val probabilities1 = FloatArray(4)
+                        softmax(modelOutput1.asFloatBuffer(), probabilities1)
+                        val predictedClassIndex1 = findIndexOfMax(probabilities1)
+                        val classLabels = arrayOf("S", "A", "B", "F")
+                        val predictedClassLabel1 = classLabels[predictedClassIndex1]
+                        predictionf = predictedClassLabel1
+
+                        modelOutput2.rewind()
+                        val probabilities2 = FloatArray(4)
+                        softmax(modelOutput2.asFloatBuffer(), probabilities2)
+                        val predictedClassIndex2 = findIndexOfMax(probabilities2)
+                        val predictedClassLabel2 = classLabels[predictedClassIndex2]
+                        predictionb = predictedClassLabel2
+
+                    }
+
+//                        navController.navigate("review/$prediction1/$prediction2")
+                },
+                modifier = Modifier
+                    .width(150.dp)
+                    .height(80.dp)
+                    .padding(4.dp),
+                shape = RectangleShape,
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "Detect",
+                    fontSize = 20.sp,
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            imageBitmap?.let { bitmap ->
+                Image(
+                    bitmap = bitmap,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize()
+                )
+            } ?: Text(
+                text = "아이폰 이미지를 등록해주세요.",
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            Text(text = "앞면 : $predictionf")
+
+            Text(text = "후면 : $predictionb")
+
+            Button(
+                onClick =
+                { navController.navigate("customer") },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "고객만족평가",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium
+                )
+            }
+            Button(
+                onClick = {
+                    navController.navigate("grade")
+                },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "당신의 등급은?",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium)
+            }
+            Button(
+                onClick = {
+                    navController.navigate("description")
+                },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "등급 분류 기준",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium)
+            }
+            Button(
+                onClick = {
+                    navController.navigate("customerReviews")
+                },
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+            ) {
+                Text(
+                    text = "고객 리뷰",
+                    fontFamily = elice,
+                    fontWeight = FontWeight.Medium)
+            }
+
+
+        }
+    }
+
     DisposableEffect(Unit) {
         val modelConditions = CustomModelDownloadConditions.Builder()
-            .requireWifi()
+            .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
             .build()
+
         FirebaseModelDownloader.getInstance()
-            .getModel("ipb1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .getModel("ipf1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
             .addOnSuccessListener { model: CustomModel? ->
                 val modelFile = model?.file
                 if (modelFile != null) {
-                    interpreter = Interpreter(modelFile)
+                    interpreterf = Interpreter(modelFile)
                 }
 
-                if (bitmapFromResource1 != null && bitmapFromResource2 != null) {
-                    val input1 = preprocessImage(bitmapFromResource1)
-                    val input2 = preprocessImage(bitmapFromResource2)
-                    val input3 = preprocessImage(bitmapFromResource3)
+                if (imagefp != null) {
+                    val input1 = preprocessImage(imagefp!!)
+
                     val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
                     val modelOutput1 =
                         ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
-                    val modelOutput2 =
-                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
-                    val modelOutput3 =
-                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
-                    interpreter?.run(input1, modelOutput1)
-                    interpreter?.run(input2, modelOutput2)
-                    interpreter?.run(input3, modelOutput3)
+
+
+                    interpreterf?.run(input1, modelOutput1)
 
                     modelOutput1.rewind()
                     // 소프트맥스 함수를 사용하여 확률 벡터 얻기
                     val probabilities1 = FloatArray(4)
                     softmax(modelOutput1.asFloatBuffer(), probabilities1)
 
+                    // 최대 확률을 가진 클래스 선택
                     val predictedClassIndex1 = findIndexOfMax(probabilities1)
 
                     // 클래스 레이블 매핑
                     val classLabels = arrayOf("S", "A", "B", "F")
                     val predictedClassLabel1 = classLabels[predictedClassIndex1]
-                    prediction1 = predictedClassLabel1
+                    predictionf = predictedClassLabel1
+                }
+            }
+
+
+        // Clean up resources when the composable is disposed
+        onDispose {
+            interpreterf?.close()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        val modelConditions = CustomModelDownloadConditions.Builder()
+            .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
+            .build()
+
+        FirebaseModelDownloader.getInstance()
+            .getModel("ipb1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .addOnSuccessListener { model: CustomModel? ->
+                val modelFile = model?.file
+                if (modelFile != null) {
+                    interpreterb = Interpreter(modelFile)
+                }
+
+                if (imagebp != null) {
+                    val input2 = preprocessImage(imagebp!!)
+
+                    val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+                    val modelOutput2 =
+                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
+
+
+                    interpreterb?.run(input2, modelOutput2)
 
                     modelOutput2.rewind()
-                    val numClasses = 4
+
+                    // 소프트맥스 함수를 사용하여 확률 벡터 얻기
                     val probabilities2 = FloatArray(4)
+                    softmax(modelOutput2.asFloatBuffer(), probabilities2)
 
-                    try {
-                        val reader = BufferedReader(
-                            InputStreamReader(context.resources.openRawResource(R.raw.organic))
-                        )
-                        // probabilities.capacity() 대신 numClasses를 사용하도록 변경
-                        for (i in 0 until numClasses) {
-                            // 클래스 레이블 읽어오기
-                            val label: String = reader.readLine()
+                    // 최대 확률을 가진 클래스 선택
+                    val predictedClassIndex2 = findIndexOfMax(probabilities2)
 
-                            // 확률 값 읽어오기
-                            val probability = probabilities2.get(i)
-
-                            // 클래스 레이블과 확률 출력
-                            println("$label: $probability")
-
-                            // 각 클래스에 대한 확률을 배열에 저장
-                            probabilities2[i] = probability
-                        }
-                    } catch (e: IOException) {
-                        // 예외 처리
-                        e.printStackTrace()
-                    }
-
-                    modelOutput3.rewind()
-                    val probabilities3 = FloatArray(4)
-                    softmax(modelOutput3.asFloatBuffer(), probabilities3)
-                    val predictedClassIndex = findIndexOfMax(probabilities3)
-                    val predictedClassLabel = classLabels[predictedClassIndex]
-                    prediction3 = predictedClassLabel
+                    // 클래스 레이블 매핑
+                    val classLabels = arrayOf("S", "A", "B", "F")
+                    val predictedClassLabel2 = classLabels[predictedClassIndex2]
+                    predictionb = predictedClassLabel2
                 }
             }
 
         // Clean up resources when the composable is disposed
         onDispose {
-            interpreter?.close()
-        }
-    }
-
-    Surface(
-        modifier=Modifier.fillMaxSize(),
-        color=MaterialTheme.colorScheme.background
-    ){
-        Column(
-            modifier=Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment=Alignment.CenterHorizontally
-        ){
-            Image(modifier=Modifier
-                .size(300.dp),
-                bitmap=image2?.asImageBitmap()?:defaultImageBitmap,contentDescription="image"
-            )
-
-            Row{
-                Button(
-                    onClick={cameraLauncher.launch(null)},
-                    modifier=Modifier
-                        .width(100.dp)
-                        .height(80.dp)
-                        .padding(4.dp),
-                    shape=RectangleShape
-                ){
-                    Text(
-                        text="Camera",
-                        fontSize=10.sp
-                    )
-                }
-
-                Spacer(modifier=Modifier.width(16.dp))
-
-                Button(
-                    onClick={launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))},
-                    modifier=Modifier
-                        .width(100.dp)
-                        .height(80.dp)
-                        .padding(4.dp),
-                    shape=RectangleShape
-                ){
-                    Text(
-                        text="Image",
-                        fontSize=10.sp
-                    )
-                }
-
-                Spacer(modifier=Modifier.width(16.dp))
-
-                Button(
-                    onClick={/*TODO*/},
-                    modifier=Modifier
-                        .width(100.dp)
-                        .height(80.dp)
-                        .padding(4.dp),
-                    shape=RectangleShape
-                ){
-                    Text(
-                        text="Detect",
-                        fontSize=10.sp
-                    )
-                }
-            }
-
-            Spacer(modifier=Modifier.height(16.dp))
-
-            imageBitmap?.let{bitmap->
-                Image(
-                    bitmap=bitmap,
-                    contentDescription=null,
-                    modifier=Modifier.fillMaxSize()
-                )
-            }?:Text(
-                text="Imagenotloacded",
-                color=MaterialTheme.colorScheme.onSurface
-            )
-
-            Text(text="1번째$label1:$prediction1")
-
-            Text(text="2번째$label2:$prediction2")
-
-            Text(text="3번째$prediction3")
-
-
-            Button(onClick={navController.navigate("evaluation")}){
-                Text(text="고객만족평가")
-            }
-            Button(onClick={navController.navigate("grade")}){
-                Text(text="당신의등급은?")
-            }
+            interpreterb?.close()
         }
     }
 }
-
-
-
 
 fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     val bitmap = Bitmap.createScaledBitmap(inputBitmap, 224, 224, true)
@@ -290,9 +568,15 @@ fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     for (y in 0 until 224) {
         for (x in 0 until 224) {
             val px = bitmap.getPixel(x, y)
+
+            // Get channel values from the pixel value.
             val r = px.red
             val g = px.green
             val b = px.blue
+
+            // Normalize channel values to [-1.0, 1.0]. This requirement depends on the model.
+            // For example, some models might require values to be normalized to the range
+            // [0.0, 1.0] instead.
             val rf = (r - 127) / 255f
             val gf = (g - 127) / 255f
             val bf = (b - 127) / 255f
@@ -304,6 +588,7 @@ fun preprocessImage(inputBitmap: Bitmap): ByteBuffer {
     }
     return input
 }
+
 fun bitmapToUri(context: Context, bitmap: Bitmap): Uri? {
     val contentValues = ContentValues().apply {
         put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg")
@@ -334,6 +619,7 @@ fun uriToBitmap(uri: Uri, context: Context): Bitmap? {
         null
     }
 }
+
 
 fun softmax(input: FloatBuffer, output: FloatArray) {
     if (input.capacity() != output.size) {
@@ -373,104 +659,3 @@ fun findIndexOfMax(array: FloatArray): Int {
 
     return maxIndex
 }
-
-
-//    RatingBar(
-//    rating = rating.value ,
-//    onRatingChanged = {
-//        newRating ->
-//        rating.value = newRating
-//    }
-//    )
-//    Button(
-//    onClick = {
-//        val uid = FirebaseAuth.getInstance().currentUser?.uid ?: ""
-//        reference.child(uid).setValue(rating.value)
-//    },
-//    modifier = Modifier.padding(bottom = 16.dp),
-//    colors = ButtonDefaults.buttonColors(
-//    Color(0xFFbfd2e9),
-//    contentColor = Color.White
-//    )
-//    ) {
-//        Text(text = "저장")
-//    }
-//@Composable
-//fun RatingBar(
-//    rating: Float,
-//    onRatingChanged: (Float) -> Unit
-//) {
-//    Row(
-//        modifier = Modifier
-//            .fillMaxWidth()
-//            .padding(start = 16.dp)
-//    ) {
-//        for (i in 0 until 5) {
-//            val starRating = i + 1
-//            val isSelected = starRating <= rating
-//            val iconColor = if (isSelected) Color(0XFFEDD500) else Color.Gray
-//
-//            IconButton(
-//                onClick = { onRatingChanged(starRating.toFloat()) },
-//                modifier = Modifier.size(30.dp)
-//            ) {
-//                Icon(
-//                    imageVector = Icons.Filled.Star,
-//                    contentDescription = "별점 $starRating",
-//                    tint = iconColor
-//                )
-//            }
-//        }
-//    }
-//}
-//val rating: MutableState<Float> = mutableStateOf(0.0f)
-//val database = FirebaseDatabase.getInstance()
-//val reference = database.getReference("ratings")
-//
-//
-
-//텍스트 리뷰임 !!!!!!!!
-//    OutlinedTextField(
-//    value = userTextReview,
-//    onValueChange = { userTextReview = it },
-//    label = { Text("텍스트 리뷰 작성") },
-//    modifier = Modifier
-//    .fillMaxWidth()
-//    .padding(16.dp)
-//    )
-//
-//    Button(
-//    onClick = {
-//        val currentUser = auth.currentUser
-//        if (currentUser != null) {
-//            val review = Review(
-//                userId = currentUser.displayName ?: "",
-//                userUid = currentUser.uid,
-//                textReview = userTextReview
-//            )
-//            // writeReview 함수 호출
-//            writeReview(review)
-//        }
-//    },
-//    modifier = Modifier
-//    .width(200.dp)
-//    .height(100.dp)
-//    ) {
-//        Text(
-//            text = "리뷰 작성",
-//            fontSize = 20.sp
-//        )
-//    }
-//
-//data class Review(
-//    val userId: String = "",
-//    val userUid: String = "",
-//    val textReview: String = ""
-//)
-//
-//fun writeReview(review: Review) {
-//    val database = FirebaseDatabase.getInstance()
-//    val reviewsRef: DatabaseReference = database.getReference("reviews")
-//    val newReviewRef = reviewsRef.push()
-//    newReviewRef.setValue(review)
-//}
