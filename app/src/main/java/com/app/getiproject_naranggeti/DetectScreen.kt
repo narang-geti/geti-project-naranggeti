@@ -28,7 +28,10 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
@@ -283,6 +286,9 @@ fun DetectScreen(navController: NavController) {
             Button(onClick={navController.navigate("grade")}){
                 Text(text="당신의등급은?")
             }
+            Button(onClick={navController.navigate("review")}){
+                Text(text="당신의등급은?")
+            }
 
 
         }
@@ -477,3 +483,5 @@ fun findIndexOfMax(array: FloatArray): Int {
 
     return maxIndex
 }
+
+

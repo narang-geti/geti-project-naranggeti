@@ -5,6 +5,7 @@ import android.widget.RatingBar
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -15,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -50,6 +52,7 @@ fun CustomerEvaluation(navController: NavController) {
     val database = FirebaseDatabase.getInstance()
     val reviewsRef: DatabaseReference = database.getReference("reviews")
     val rating: MutableState<Float> = remember { mutableStateOf(0.0f) }
+
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -148,4 +151,42 @@ fun writeReview(review: MyReview) {
     val reviewsRef: DatabaseReference = database.getReference("reviews")
     val newReviewRef = reviewsRef.push()
     newReviewRef.setValue(review)
+}
+@Composable
+fun ReviewScreen(review: MyReview, navController: NavController) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(16.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Start
+            ) {
+                for (i in 0 until 5) {
+                    val isSelected = i < review.starRating
+                    val iconColor = if (isSelected) Color(0XFFEDD500) else Color.Gray
+
+                    Icon(
+                        imageVector = Icons.Filled.Star,
+                        contentDescription = "별점",
+                        tint = iconColor,
+                        modifier = Modifier.size(24.dp)
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(text = review.textReview)
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text(text = "작성자: ${review.userId}")
+        }
+    }
 }
