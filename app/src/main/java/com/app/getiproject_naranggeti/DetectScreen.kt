@@ -186,11 +186,11 @@ fun DetectScreen(navController: NavController) {
                         .alpha(alpha)
                 ) {
                     Image(
-                        painter = painterResource(id = R.drawable.somac_logo),
+                        painter = painterResource(id = R.drawable.classification_logo),
                         contentDescription = null,
                         modifier = Modifier
                             .clip(MaterialTheme.shapes.medium)
-                            .size(width = 80.dp, height = 50.dp)
+                            .size(width = 120.dp, height = 80.dp)
                     )
                 }
 
@@ -421,50 +421,51 @@ fun DetectScreen(navController: NavController) {
 
             Text(text = "후면 : $predictionb")
 
-            Button(
-                onClick =
-                { navController.navigate("customer") },
-                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-            ) {
-                Text(
-                    text = "고객만족평가",
-                    fontFamily = elice,
-                    fontWeight = FontWeight.Medium
-                )
-            }
+//            Button(
+//                onClick =
+//                { navController.navigate("customer") },
+//                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+//            ) {
+//                Text(
+//                    text = "고객만족평가",
+//                    fontFamily = elice,
+//                    fontWeight = FontWeight.Medium
+//                )
+//            }
             Button(
                 onClick = {
                     navController.navigate("grade")
                 },
-                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White),
+                shape = RectangleShape
             ) {
                 Text(
                     text = "당신의 등급은?",
                     fontFamily = elice,
                     fontWeight = FontWeight.Medium)
             }
-            Button(
-                onClick = {
-                    navController.navigate("description")
-                },
-                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-            ) {
-                Text(
-                    text = "등급 분류 기준",
-                    fontFamily = elice,
-                    fontWeight = FontWeight.Medium)
-            }
-            Button(
-                onClick = {
-                    navController.navigate("customerReviews")
-                },
-                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-            ) {
-                Text(
-                    text = "고객 리뷰",
-                    fontFamily = elice,
-                    fontWeight = FontWeight.Medium)
-            }
+//            Button(
+//                onClick = {
+//                    navController.navigate("description")
+//                },
+//                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+//            ) {
+//                Text(
+//                    text = "등급 분류 기준",
+//                    fontFamily = elice,
+//                    fontWeight = FontWeight.Medium)
+//            }
+//            Button(
+//                onClick = {
+//                    navController.navigate("customerReviews")
+//                },
+//                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+//            ) {
+//                Text(
+//                    text = "고객 리뷰",
+//                    fontFamily = elice,
+//                    fontWeight = FontWeight.Medium)
+//            }
 
 
         }

@@ -423,8 +423,11 @@ fun SignupScreen(navController: NavController) {
     }
 }
 fun navigateToDetectScreen(navController: NavController) {
-    navController.navigate("detect")
+    navController.navigate("menu")
 }
+//fun navigateToDetectScreen(navController: NavController) {
+//    navController.navigate("detect")
+//}
 fun navigateToLoginScreen(navController: NavController) {
     navController.navigate("login")
 }

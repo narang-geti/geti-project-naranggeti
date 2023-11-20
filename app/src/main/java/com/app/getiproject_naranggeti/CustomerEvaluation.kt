@@ -1,5 +1,6 @@
 package com.app.getiproject_naranggeti
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -30,6 +31,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -49,6 +52,7 @@ fun CustomerEvaluation(navController: NavController) {
     val reviewsRef: DatabaseReference = database.getReference("reviews")
     val rating: MutableState<Float> = remember { mutableStateOf(0.0f) }
 
+    val context = LocalContext.current
     val scrollState = rememberScrollState()
 
     val CustomColor = Color(0xFF608EBD)
@@ -93,12 +97,15 @@ fun CustomerEvaluation(navController: NavController) {
                             starRating = rating.value
                         )
                         writeReview(review)
+
+                        Toast.makeText(context, "리뷰 작성 완료", Toast.LENGTH_LONG).show()
                     }
                 },
                 modifier = Modifier
                     .width(150.dp)
-                    .height(100.dp),
-                colors = ButtonDefaults.buttonColors(CustomColor)
+                    .height(60.dp),
+                colors = ButtonDefaults.buttonColors(CustomColor),
+                shape = RectangleShape
             ) {
                 Text(
                     text = "리뷰 작성",

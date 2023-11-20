@@ -60,6 +60,9 @@ fun Navi() {
                 composable("customerReviews"){
                     CustomerReviewScreen(navController)
                 }
+                composable("menu"){
+                    MenuScreen(navController)
+                }
 
             }
         }
