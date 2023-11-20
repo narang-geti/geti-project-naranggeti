@@ -29,14 +29,14 @@ fun DescriptionScreen(navController: NavHostController) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Card {
-                Box(contentAlignment = Alignment.Center) {
+
                     Text(
                         text = "단순 참고용 등급 분류 기준 입니다.",
                         fontSize = 20.sp,
                         textAlign = TextAlign.Center,
                         fontFamily = elice
                     )
-                }
+
             }
 
             Spacer(modifier = Modifier.height(12.dp))
