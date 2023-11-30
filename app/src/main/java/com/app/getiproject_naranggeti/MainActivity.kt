@@ -66,6 +66,9 @@ fun Navi() {
                 composable("add"){
                     AddPage(navController)
                 }
+//                composable("page"){
+//                    MyPage(navController)
+//                }
 
             }
         }

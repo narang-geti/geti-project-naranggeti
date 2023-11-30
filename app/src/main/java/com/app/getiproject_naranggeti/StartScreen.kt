@@ -364,7 +364,7 @@ fun SignupScreen(navController: NavController) {
         OutlinedTextField(
             value = name,
             onValueChange = { name = it },
-            label = { Text("이름을 입력하세요") },
+            label = { Text("닉네임을 입력하세요") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),
