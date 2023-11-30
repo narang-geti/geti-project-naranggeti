@@ -7,9 +7,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
@@ -25,8 +33,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.key.Key.Companion.Calendar
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
@@ -34,15 +42,17 @@ import androidx.navigation.NavHostController
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
+import kotlin.text.*
 
 
 data class UserData(
     val title: String? = null,
     val buydate: String? = null,
-    val memorycapacity: String? = null,
+    val storage: String? = null,
     val batteryefficiency: String? = null,
     val price: String? = null,
-    val applecare: String? = null
+    val applecare: String? = null,
+    val customertext: String? = null,
 )
 
 enum class AppleCareOption(val value: String) {
@@ -54,19 +64,19 @@ enum class AppleCareOption(val value: String) {
 @Composable
 fun AddPage(navController: NavHostController) {
     var title by remember { mutableStateOf(TextFieldValue()) }
-    var memorycapacity by remember { mutableStateOf(TextFieldValue()) }
     var batteryefficiency by remember { mutableStateOf(TextFieldValue()) }
     var price by remember { mutableStateOf(TextFieldValue()) }
     var applecareOption by remember { mutableStateOf(AppleCareOption.YES) }
     val selectedDate = remember { mutableStateOf(LocalDate.now()) }
     val showDialog = remember { mutableStateOf(false) }
-//    var buydate by remember { mutableStateOf(selectedDate.value.toString()) }
-
+    var selectedStorage by remember { mutableStateOf("") }
+    var customerText by remember { mutableStateOf(TextFieldValue()) }
 
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .verticalScroll(rememberScrollState())
     ) {
         TextField(
             value = title,
@@ -85,6 +95,7 @@ fun AddPage(navController: NavHostController) {
                 .padding(16.dp)
         )
         LaunchedEffect(showDialog.value) {
+            //달력 재선택 가능하게 해줌
             if (showDialog.value) {
                 showDialog.value = false
             }
@@ -96,7 +107,7 @@ fun AddPage(navController: NavHostController) {
                 val year = current.year
                 val month = current.monthValue - 1
                 val day = current.dayOfMonth
-
+                //달력 코드
                 DatePickerDialog(
                     LocalContext.current,
                     { _, year, month, dayOfMonth ->
@@ -109,36 +120,36 @@ fun AddPage(navController: NavHostController) {
                 ).show()
             }
         }
-        TextField(
-            value = memorycapacity,
-            onValueChange = { memorycapacity = it },
-            label = { Text("Memory Capacity") },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
-        )
+
+        DropDownMenu(selectedItem = selectedStorage, onChangeItem = { selectedStorage = it })
 
         TextField(
-            value = batteryefficiency,
-            onValueChange = { batteryefficiency = it },
+            value = "${batteryefficiency.text}%",
+            onValueChange = {
+                batteryefficiency =
+                    TextFieldValue(it.filterIndexed { index, char -> index < 3 && char.isDigit() })
+            },
             label = { Text("Battery Efficiency") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp),
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         TextField(
-            value = price,
-            onValueChange = { price = it },
+            value = "${price.text}₩",
+            onValueChange = {
+                price =
+                    TextFieldValue(it.filterIndexed { index, char -> index < 9 && char.isDigit() })
+            },
             label = { Text("Price") },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(bottom = 8.dp),
-            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent)
+            colors = TextFieldDefaults.textFieldColors(containerColor = Color.Transparent),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
-
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -173,16 +184,31 @@ fun AddPage(navController: NavHostController) {
                     .align(Alignment.CenterVertically)
             )
         }
+        OutlinedTextField(
+            value = customerText,
+            onValueChange = { customerText = it },
+            label = { Text("Custom Text") },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = 8.dp)
+                .height(200.dp),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                unfocusedBorderColor = Color.Gray,
+                textColor = Color.Black
+            )
+        )
 
 
         Button(
             onClick = {
                 val userData = UserData(
                     title = title.text,
-                    buydate = selectedDate.value.toString(),                    memorycapacity = memorycapacity.text,
-                    batteryefficiency = batteryefficiency.text,
-                    price = price.text,
-                    applecare = applecareOption.value
+                    buydate = selectedDate.value.toString(),
+                    storage = selectedStorage,
+                    batteryefficiency = "${batteryefficiency.text}%",
+                    price = "${price.text}원",
+                    applecare = applecareOption.value,
+                    customertext = customerText.text
                 )
 
                 val db = Firebase.firestore
@@ -209,21 +235,47 @@ fun AddPage(navController: NavHostController) {
         }
     }
 }
-@Composable
-fun showDatePickerDialog(selectedDate: MutableState<LocalDate>) {
-    val current = LocalDate.now()
-    val year = current.year
-    val month = current.monthValue - 1
-    val day = current.dayOfMonth
 
-    val datePickerDialog = DatePickerDialog(
-        LocalContext.current,
-        { _, year, month, dayOfMonth ->
-            selectedDate.value = LocalDate.of(year, month + 1, dayOfMonth)
-        },
-        year,
-        month,
-        day
-    )
-    datePickerDialog.show()
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DropDownMenu(selectedItem: String, onChangeItem: (String) -> Unit) {
+    var expanded by remember { mutableStateOf(false) }
+    val list = listOf("128GB", "256GB", "512GB", "1TB")
+
+    Column(modifier = Modifier.padding(20.dp)) {
+        ExposedDropdownMenuBox(
+            expanded = expanded,
+            onExpandedChange = { expanded = !expanded }
+        ) {
+            OutlinedTextField(
+                readOnly = true,
+                value = selectedItem,
+                onValueChange = { },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .menuAnchor(),
+                label = { Text(text = "Select Storage") },
+                trailingIcon = {
+                    ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                }
+            )
+            ExposedDropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+            ) {
+                list.forEach { label ->
+                    DropdownMenuItem(
+                        text = {
+                            Text(text = label)
+                        },
+                        onClick = {
+                            onChangeItem(label)
+                            expanded = false
+                        },
+                    )
+                }
+            }
+
+        }
+    }
 }
