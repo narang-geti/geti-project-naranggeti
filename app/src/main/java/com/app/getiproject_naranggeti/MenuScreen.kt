@@ -70,7 +70,7 @@ fun MenuScreen(navController: NavController) {
             CardButton("등급 분류 서비스", onClick = { navController.navigate("detect") }, CustomColor)
             CardButton("등급 분류 기준", onClick = { navController.navigate("description") }, CustomColor)
             CardButton("고객 만족 평가", onClick = { navController.navigate("customer") }, CustomColor)
-            CardButton("고객 리뷰 모음", onClick = { navController.navigate("customerReviews") }, CustomColor)
+            CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
         }
     }
 }
