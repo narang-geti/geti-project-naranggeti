@@ -35,7 +35,7 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start") {
+            NavHost(navController = navController, startDestination = "imei") {
                 composable("start") {
                     StartScreen(navController)
                 }
@@ -68,6 +68,9 @@ fun Navi() {
                 }
                 composable("info"){
                     UserInfo(navController)
+                }
+                composable("imei"){
+                    ImeinScreen(navController)
                 }
 
             }

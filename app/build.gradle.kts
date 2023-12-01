@@ -90,4 +90,15 @@ dependencies {
     // Also add the dependency for the TensorFlow Lite library and specify its version
     implementation("org.tensorflow:tensorflow-lite:2.3.0")
 
+//
+//    implementation ("io.coil-kt:coil-compose:1.4.0")
+    //텍스트인식
+    // To recognize Latin script
+    implementation ("com.google.mlkit:text-recognition:16.0.0")
+
+    // To recognize Korean script
+    implementation ("com.google.mlkit:text-recognition-korean:16.0.0")
+
+
+
 }
