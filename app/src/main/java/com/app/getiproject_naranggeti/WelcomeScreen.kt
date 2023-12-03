@@ -111,7 +111,7 @@ fun WelcomeScreen(navController: NavController) {
         user?.uid?.let { uid ->
             db.collection("userdata").document(uid).get()
                 .addOnSuccessListener { documentSnapshot ->
-                    // UserData 객체에 Firestore 문서의 데이터를 매핑합니다.
+                    // UserData 객체에 Firestore 문서의 데이터를 매핑해줌
                     documentSnapshot.toObject(UserData::class.java)?.let { data ->
                         userData = data
                     }
