@@ -47,17 +47,17 @@ import java.time.LocalDate
 import kotlin.text.*
 
 
-data class UserData(
-    val title: String? = null,
-    val buydate: String? = null,
-    val storage: String? = null,
-    val batteryefficiency: String? = null,
-    val price: String? = null,
-    val applecare: String? = null,
-    val customertext: String? = null,
-
-
-)
+//data class UserData(
+//    val title: String? = null,
+//    val buydate: String? = null,
+//    val storage: String? = null,
+//    val batteryefficiency: String? = null,
+//    val price: String? = null,
+//    val applecare: String? = null,
+//    val customertext: String? = null,
+//
+//
+//)
 
 enum class AppleCareOption(val value: String) {
     YES("Yes"),
