@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -117,7 +118,7 @@ fun WelcomeScreen(navController: NavController) {
                     }
                 }
                 .addOnFailureListener { e ->
-                    Log.w("Firestore", "Error loading document", e)
+                    Log.w("Firestore", "에러", e)
                 }
         }
     }
@@ -152,23 +153,45 @@ fun WelcomeScreen(navController: NavController) {
             )
         }
         Column {
-            Row {
-                Image(
-                    painter = painterResource(id = imageResource),
-                    contentDescription = "총점 이미지",
-                    modifier = Modifier
-                        .width(50.dp)
-                        .height(70.dp)
-                )
-                userData?.let { data ->
-                    Text(text = "제목: ${data.title}\n")
-                    Text(text = "상세 설명: ${data.customertext}\n")
-                    Text(text = "가격: ${data.price}")
-                    //불러올 데이터를 더 추가할거면 여기다가 하면 됩니다
+
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ){
+
+                Row {
+                    Image(
+                        painter = painterResource(id = imageResource),
+                        contentDescription = "총점 이미지",
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(100.dp)
+                    )
+                    Column {
+
+                        userData?.let { data ->
+                            Text(text = "제목: ${data.title}\n")
+                            Text(text = "상세 설명: ${data.customertext}\n")
+                            Text(text = "가격: ${data.price}")
+                            //불러올 데이터를 더 추가할거면 여기다가 하면 됩니다
+                        }
+                        if (imeiValid && !isLoading) {
+                            Image(
+                                painter = painterResource(id = R.drawable.imei_mark),
+                                contentDescription = "IMEI 인증 마크",
+                                modifier = Modifier
+                                    .size(32.dp)
+                            )
+                        }
+
+
+                    }
+
+
                 }
 
-
             }
+
         }
 
         Spacer(modifier = Modifier.width(8.dp))
