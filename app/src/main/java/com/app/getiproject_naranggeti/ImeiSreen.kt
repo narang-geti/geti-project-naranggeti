@@ -25,6 +25,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
@@ -285,13 +287,13 @@ fun ImeinScreen(navController: NavController) {
                 launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.tertiary,
-
-                ),
+                containerColor = Color(0xFF608DBC) // HEX 색상 코드 사용
+            ),
             modifier = Modifier
                 .width(120.dp)
                 .height(50.dp)
-                .padding(top = 12.dp)
+                .padding(top = 12.dp),
+            shape = RectangleShape
         ) {
             Text(
                 "IMEI 인증",

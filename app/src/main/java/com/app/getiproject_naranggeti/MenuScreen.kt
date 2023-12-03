@@ -4,12 +4,15 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -71,14 +74,15 @@ fun MenuScreen(navController: NavController) {
             )
         }
 
-
         CardButton("올라온 상품", onClick = { navController.navigate("welcome") }, CustomColor)
         CardButton("상품 등록", onClick = { navController.navigate("product") }, CustomColor)
+        CardButton("IMEI 인증 마크", onClick = { navController.navigate("imei") }, CustomColor)
         CardButton("등급 분류 서비스", onClick = { navController.navigate("detect") }, CustomColor)
         CardButton("등급 분류 기준", onClick = { navController.navigate("description") }, CustomColor)
         CardButton("고객 만족 평가", onClick = { navController.navigate("customer") }, CustomColor)
         CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
-        CardButton("IMEI등록", onClick = { navController.navigate("imei") }, CustomColor)
+        CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
+
     }
 }
 
@@ -87,8 +91,11 @@ fun MenuScreen(navController: NavController) {
 fun CardButton(text: String, onClick: () -> Unit, backgroundColor: Color) {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
+            .width(300.dp)
+            .padding(8.dp)
+            .border(1.dp, Color.White, RoundedCornerShape(4.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF608DBC))
 
         ) {
         Button(
