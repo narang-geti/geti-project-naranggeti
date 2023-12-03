@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Email
@@ -31,6 +32,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -64,6 +66,8 @@ fun Navi() {
 
     GetiProject_naranggetiTheme {
 
+        val CustomColor = Color(0xFF608EBD)
+
         val items = listOf(
             BottomNavigationItem(
                 title = "Home",
@@ -95,12 +99,16 @@ fun Navi() {
 
         Surface(
             modifier = Modifier.fillMaxSize(),
-            color = Purple40
+            color = CustomColor
         ) {
             var selectedItemIndex by rememberSaveable {
                 mutableStateOf(0)
 
             }
+
+            val navController = rememberNavController()
+
+
 
             Scaffold(
                 bottomBar = {
@@ -110,6 +118,13 @@ fun Navi() {
                                 selected = selectedItemIndex == index,
                                 onClick = {
                                     selectedItemIndex = index
+
+                                    when (item.title) {
+                                        "Home" -> navController.navigate("welcome")
+                                        "Chat" -> navController.navigate("imei")
+                                        "Menu" -> navController.navigate("menu")
+                                        "Profile" -> navController.navigate("info")
+                                    }
 
                                 },
                                 label = {
@@ -142,53 +157,56 @@ fun Navi() {
 
                     }
                 }
-            ) {
+            ) { innerPadding ->
+                Surface(modifier = Modifier.padding(innerPadding)) {
 
 
-            }
-
-            val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "login") {
-                composable("start") {
-                    StartScreen()
-                }
-                composable("detect") {
-                    DetectScreen(navController)
-                }
-                composable("login") {
-                    LoginScreen(LoginViewModel(), {}, navController)
-                }
-                composable("Sign Up") {
-                    SignupScreen(navController)
-                }
-                composable("customer") {
-                    CustomerEvaluation(navController)
-                }
-                composable("grade") {
-                    GradeScreen(navController)
-                }
-                composable("description") {
-                    DescriptionScreen(navController)
-                }
-                composable("customerReviews") {
-                    CustomerReviewScreen(navController)
-                }
-                composable("menu") {
-                    MenuScreen(navController)
-                }
-                composable("add") {
-                    AddPage(navController)
-                }
-                composable("info") {
-                    UserInfo(navController)
-                }
-                composable("imei") {
-                    ImeinScreen(navController)
-                }
-                composable("welcome") {
-                    WelcomeScreen(navController)
                 }
 
+//            val navController = rememberNavController()
+                NavHost(navController = navController, startDestination = "login") {
+                    composable("start") {
+                        StartScreen()
+                    }
+                    composable("detect") {
+                        DetectScreen(navController)
+                    }
+                    composable("login") {
+                        LoginScreen(LoginViewModel(), {}, navController)
+                    }
+                    composable("Sign Up") {
+                        SignupScreen(navController)
+                    }
+                    composable("customer") {
+                        CustomerEvaluation(navController)
+                    }
+                    composable("grade") {
+                        GradeScreen(navController)
+                    }
+                    composable("description") {
+                        DescriptionScreen(navController)
+                    }
+                    composable("customerReviews") {
+                        CustomerReviewScreen(navController)
+                    }
+                    composable("menu") {
+                        MenuScreen(navController)
+                    }
+                    composable("product") {
+                        ProductRegistration(navController)
+                    }
+                    composable("info") {
+                        UserInfo(navController)
+                    }
+                    composable("imei") {
+                        ImeinScreen(navController)
+                    }
+                    composable("welcome") {
+                        WelcomeScreen(navController)
+                    }
+
+
+                }
             }
         }
     }

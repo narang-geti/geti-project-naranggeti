@@ -22,8 +22,6 @@ import com.app.getiproject_naranggeti.ui.theme.elice
 @Composable
 fun DescriptionScreen(navController: NavHostController) {
 
-    Box(){
-
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -46,13 +44,12 @@ fun DescriptionScreen(navController: NavHostController) {
                 painter = painterResource(id = R.drawable.description),
                 contentDescription = "총점 이미지",
                 modifier = Modifier
-                    .width(700.dp)
-                    .height(1000.dp)
+                    .width(500.dp)
+                    .height(700.dp)
             )
 
         }
 
 
-    }
 
 }

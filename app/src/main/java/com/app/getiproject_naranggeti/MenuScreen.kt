@@ -5,6 +5,8 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -29,6 +31,8 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun MenuScreen(navController: NavController) {
+
+    val scrollState = rememberScrollState()
     val CustomColor = Color(0xFF608EBD)
     var shouldAnimate by remember { mutableStateOf(true) }
 
@@ -39,42 +43,45 @@ fun MenuScreen(navController: NavController) {
         }
     }
 
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier.fillMaxSize()
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(scrollState),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+
+        AnimatedVisibility(
+            visible = !shouldAnimate,
+            enter = slideInHorizontally(
+                initialOffsetX = { fullWidth -> fullWidth },
+                animationSpec = tween(durationMillis = 1000, delayMillis = 300)
+            ),
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.CenterHorizontally)
         ) {
-
-            AnimatedVisibility(
-                visible = !shouldAnimate,
-                enter = slideInHorizontally(
-                    initialOffsetX = { fullWidth -> fullWidth },
-                    animationSpec = tween(durationMillis = 1000, delayMillis = 300)
-                ),
+            Image(
+                painter = painterResource(id = R.drawable.somacmenu_logo),
+                contentDescription = null,
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .align(Alignment.CenterHorizontally)
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.somacmenu_logo),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.medium)
-                        .size(width = 200.dp, height =120.dp)
-                )
-            }
-
-            CardButton("등급 분류 서비스", onClick = { navController.navigate("detect") }, CustomColor)
-            CardButton("등급 분류 기준", onClick = { navController.navigate("description") }, CustomColor)
-            CardButton("고객 만족 평가", onClick = { navController.navigate("customer") }, CustomColor)
-            CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
-            CardButton("IMEI등록", onClick = { navController.navigate("imei") }, CustomColor)
+                    .clip(MaterialTheme.shapes.medium)
+                    .size(width = 200.dp, height = 120.dp)
+            )
         }
+
+
+        CardButton("올라온 상품", onClick = { navController.navigate("welcome") }, CustomColor)
+        CardButton("상품 등록", onClick = { navController.navigate("product") }, CustomColor)
+        CardButton("등급 분류 서비스", onClick = { navController.navigate("detect") }, CustomColor)
+        CardButton("등급 분류 기준", onClick = { navController.navigate("description") }, CustomColor)
+        CardButton("고객 만족 평가", onClick = { navController.navigate("customer") }, CustomColor)
+        CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
+        CardButton("IMEI등록", onClick = { navController.navigate("imei") }, CustomColor)
     }
 }
+
 
 @Composable
 fun CardButton(text: String, onClick: () -> Unit, backgroundColor: Color) {
@@ -83,7 +90,7 @@ fun CardButton(text: String, onClick: () -> Unit, backgroundColor: Color) {
             .fillMaxWidth()
             .padding(8.dp),
 
-    ) {
+        ) {
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(backgroundColor, contentColor = Color.White),

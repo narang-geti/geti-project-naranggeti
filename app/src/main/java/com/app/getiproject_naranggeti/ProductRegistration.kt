@@ -62,7 +62,7 @@ enum class AppleCareOption(val value: String) {
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
-fun AddPage(navController: NavHostController) {
+fun ProductRegistration(navController: NavHostController) {
     var title by remember { mutableStateOf(TextFieldValue()) }
     var batteryefficiency by remember { mutableStateOf(TextFieldValue()) }
     var price by remember { mutableStateOf(TextFieldValue()) }
@@ -71,12 +71,12 @@ fun AddPage(navController: NavHostController) {
     val showDialog = remember { mutableStateOf(false) }
     var selectedStorage by remember { mutableStateOf("") }
     var customerText by remember { mutableStateOf(TextFieldValue()) }
+    val scrollState = rememberScrollState()
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
+            .verticalScroll(scrollState),
     ) {
         TextField(
             value = title,
