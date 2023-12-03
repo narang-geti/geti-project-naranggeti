@@ -39,6 +39,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.navigation.NavHostController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.time.LocalDate
@@ -53,6 +55,8 @@ data class UserData(
     val price: String? = null,
     val applecare: String? = null,
     val customertext: String? = null,
+
+
 )
 
 enum class AppleCareOption(val value: String) {
@@ -72,6 +76,8 @@ fun ProductRegistration(navController: NavHostController) {
     var selectedStorage by remember { mutableStateOf("") }
     var customerText by remember { mutableStateOf(TextFieldValue()) }
     val scrollState = rememberScrollState()
+    val auth = Firebase.auth
+    val userUid = auth.currentUser?.uid ?: ""
 
     Column(
         modifier = Modifier
@@ -213,17 +219,13 @@ fun ProductRegistration(navController: NavHostController) {
 
                 val db = Firebase.firestore
 
-                db.collection("userdata")
-                    .add(userData)
-                    .addOnSuccessListener { documentReference ->
-                        Log.d(
-                            "Firestore",
-                            "DocumentSnapshot added with ID: ${documentReference.id}"
-                        )
+                db.collection("userdata").document(userUid)
+                    .set(userData, SetOptions.merge())
+                    .addOnSuccessListener {
+                        Log.d("Firestore", "DocumentSnapshot added with ID: $userUid")
                         navController.navigate("menu")
                     }
                     .addOnFailureListener { e ->
-                        // 저장 중 오류가 발생한 경우
                         Log.w("Firestore", "Error adding document", e)
                     }
             },

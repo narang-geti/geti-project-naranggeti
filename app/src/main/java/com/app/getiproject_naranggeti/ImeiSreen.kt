@@ -142,7 +142,42 @@ fun ImeinScreen(navController: NavController) {
 //            }
 //        }
 
-        //IMEI가 들어있으면 true값으로 들어가도록 했음
+        //IMEI가 들어있으면 true값으로 들어가도록 했음 1
+//        selectUri?.let {
+//            try {
+//                val image = InputImage.fromFilePath(context, it)
+//                koRecognizer.process(image)
+//                    .addOnSuccessListener { result ->
+//                        trText = result.text
+//
+//                        userUID?.let { uid ->
+//                            val containsIMEI = trText.contains("IMEI")
+//                            val userData = hashMapOf("imeiValid" to containsIMEI)
+//                            db.collection("userdata").document(uid)
+//                                .set(userData, SetOptions.merge())
+//                                .addOnSuccessListener {
+//                                    if (containsIMEI) {
+//                                        Log.d("Firestore", "IMEI 인식 완료: $trText")
+//                                    } else {
+//                                        Log.d("Firestore", "IMEI 미발견")
+//                                    }
+//                                }
+//                                .addOnFailureListener { e ->
+//                                    Log.w("Firestore", "등록 실패", e)
+//                                }
+//                        }
+//                    }
+//                    .addOnFailureListener {
+//                        userUID?.let { uid ->
+//                            val userData = hashMapOf("imeiValid" to false)
+//                            db.collection("userdata").document(uid)
+//                                .set(userData, SetOptions.merge())
+//                        }
+//                    }
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//        }
         selectUri?.let {
             try {
                 val image = InputImage.fromFilePath(context, it)
@@ -152,15 +187,12 @@ fun ImeinScreen(navController: NavController) {
 
                         userUID?.let { uid ->
                             val containsIMEI = trText.contains("IMEI")
-                            val userData = hashMapOf("imeiValid" to containsIMEI)
+                            val imeiData = hashMapOf("imeiValid" to containsIMEI)
+
                             db.collection("userdata").document(uid)
-                                .set(userData, SetOptions.merge())
+                                .set(imeiData, SetOptions.merge())
                                 .addOnSuccessListener {
-                                    if (containsIMEI) {
-                                        Log.d("Firestore", "IMEI 인식 완료: $trText")
-                                    } else {
-                                        Log.d("Firestore", "IMEI 미발견")
-                                    }
+                                    Log.d("Firestore", "IMEI 인식 완료: $trText")
                                 }
                                 .addOnFailureListener { e ->
                                     Log.w("Firestore", "등록 실패", e)
@@ -169,15 +201,16 @@ fun ImeinScreen(navController: NavController) {
                     }
                     .addOnFailureListener {
                         userUID?.let { uid ->
-                            val userData = hashMapOf("imeiValid" to false)
+                            val imeiData = hashMapOf("imeiValid" to false)
                             db.collection("userdata").document(uid)
-                                .set(userData, SetOptions.merge())
+                                .set(imeiData, SetOptions.merge())
                         }
                     }
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
+
 
 //
         //15자리 숫자... 실패
