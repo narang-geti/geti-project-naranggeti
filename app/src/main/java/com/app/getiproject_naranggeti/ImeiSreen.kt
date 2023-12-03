@@ -1,6 +1,7 @@
 package com.app.getiproject_naranggeti
 
 import android.net.Uri
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,13 +31,17 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.SetOptions
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.korean.KoreanTextRecognizerOptions
 import java.io.IOException
 
 @Composable
-fun ImeinScreen(navController: NavController){
+fun ImeinScreen(navController: NavController) {
     //일단 텍스트 인식으로 인식을 완료
     //IMEI 숫자 부분만 가져와서
     //15자리 숫자가 인식되면
@@ -53,6 +58,9 @@ fun ImeinScreen(navController: NavController){
 
         }
     )
+
+    val db = Firebase.firestore
+    val userUID = Firebase.auth.currentUser?.uid
 
 
     Column {
@@ -82,17 +90,45 @@ fun ImeinScreen(navController: NavController){
         val context = LocalContext.current
         var trText by remember { mutableStateOf("") }
 
+//        selectUri?.let {
+//            try {
+//                val image = InputImage.fromFilePath(context, it)//선택된 URI를 사용,인스턴스 생성했음
+//                koRecognizer.process(image)//이미지를 텍스트 추출기에 제공하고 추출작업 수행했음
+//                    .addOnSuccessListener { result ->//텍스트 추출에 성공 하면 추출된 텍스트를 처리 하는 콜백임
+//                        trText = result.text//추출된 텍스트를 trText변수에 할당하고 추출된 텍스트가 화면에 표시될 수 있또록
+//                    }
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//        }
+
         selectUri?.let {
             try {
-                val image = InputImage.fromFilePath(context, it)//선택된 URI를 사용,인스턴스 생성
-                koRecognizer.process(image)//이미지를 텍스트 추출기에 제공하고 추출작업 수행
-                    .addOnSuccessListener { result ->//텍스트 추출에 성공 하면 추출된 텍스트를 처리 하는 콜백
-                        trText = result.text//추출된 텍스트를 trText변수에 할당하고 추출된 텍스트가 화면에 표시될 수 있또록
+                val image = InputImage.fromFilePath(context, it)
+                koRecognizer.process(image)
+                    .addOnSuccessListener { result ->
+                        trText = result.text
+
+                        userUID?.let { uid ->
+                            val userData = hashMapOf("textExtracted" to true)
+                            db.collection("userdata").document(uid)
+                                .set(userData, SetOptions.merge())
+                                .addOnSuccessListener { Log.d("Firestore", "imei 등록 완료") }
+                                .addOnFailureListener { e -> Log.w("Firestore", "등록 실패", e) }
+                        }
+                    }
+                    .addOnFailureListener {
+                        userUID?.let { uid ->
+                            val userData = hashMapOf("textExtracted" to false)
+                            db.collection("userdata").document(uid)
+                                .set(userData, SetOptions.merge())
+                        }
                     }
             } catch (e: IOException) {
                 e.printStackTrace()
             }
         }
+
 
 
         Card(
@@ -122,13 +158,6 @@ fun ImeinScreen(navController: NavController){
 
 
     }
-
-
-
-
-
-
-
 
 
 }

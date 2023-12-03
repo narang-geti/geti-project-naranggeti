@@ -38,7 +38,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -74,7 +73,7 @@ import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 
 @Composable
-fun StartScreen(navController: NavController) {
+fun StartScreen() {
 
 
     var shouldAnimate by remember { mutableStateOf(true) }
@@ -122,7 +121,7 @@ fun StartScreen(navController: NavController) {
 
             Button(
                 onClick = {
-                    navController.navigate("login")
+//                    navController.navigate("login")
                 },
                 modifier = Modifier
                     .width(200.dp)
