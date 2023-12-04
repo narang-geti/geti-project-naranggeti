@@ -39,6 +39,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 import com.app.getiproject_naranggeti.ui.theme.Purple40
+import com.google.firebase.auth.UserInfo
 
 data class BottomNavigationItem(
     val title: String,
@@ -196,7 +197,7 @@ fun Navi() {
                         ProductRegistration(navController)
                     }
                     composable("info") {
-                        UserInfo(navController)
+                        UserDataScreen(navController,UserDataViewModel())
                     }
                     composable("imei") {
                         ImeinScreen(navController)
