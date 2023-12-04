@@ -185,7 +185,7 @@ fun Navi() {
                         GradeScreen(navController)
                     }
                     composable("description") {
-                        DescriptionScreen(navController)
+                        CriteriaScreen(navController)
                     }
                     composable("customerReviews") {
                         CustomerReviewScreen(navController)
