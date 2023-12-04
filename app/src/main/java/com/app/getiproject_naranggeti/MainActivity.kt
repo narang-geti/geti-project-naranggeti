@@ -36,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.app.getiproject_naranggeti.ui.theme.GetiProject_naranggetiTheme
 import com.app.getiproject_naranggeti.ui.theme.Purple40
@@ -110,52 +111,56 @@ fun Navi() {
             val navController = rememberNavController()
 
 
+            val currentRoute =
+                navController.currentBackStackEntryAsState().value?.destination?.route
 
             Scaffold(
                 bottomBar = {
-                    NavigationBar {
-                        items.forEachIndexed { index, item ->
-                            NavigationBarItem(
-                                selected = selectedItemIndex == index,
-                                onClick = {
-                                    selectedItemIndex = index
+                    if (currentRoute !in listOf("login", "chat1", "chat2", "chat3", "chat4", "chat5")) {
+                        NavigationBar {
+                            items.forEachIndexed { index, item ->
+                                NavigationBarItem(
+                                    selected = selectedItemIndex == index,
+                                    onClick = {
+                                        selectedItemIndex = index
 
-                                    when (item.title) {
-                                        "Home" -> navController.navigate("welcome")
-                                        "Chat" -> navController.navigate("imei")
-                                        "Menu" -> navController.navigate("menu")
-                                        "Profile" -> navController.navigate("info")
-                                    }
-
-                                },
-                                label = {
-                                    Text(text = item.title)
-                                },
-                                icon = {
-                                    BadgedBox(
-                                        badge = {
-                                            if (item.badgeCount != null) {
-                                                Badge {
-                                                    Text(text = item.badgeCount.toString())
-                                                }
-                                            } else if (item.hasNews) {
-                                                Badge()
-                                            }
+                                        when (item.title) {
+                                            "Home" -> navController.navigate("welcome")
+                                            "Chat" -> navController.navigate("chatview")
+                                            "Menu" -> navController.navigate("menu")
+                                            "Profile" -> navController.navigate("info")
                                         }
-                                    ) {
-                                        Icon(
-                                            imageVector = if (index == selectedItemIndex) {
-                                                item.selectedICon
 
-                                            } else item.unselectedIcon,
-                                            contentDescription = item.title
-                                        )
+                                    },
+                                    label = {
+                                        Text(text = item.title)
+                                    },
+                                    icon = {
+                                        BadgedBox(
+                                            badge = {
+                                                if (item.badgeCount != null) {
+                                                    Badge {
+                                                        Text(text = item.badgeCount.toString())
+                                                    }
+                                                } else if (item.hasNews) {
+                                                    Badge()
+                                                }
+                                            }
+                                        ) {
+                                            Icon(
+                                                imageVector = if (index == selectedItemIndex) {
+                                                    item.selectedICon
 
+                                                } else item.unselectedIcon,
+                                                contentDescription = item.title
+                                            )
+
+                                        }
                                     }
-                                }
-                            )
-                        }
+                                )
+                            }
 
+                        }
                     }
                 }
             ) { innerPadding ->
@@ -197,7 +202,7 @@ fun Navi() {
                         ProductRegistration(navController)
                     }
                     composable("info") {
-                        UserDataScreen(navController,UserDataViewModel())
+                        UserDataScreen(navController, UserDataViewModel())
                     }
                     composable("imei") {
                         ImeinScreen(navController)
@@ -205,11 +210,99 @@ fun Navi() {
                     composable("welcome") {
                         WelcomeScreen(navController)
                     }
-
-
+                    composable("chatview") {
+                        ChatView(
+                            onNavigateToChatting1 = {
+                                navController.navigate("chat1") {
+                                    popUpTo("chat1") {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onNavigateToChatting2 = {
+                                navController.navigate("chat2") {
+                                    popUpTo("chat2") {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onNavigateToChatting3 = {
+                                navController.navigate("chat3") {
+                                    popUpTo("chat3") {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onNavigateToChatting4 = {
+                                navController.navigate("chat4") {
+                                    popUpTo("chat4") {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                            onNavigateToChatting5 = {
+                                navController.navigate("chat5") {
+                                    popUpTo("chat5") {
+                                        inclusive = true
+                                    }
+                                }
+                            },
+                        )
+                    }
+                    composable("chat1") {
+                        Chatting1(
+                            onNavigateToChatview = {
+                                navController.navigate("chatview") {
+                                    popUpTo("chatview") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                    }
+                    composable("chat2") {
+                        Chatting2(
+                            onNavigateToChatview = {
+                                navController.navigate("chatview") {
+                                    popUpTo("chatview") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                    }
+                    composable("chat3") {
+                        Chatting3(
+                            onNavigateToChatview = {
+                                navController.navigate("chatview") {
+                                    popUpTo("chatview") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                    }
+                    composable("chat4") {
+                        Chatting4(
+                            onNavigateToChatview = {
+                                navController.navigate("chatview") {
+                                    popUpTo("chatview") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                    }
+                    composable("chat5") {
+                        Chatting5(
+                            onNavigateToChatview = {
+                                navController.navigate("chatview") {
+                                    popUpTo("chatview") {
+                                        inclusive = true
+                                    }
+                                }
+                            })
+                    }
                 }
             }
         }
     }
 }
+
 

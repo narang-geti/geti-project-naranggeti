@@ -67,10 +67,7 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
             text = "안녕하세요, $userName 님!",
             style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
         )
-        // 사용자 데이터 표시
-        for (userData in userDatas.value) {
-            UserDetails(navController = navController, userData = userData)
-        }
+
         // 로그아웃 버튼
         Button(
             onClick = {

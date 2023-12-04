@@ -16,7 +16,6 @@ val maruburi = FontFamily(
     Font(R.font.maruburi_regular, FontWeight.Medium, FontStyle.Normal),
     Font(R.font.maruburi_semibold, FontWeight.SemiBold, FontStyle.Normal),
     Font(R.font.maruburi_bold, FontWeight.Bold, FontStyle.Normal)
-
 )
 val bmeuljiro=FontFamily(
     Font(R.font.mbeuljiro,FontWeight.Light, FontStyle.Normal)
