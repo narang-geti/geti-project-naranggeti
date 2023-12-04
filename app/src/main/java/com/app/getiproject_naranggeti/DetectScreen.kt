@@ -83,15 +83,25 @@ fun DetectScreen(navController: NavController) {
     var imageBitmap by remember { mutableStateOf<ImageBitmap?>(null) }
     var interpreterf by remember { mutableStateOf<Interpreter?>(null) }
     var interpreterb by remember { mutableStateOf<Interpreter?>(null) }
+    var interpreterl by remember { mutableStateOf<Interpreter?>(null) }
+    var interpreterd by remember { mutableStateOf<Interpreter?>(null) }
+
     var predictionf by remember { mutableStateOf("") }
     var predictionb by remember { mutableStateOf("") }
+    var predictionl by remember { mutableStateOf("") }
+    var predictiond by remember { mutableStateOf("") }
 
     val scrollState = rememberScrollState()
 
     var imagef by remember { mutableStateOf<Bitmap?>(null) }
     var imageb by remember { mutableStateOf<Bitmap?>(null) }
+    var imagel by remember { mutableStateOf<Bitmap?>(null) }
+    var imaged by remember { mutableStateOf<Bitmap?>(null) }
+
     var imagefp by remember { mutableStateOf<Bitmap?>(null) }
     var imagebp by remember { mutableStateOf<Bitmap?>(null) }
+    var imagelp by remember { mutableStateOf<Bitmap?>(null) }
+    var imagedp by remember { mutableStateOf<Bitmap?>(null) }
 
     val db = Firebase.firestore
     val userUID = Firebase.auth.currentUser?.uid
@@ -99,10 +109,12 @@ fun DetectScreen(navController: NavController) {
     userUID?.let { uid ->
         val userData = hashMapOf(
             "front" to predictionf,
-            "back" to predictionb
+            "back" to predictionb,
+            "lateral" to predictionl,
+            "down" to predictiond
         )
 
-        db.collection("userdata").document(uid)
+        db.collection("userClassification").document(uid)
             .set(userData, SetOptions.merge())
             .addOnSuccessListener { Log.d("Firestore", "성공") }
             .addOnFailureListener { e -> Log.w("Firestore", "에러", e) }
@@ -136,11 +148,47 @@ fun DetectScreen(navController: NavController) {
             imageb = photo
         }
     )
+
+    val launcherl = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            imagel = uriToBitmap(uri!!, context)
+        }
+    )
+
+    val cameraLauncherl = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { photo ->
+            imagel = photo
+        }
+    )
+
+    val launcherd = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            imaged = uriToBitmap(uri!!, context)
+        }
+    )
+
+    val cameraLauncherd = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.TakePicturePreview(),
+        onResult = { photo ->
+            imaged = photo
+        }
+    )
+
+
     val resources = context.resources
     val defaultImageBitmapf =
         BitmapFactory.decodeResource(resources, R.drawable.f).asImageBitmap()
     val defaultImageBitmapb=
         BitmapFactory.decodeResource(resources, R.drawable.b).asImageBitmap()
+    val defaultImageBitmapl=
+        BitmapFactory.decodeResource(resources, R.drawable.l).asImageBitmap()
+    val defaultImageBitmapd=
+        BitmapFactory.decodeResource(resources, R.drawable.d).asImageBitmap()
+
+
 
     val CustomColor = Color(0xFF608EBD)
 
@@ -298,94 +346,168 @@ fun DetectScreen(navController: NavController) {
 
                 Spacer(modifier = Modifier.width(16.dp))
 
-//                Button(
-//                    onClick = {
-//                        if (imagef != null && imageb != null) {
-//                            imagefp = imagef as Bitmap
-//                            imagebp = imageb as Bitmap
-//
-//                            val input1 = preprocessImage(imagefp!!)
-//                            val input2 = preprocessImage(imagebp!!)
-//
-//                            val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
-//                            val modelOutput1 =
-//                                ByteBuffer.allocateDirect(bufferSize)
-//                                    .order(ByteOrder.nativeOrder())
-//                            val modelOutput2 =
-//                                ByteBuffer.allocateDirect(bufferSize)
-//                                    .order(ByteOrder.nativeOrder())
-//
-//                            interpreterf?.run(input1, modelOutput1)
-//                            interpreterb?.run(input2, modelOutput2)
-//
-//                            modelOutput1.rewind()
-//                            val probabilities1 = FloatArray(4)
-//                            softmax(modelOutput1.asFloatBuffer(), probabilities1)
-//                            val predictedClassIndex1 = findIndexOfMax(probabilities1)
-//                            val classLabels = arrayOf("S", "A", "B", "F")
-//                            val predictedClassLabel1 = classLabels[predictedClassIndex1]
-//                            predictionf = predictedClassLabel1
-//
-//                            modelOutput2.rewind()
-//                            val probabilities2 = FloatArray(4)
-//                            softmax(modelOutput2.asFloatBuffer(), probabilities2)
-//                            val predictedClassIndex2 = findIndexOfMax(probabilities2)
-//                            val predictedClassLabel2 = classLabels[predictedClassIndex2]
-//                            predictionb = predictedClassLabel2
-//
-//                        }
-//
-////                        navController.navigate("review/$prediction1/$prediction2")
-//                    },
-//                    modifier = Modifier
-//                        .width(100.dp)
-//                        .height(80.dp)
-//                        .padding(4.dp),
-//                    shape = RectangleShape,
-//                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-//                ) {
-//                    Text(
-//                        text = "Detect",
-//                        fontSize = 20.sp
-//                    )
-//                }
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+            Image(
+                modifier = Modifier
+                    .size(300.dp),
+                bitmap = imagel?.asImageBitmap() ?: defaultImageBitmapl,
+                contentDescription = "image"
+            )
+
+            Row {
+                Button(
+                    onClick = { cameraLauncherl.launch(null) },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                ) {
+                    Text(
+                        text = "Camera",
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    onClick = { launcherl.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                ) {
+                    Text(
+                        text = "Image",
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Image(
+                modifier = Modifier
+                    .size(300.dp),
+                bitmap = imaged?.asImageBitmap() ?: defaultImageBitmapd,
+                contentDescription = "image"
+            )
+
+            Row {
+                Button(
+                    onClick = { cameraLauncherd.launch(null) },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                ) {
+                    Text(
+                        text = "Camera",
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+                Button(
+                    onClick = { launcherd.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    modifier = Modifier
+                        .width(150.dp)
+                        .height(80.dp)
+                        .padding(4.dp),
+                    shape = RectangleShape,
+                    colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
+                ) {
+                    Text(
+                        text = "Image",
+                        fontSize = 20.sp,
+                        fontFamily = elice,
+                        fontWeight = FontWeight.Medium
+                    )
+                }
+
+                Spacer(modifier = Modifier.width(16.dp))
+
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+
+
             Button(
                 onClick = {
-                    if (imagef != null && imageb != null) {
+                    if (imagef != null && imageb != null && imagel != null && imaged != null) {
                         imagefp = imagef as Bitmap
                         imagebp = imageb as Bitmap
+                        imagelp = imagel as Bitmap
+                        imagedp = imaged as Bitmap
 
-                        val input1 = preprocessImage(imagefp!!)
-                        val input2 = preprocessImage(imagebp!!)
+                        val inputf = preprocessImage(imagefp!!)
+                        val inputb = preprocessImage(imagebp!!)
+                        val inputl = preprocessImage(imagelp!!)
+                        val inputd = preprocessImage(imagedp!!)
 
                         val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
-                        val modelOutput1 =
+                        val modelOutputf =
                             ByteBuffer.allocateDirect(bufferSize)
                                 .order(ByteOrder.nativeOrder())
-                        val modelOutput2 =
+                        val modelOutputb =
+                            ByteBuffer.allocateDirect(bufferSize)
+                                .order(ByteOrder.nativeOrder())
+                        val modelOutputl =
+                            ByteBuffer.allocateDirect(bufferSize)
+                                .order(ByteOrder.nativeOrder())
+                        val modelOutputd =
                             ByteBuffer.allocateDirect(bufferSize)
                                 .order(ByteOrder.nativeOrder())
 
-                        interpreterf?.run(input1, modelOutput1)
-                        interpreterb?.run(input2, modelOutput2)
+                        interpreterf?.run(inputf, modelOutputf)
+                        interpreterb?.run(inputb, modelOutputb)
+                        interpreterl?.run(inputl, modelOutputl)
+                        interpreterd?.run(inputd, modelOutputd)
 
-                        modelOutput1.rewind()
-                        val probabilities1 = FloatArray(4)
-                        softmax(modelOutput1.asFloatBuffer(), probabilities1)
-                        val predictedClassIndex1 = findIndexOfMax(probabilities1)
+                        modelOutputf.rewind()
+                        val probabilitiesf = FloatArray(4)
+                        softmax(modelOutputf.asFloatBuffer(), probabilitiesf)
+                        val predictedClassIndexf = findIndexOfMax(probabilitiesf)
                         val classLabels = arrayOf("S", "A", "B", "F")
-                        val predictedClassLabel1 = classLabels[predictedClassIndex1]
-                        predictionf = predictedClassLabel1
+                        val predictedClassLabelf = classLabels[predictedClassIndexf]
+                        predictionf = predictedClassLabelf
 
-                        modelOutput2.rewind()
-                        val probabilities2 = FloatArray(4)
-                        softmax(modelOutput2.asFloatBuffer(), probabilities2)
-                        val predictedClassIndex2 = findIndexOfMax(probabilities2)
-                        val predictedClassLabel2 = classLabels[predictedClassIndex2]
-                        predictionb = predictedClassLabel2
+                        modelOutputb.rewind()
+                        val probabilitiesb = FloatArray(4)
+                        softmax(modelOutputb.asFloatBuffer(), probabilitiesb)
+                        val predictedClassIndexb = findIndexOfMax(probabilitiesb)
+                        val predictedClassLabelb = classLabels[predictedClassIndexb]
+                        predictionb = predictedClassLabelb
+
+                        modelOutputl.rewind()
+                        val probabilitiesl = FloatArray(4)
+                        softmax(modelOutputl.asFloatBuffer(), probabilitiesl)
+                        val predictedClassIndexl = findIndexOfMax(probabilitiesl)
+                        val predictedClassLabell = classLabels[predictedClassIndexl]
+                        predictionl = predictedClassLabell
+
+                        modelOutputd.rewind()
+                        val probabilitiesd = FloatArray(4)
+                        softmax(modelOutputd.asFloatBuffer(), probabilitiesd)
+                        val predictedClassIndexd = findIndexOfMax(probabilitiesd)
+                        val predictedClassLabeld = classLabels[predictedClassIndexd]
+                        predictiond = predictedClassLabeld
 
                     }
 
@@ -424,17 +546,11 @@ fun DetectScreen(navController: NavController) {
 
             Text(text = "후면 : $predictionb")
 
-//            Button(
-//                onClick =
-//                { navController.navigate("customer") },
-//                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-//            ) {
-//                Text(
-//                    text = "고객만족평가",
-//                    fontFamily = elice,
-//                    fontWeight = FontWeight.Medium
-//                )
-//            }
+            Text(text = "측면 : $predictionl")
+
+            Text(text = "밑면 : $predictiond")
+
+
             Button(
                 onClick = {
                     navController.navigate("grade")
@@ -447,29 +563,6 @@ fun DetectScreen(navController: NavController) {
                     fontFamily = elice,
                     fontWeight = FontWeight.Medium)
             }
-//            Button(
-//                onClick = {
-//                    navController.navigate("description")
-//                },
-//                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-//            ) {
-//                Text(
-//                    text = "등급 분류 기준",
-//                    fontFamily = elice,
-//                    fontWeight = FontWeight.Medium)
-//            }
-//            Button(
-//                onClick = {
-//                    navController.navigate("customerReviews")
-//                },
-//                colors = ButtonDefaults.buttonColors(CustomColor, contentColor = Color.White)
-//            ) {
-//                Text(
-//                    text = "고객 리뷰",
-//                    fontFamily = elice,
-//                    fontWeight = FontWeight.Medium)
-//            }
-
 
         }
     }
@@ -555,6 +648,96 @@ fun DetectScreen(navController: NavController) {
                     val classLabels = arrayOf("S", "A", "B", "F")
                     val predictedClassLabel2 = classLabels[predictedClassIndex2]
                     predictionb = predictedClassLabel2
+                }
+            }
+
+        // Clean up resources when the composable is disposed
+        onDispose {
+            interpreterb?.close()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        val modelConditions = CustomModelDownloadConditions.Builder()
+            .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
+            .build()
+
+        FirebaseModelDownloader.getInstance()
+            .getModel("ipl1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .addOnSuccessListener { model: CustomModel? ->
+                val modelFile = model?.file
+                if (modelFile != null) {
+                    interpreterl = Interpreter(modelFile)
+                }
+
+                if (imagelp != null) {
+                    val inputl = preprocessImage(imagelp!!)
+
+                    val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+                    val modelOutputl =
+                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
+
+
+                    interpreterl?.run(inputl, modelOutputl)
+
+                    modelOutputl.rewind()
+
+                    // 소프트맥스 함수를 사용하여 확률 벡터 얻기
+                    val probabilitiesl = FloatArray(4)
+                    softmax(modelOutputl.asFloatBuffer(), probabilitiesl)
+
+                    // 최대 확률을 가진 클래스 선택
+                    val predictedClassIndexl = findIndexOfMax(probabilitiesl)
+
+                    // 클래스 레이블 매핑
+                    val classLabels = arrayOf("S", "A", "B", "F")
+                    val predictedClassLabell = classLabels[predictedClassIndexl]
+                    predictionl = predictedClassLabell
+                }
+            }
+
+        // Clean up resources when the composable is disposed
+        onDispose {
+            interpreterl?.close()
+        }
+    }
+
+    DisposableEffect(Unit) {
+        val modelConditions = CustomModelDownloadConditions.Builder()
+            .requireWifi()  // Also possible: .requireCharging() and .requireDeviceIdle()
+            .build()
+
+        FirebaseModelDownloader.getInstance()
+            .getModel("ipd1", DownloadType.LOCAL_MODEL_UPDATE_IN_BACKGROUND, modelConditions)
+            .addOnSuccessListener { model: CustomModel? ->
+                val modelFile = model?.file
+                if (modelFile != null) {
+                    interpreterd = Interpreter(modelFile)
+                }
+
+                if (imagedp != null) {
+                    val inputd = preprocessImage(imagedp!!)
+
+                    val bufferSize = 4 * java.lang.Float.SIZE / java.lang.Byte.SIZE
+                    val modelOutputd =
+                        ByteBuffer.allocateDirect(bufferSize).order(ByteOrder.nativeOrder())
+
+
+                    interpreterd?.run(inputd, modelOutputd)
+
+                    modelOutputd.rewind()
+
+                    // 소프트맥스 함수를 사용하여 확률 벡터 얻기
+                    val probabilitiesd = FloatArray(4)
+                    softmax(modelOutputd.asFloatBuffer(), probabilitiesd)
+
+                    // 최대 확률을 가진 클래스 선택
+                    val predictedClassIndexd = findIndexOfMax(probabilitiesd)
+
+                    // 클래스 레이블 매핑
+                    val classLabels = arrayOf("S", "A", "B", "F")
+                    val predictedClassLabeld = classLabels[predictedClassIndexd]
+                    predictiond = predictedClassLabeld
                 }
             }
 

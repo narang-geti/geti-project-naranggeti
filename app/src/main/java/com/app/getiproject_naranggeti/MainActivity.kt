@@ -118,7 +118,8 @@ fun Navi() {
 
             Scaffold(
                 bottomBar = {
-                    if (currentRoute !in listOf("login", "chat1", "chat2", "chat3", "chat4", "chat5")) {
+                    // if문에서 listof에 경로 쓰면 그 경로는 하단바 안 나타납니다!
+                    if (currentRoute !in listOf("login", "detect", "chat1", "chat2", "chat3", "chat4", "chat5")) {
                         NavigationBar {
                             items.forEachIndexed { index, item ->
                                 NavigationBarItem(

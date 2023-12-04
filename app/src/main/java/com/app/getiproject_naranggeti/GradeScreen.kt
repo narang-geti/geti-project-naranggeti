@@ -28,7 +28,8 @@ fun GradeScreen(navController: NavController) {
 
     var ipFront by remember { mutableStateOf<String?>(null) }
     var ipBack by remember { mutableStateOf<String?>(null) }
-
+    var ipLateral by remember { mutableStateOf<String?>(null) }
+    var ipDown by remember { mutableStateOf<String?>(null) }
 
     val db = Firebase.firestore
 
@@ -36,11 +37,13 @@ fun GradeScreen(navController: NavController) {
 
 
     userUID?.let { uid ->
-        db.collection("user").document(uid).get()
+        db.collection("userClassification").document(uid).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     ipFront = document.getString("front")
                     ipBack = document.getString("back")
+                    ipLateral = document.getString("lateral")
+                    ipDown = document.getString("down")
                 } else {
                     Log.d("Firestore", "문서 없음")
                 }
@@ -83,12 +86,12 @@ fun GradeScreen(navController: NavController) {
 
     val gradeScores = mapOf("S" to 100, "A" to 80, "B" to 60, "F" to 40)
 
-    val weightedScore = (gradeScores[ipFront] ?: 0) * 0.7 + (gradeScores[ipBack] ?: 0) * 0.3
+    val weightedScore = (gradeScores[ipFront] ?: 0) * 0.4 + (gradeScores[ipBack] ?: 0) * 0.3 + (gradeScores[ipLateral] ?: 0) * 0.2 + (gradeScores[ipDown] ?: 0) * 0.1
 
     val imageResource = when {
-        weightedScore >= 86 -> R.drawable.s_grade
-        weightedScore >= 74 -> R.drawable.a_grade
-        weightedScore >= 58 -> R.drawable.b_grade
+        weightedScore >= 90 -> R.drawable.s_grade
+        weightedScore >= 70 -> R.drawable.a_grade
+        weightedScore >= 50 -> R.drawable.b_grade
         else -> R.drawable.f_grade
     }
 
