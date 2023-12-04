@@ -2,6 +2,7 @@ package com.app.getiproject_naranggeti
 
 import android.util.Log
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -31,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.app.getiproject_naranggeti.ui.theme.elice
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -75,7 +79,7 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
         )
         Button(
             onClick = {
-                navController.navigate("UserDetails/${userUid}")
+                navController.navigate("userDetails/${userUid}")
             },
             modifier = Modifier.padding(top = 16.dp)
         ) {
@@ -83,10 +87,9 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
         }
 
         if (showUserDetails) {
-            for (userData in userDatas) {
-                UserDetails(navController = navController, userData = userData)
-            }
+            UserDetails(navController = navController, userDatas = userDatas, userUid = userUid)
         }
+
         // 로그아웃 버튼
         Button(
             onClick = {
@@ -99,9 +102,12 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
         }
     }
 }
-//판매 제목 !!!
+
+// 판매 제목 !!!
 @Composable
-fun UserDetails(navController: NavController, userData: UserData) {
+fun UserDetails(navController: NavController, userDatas: List<UserData>, userUid: String?) {
+    val CustomColor = Color(0xFF608EBD)
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
@@ -109,46 +115,45 @@ fun UserDetails(navController: NavController, userData: UserData) {
     ) {
         Column(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { navController.navigate("UserDetailsText") }
-                    .background(color = Color.Gray), // 배경색 추가
-            ) {
-                Button(
-                    onClick = { navController.navigate("UserDetailsText/${userData.uid}") },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                ) {
-                    Text(text = "Title: ${userData.title}")
+            userDatas
+                .filter { it.uid == userUid }
+                .forEach { userData ->
+                    CardButton(
+                        text = "Title: ${userData.title}",
+                        onClick = { navController.navigate("UserDetailsText/${userData.uid}") },
+                        CustomColor
+                    )
                 }
-            }
         }
     }
 }
-
 //판매 상세 페이지
 @Composable
-fun UserDetailsText(userData: UserData) {
-    Surface(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp)
-    ) {
-        Column(
+fun UserDetailsText(navController: NavController, userDataViewModel: UserDataViewModel, userDataId: String) {
+    val userDatasState = userDataViewModel.userDatas.collectAsState()
+    val userDatas: List<UserData> = userDatasState.value
+    val userData = userDatas.find { it.uid == userDataId }
+
+    if (userData != null) {
+        Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            Text(text = "Buy Date: ${userData.buydate}")
-            Text(text = "Storage: ${userData.storage}")
-            Text(text = "Battery Efficiency: ${userData.batteryefficiency}")
-            Text(text = "Price: ${userData.price}")
-            Text(text = "Apple Care: ${userData.applecare}")
-            Text(text = "Custom Text: ${userData.customertext}")
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp)
+            ) {
+                Text(text = "Buy Date: ${userData.buydate}")
+                Text(text = "Storage: ${userData.storage}")
+                Text(text = "Battery Efficiency: ${userData.batteryefficiency}")
+                Text(text = "Price: ${userData.price}")
+                Text(text = "Apple Care: ${userData.applecare}")
+                Text(text = "Custom Text: ${userData.customertext}")
+            }
         }
     }
 }
@@ -163,6 +168,7 @@ class UserDataViewModel : ViewModel() {
     init {
         fetchData()
     }
+
     private fun fetchData() {
         viewModelScope.launch(Dispatchers.IO) {
             try {

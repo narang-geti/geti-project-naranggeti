@@ -47,18 +47,6 @@ import java.time.LocalDate
 import kotlin.text.*
 
 
-//data class UserData(
-//    val title: String? = null,
-//    val buydate: String? = null,
-//    val storage: String? = null,
-//    val batteryefficiency: String? = null,
-//    val price: String? = null,
-//    val applecare: String? = null,
-//    val customertext: String? = null,
-//
-//
-//)
-
 enum class AppleCareOption(val value: String) {
     YES("Yes"),
     NO("No")
@@ -208,6 +196,7 @@ fun ProductRegistration(navController: NavHostController) {
         Button(
             onClick = {
                 val userData = UserData(
+                    uid = userUid,
                     title = title.text,
                     buydate = selectedDate.value.toString(),
                     storage = selectedStorage,
@@ -218,11 +207,11 @@ fun ProductRegistration(navController: NavHostController) {
                 )
 
                 val db = Firebase.firestore
+                val collectionRef = db.collection("userdata")
 
-                db.collection("userdata").document(userUid)
-                    .set(userData, SetOptions.merge())
-                    .addOnSuccessListener {
-                        Log.d("Firestore", "DocumentSnapshot added with ID: $userUid")
+                collectionRef.add(userData)
+                    .addOnSuccessListener { documentReference ->
+                        Log.d("Firestore", "DocumentSnapshot added with ID: ${documentReference.id}")
                         navController.navigate("menu")
                     }
                     .addOnFailureListener { e ->

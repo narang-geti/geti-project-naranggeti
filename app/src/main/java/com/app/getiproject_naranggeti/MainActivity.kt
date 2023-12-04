@@ -118,7 +118,15 @@ fun Navi() {
 
             Scaffold(
                 bottomBar = {
-                    if (currentRoute !in listOf("login", "chat1", "chat2", "chat3", "chat4", "chat5")) {
+                    if (currentRoute !in listOf(
+                            "login",
+                            "chat1",
+                            "chat2",
+                            "chat3",
+                            "chat4",
+                            "chat5"
+                        )
+                    ) {
                         NavigationBar {
                             items.forEachIndexed { index, item ->
                                 NavigationBarItem(
@@ -167,11 +175,12 @@ fun Navi() {
                 }
             ) { innerPadding ->
                 Surface(modifier = Modifier.padding(innerPadding)) {
-
-
                 }
 
-//            val navController = rememberNavController()
+                val userDataViewModel: UserDataViewModel = viewModel()
+                val userDatasState = userDataViewModel.userDatas.collectAsState()
+                val userDatas: List<UserData> = userDatasState.value
+
                 NavHost(navController = navController, startDestination = "login") {
                     composable("start") {
                         StartScreen()
@@ -301,26 +310,24 @@ fun Navi() {
                                 }
                             })
                     }
-                    composable("UserDetails/{userUid}") { backStackEntry ->
-                        val userUid = backStackEntry.arguments?.getString("userUid")
-                        if (userUid != null) {
-                            val userDataViewModel: UserDataViewModel = viewModel()
-                            val userDatas by userDataViewModel.userDatas.collectAsState()
-                            val userData = userDatas.find { it.uid == userUid }
-                            if (userData != null) {
-                                UserDetails(navController, userData)
-                            }
-                        }
+                    composable("userDataScreen") {
+                        UserDataScreen(
+                            navController,
+                            userDataViewModel
+                        )
                     }
-                    composable("UserDetailsText/{userUid}") { backStackEntry ->
-                        val userUid = backStackEntry.arguments?.getString("userUid")
-                        if (userUid != null) {
-                            val userDataViewModel: UserDataViewModel = viewModel()
-                            val userDatas by userDataViewModel.userDatas.collectAsState()
-                            val userData = userDatas.find { it.uid == userUid }
-                            if (userData != null) {
-                                UserDetailsText(userData)
-                            }
+                    composable("userDetails/{userUid}") { backStackEntry ->
+                        UserDetails(
+                            navController,
+                            userDatas,
+                            backStackEntry.arguments?.getString("userUid")
+                        )
+                    }
+                    composable("UserDetailsText/{userDataId}") { backStackEntry ->
+                        val userDataId = backStackEntry.arguments?.getString("userDataId")
+                        val userData = userDatas.find { it.uid == userDataId }
+                        if (userData != null) {
+                            UserDetailsText(navController, userDataViewModel, userDataId!!)
                         }
                     }
                 }
