@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -49,15 +51,32 @@ import java.util.regex.Pattern
 
 @Composable
 fun ImeinScreen(navController: NavController) {
+
+    val scrollState = rememberScrollState()
     //일단 텍스트 인식으로 인식을 완료
     //IMEI 숫자 부분만 가져와서
     //15자리 숫자가 인식되면
     //DB에 true false로 넣어준다
     //DB에 true가 들어가 있으면 인증마크를 띄워주는 방식으로 하자
 
+
+    //imei 15자리 조회
+    var selectUri1 by remember {
+        mutableStateOf<Uri?>(null)
+    }
+    val launcher1 = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia(),
+        onResult = { uri ->
+            selectUri1 = uri
+
+        }
+    )
+
+    //imei 사이트 조회용
     var selectUri by remember {
         mutableStateOf<Uri?>(null)
     }
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
         onResult = { uri ->
@@ -65,6 +84,7 @@ fun ImeinScreen(navController: NavController) {
 
         }
     )
+
 
     val db = Firebase.firestore
     val userUID = Firebase.auth.currentUser?.uid
@@ -76,110 +96,33 @@ fun ImeinScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .verticalScroll(scrollState)
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-//        Button(
-//            onClick = {
-//                launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-//            },
-//            colors = ButtonDefaults.buttonColors(
-//                containerColor = MaterialTheme.colorScheme.tertiary,
-//
-//                ),
-//            modifier = Modifier
-//                .width(120.dp)
-//                .height(50.dp)
-//                .padding(top = 12.dp)
-//        ) {
-//            Text(
-//                "IMEI 인증",
-//                fontSize = 16.sp,
-//                fontWeight = FontWeight.ExtraBold
-//            )
-//
-//        }
+        val imeiRecognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+        val context1 = LocalContext.current
+        var imeiText by remember { mutableStateOf("") }
 
         val koRecognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
         val context = LocalContext.current
         var trText by remember { mutableStateOf("") }
 
-//        selectUri?.let {
-//            try {
-//                val image = InputImage.fromFilePath(context, it)//선택된 URI를 사용,인스턴스 생성했음
-//                koRecognizer.process(image)//이미지를 텍스트 추출기에 제공하고 추출작업 수행했음
-//                    .addOnSuccessListener { result ->//텍스트 추출에 성공 하면 추출된 텍스트를 처리 하는 콜백임
-//                        trText = result.text//추출된 텍스트를 trText변수에 할당하고 추출된 텍스트가 화면에 표시될 수 있또록
-//                    }
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
+        //selectUri가 null이 아닐 때 해당 블록 코드 실행함
+        selectUri1?.let {
+            try {
+                val image = InputImage.fromFilePath(context1, it)//선택된 URI를 사용,인스턴스 생성
+                imeiRecognizer.process(image)//이미지를 텍스트 추출기에 제공하고 추출작업 수행
+                    .addOnSuccessListener { result ->//텍스트 추출에 성공 하면 추출된 텍스트를 처리 하는 콜백
+                        imeiText = result.text//추출된 텍스트를 trText변수에 할당하고 추출된 텍스트가 화면에 표시될 수 있또록
+                    }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
 
-//        selectUri?.let {
-//            try {
-//                val image = InputImage.fromFilePath(context, it)
-//                koRecognizer.process(image)
-//                    .addOnSuccessListener { result ->
-//                        trText = result.text
-//
-//                        userUID?.let { uid ->
-//                            val userData = hashMapOf("textExtracted" to true)
-//                            db.collection("userdata").document(uid)
-//                                .set(userData, SetOptions.merge())
-//                                .addOnSuccessListener { Log.d("Firestore", "imei 등록 완료") }
-//                                .addOnFailureListener { e -> Log.w("Firestore", "등록 실패", e) }
-//                        }
-//                    }
-//                    .addOnFailureListener {
-//                        userUID?.let { uid ->
-//                            val userData = hashMapOf("textExtracted" to false)
-//                            db.collection("userdata").document(uid)
-//                                .set(userData, SetOptions.merge())
-//                        }
-//                    }
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
 
-        //IMEI가 들어있으면 true값으로 들어가도록 했음 1
-//        selectUri?.let {
-//            try {
-//                val image = InputImage.fromFilePath(context, it)
-//                koRecognizer.process(image)
-//                    .addOnSuccessListener { result ->
-//                        trText = result.text
-//
-//                        userUID?.let { uid ->
-//                            val containsIMEI = trText.contains("IMEI")
-//                            val userData = hashMapOf("imeiValid" to containsIMEI)
-//                            db.collection("userdata").document(uid)
-//                                .set(userData, SetOptions.merge())
-//                                .addOnSuccessListener {
-//                                    if (containsIMEI) {
-//                                        Log.d("Firestore", "IMEI 인식 완료: $trText")
-//                                    } else {
-//                                        Log.d("Firestore", "IMEI 미발견")
-//                                    }
-//                                }
-//                                .addOnFailureListener { e ->
-//                                    Log.w("Firestore", "등록 실패", e)
-//                                }
-//                        }
-//                    }
-//                    .addOnFailureListener {
-//                        userUID?.let { uid ->
-//                            val userData = hashMapOf("imeiValid" to false)
-//                            db.collection("userdata").document(uid)
-//                                .set(userData, SetOptions.merge())
-//                        }
-//                    }
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
         selectUri?.let {
             try {
                 val image = InputImage.fromFilePath(context, it)
@@ -188,7 +131,7 @@ fun ImeinScreen(navController: NavController) {
                         trText = result.text
 
                         userUID?.let { uid ->
-                            val containsIMEI = trText.contains("IMEI")
+                            val containsIMEI = trText.contains("도난 정보가 없습니다.")
                             val imeiData = hashMapOf("imeiValid" to containsIMEI)
 
                             db.collection("userdata").document(uid)
@@ -212,50 +155,53 @@ fun ImeinScreen(navController: NavController) {
                 e.printStackTrace()
             }
         }
+        Card(
+            shape = MaterialTheme.shapes.medium,
+            elevation = CardDefaults.cardElevation(
+                defaultElevation = 12.dp
+            )
+        ) {
+            Text(
+                text = imeiText,
+                fontSize = 20.sp,
+                style = LocalTextStyle.current.merge(
+                    TextStyle(
+                        lineHeight = 1.5.em,
+                        platformStyle = PlatformTextStyle(
+                            includeFontPadding = false
+                        ),
+                        lineHeightStyle = LineHeightStyle(
+                            alignment = LineHeightStyle.Alignment.Center,
+                            trim = LineHeightStyle.Trim.None
+                        )
+                    )
+                ),
+            )
 
 
-//
-        //15자리 숫자... 실패
-//        selectUri?.let {
-//            try {
-//                val image = InputImage.fromFilePath(context, it)
-//                koRecognizer.process(image)
-//                    .addOnSuccessListener { result ->
-//                        trText = result.text
-//
-//                        // 15자리 숫자를 찾기 위한 정규 표현식
-//                        val pattern = Pattern.compile("\\b\\d{15}\\b")
-//                        val matcher = pattern.matcher(trText)
-//
-//                        if (matcher.find()) {
-//                            // 15자리 숫자가 발견되면 Firestore에 true 저장
-//                            userUID?.let { uid ->
-//                                val userData = hashMapOf("imeiValid" to true)
-//                                db.collection("userdata").document(uid)
-//                                    .set(userData, SetOptions.merge())
-//                                    .addOnSuccessListener { Log.d("Firestore", "imei 등록 완료") }
-//                                    .addOnFailureListener { e -> Log.w("Firestore", "등록 실패", e) }
-//                            }
-//                        } else {
-//                            // 15자리 숫자가 없으면 Firestore에 false 저장
-//                            userUID?.let { uid ->
-//                                val userData = hashMapOf("imeiValid" to false)
-//                                db.collection("userdata").document(uid)
-//                                    .set(userData, SetOptions.merge())
-//                            }
-//                        }
-//                    }
-//                    .addOnFailureListener {
-//                        userUID?.let { uid ->
-//                            val userData = hashMapOf("imeiValid" to false)
-//                            db.collection("userdata").document(uid)
-//                                .set(userData, SetOptions.merge())
-//                        }
-//                    }
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//            }
-//        }
+        }
+        Button(
+            onClick = {
+                launcher1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            },
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Color(0xFF608DBC)
+            ),
+            modifier = Modifier
+                .width(120.dp)
+                .height(50.dp)
+                .padding(top = 12.dp),
+            shape = RectangleShape
+        ) {
+            Text(
+                "내 IMEI",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.ExtraBold
+            )
+
+        }
+
+
 
         Card(
             shape = MaterialTheme.shapes.medium,
@@ -287,7 +233,7 @@ fun ImeinScreen(navController: NavController) {
                 launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             },
             colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF608DBC) // HEX 색상 코드 사용
+                containerColor = Color(0xFF608DBC)
             ),
             modifier = Modifier
                 .width(120.dp)
@@ -323,7 +269,7 @@ fun ImeinScreen(navController: NavController) {
         //확인하고 인증마크 띄워줌 저장된 값이 true면 인증마크 나옴
         if (imeiValid && !isLoading) {
             Image(
-                painter = painterResource(id = R.drawable.imei_mark),
+                painter = painterResource(id = R.drawable.imei_certificate),
                 contentDescription = "IMEI 인증 마크"
             )
         }
