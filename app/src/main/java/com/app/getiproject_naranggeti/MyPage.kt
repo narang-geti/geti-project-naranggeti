@@ -1,6 +1,7 @@
 package com.app.getiproject_naranggeti
 
 import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -108,14 +110,19 @@ fun UserDetails(navController: NavController, userData: UserData) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
         ) {
             Card(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { navController.navigate("UserDetailsText") },
+                    .clickable { navController.navigate("UserDetailsText") }
+                    .background(color = Color.Gray), // 배경색 추가
             ) {
-                Button(onClick = { navController.navigate("UserDetailsText/${userData.uid}") }) {
+                Button(
+                    onClick = { navController.navigate("UserDetailsText/${userData.uid}") },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                ) {
                     Text(text = "Title: ${userData.title}")
                 }
             }
