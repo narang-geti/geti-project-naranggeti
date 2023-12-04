@@ -91,4 +91,13 @@ dependencies {
     // Also add the dependency for the TensorFlow Lite library and specify its version
     implementation("org.tensorflow:tensorflow-lite:2.3.0")
 
+    // CameraX Stuff
+    val camerax_version = "1.1.0-alpha10"
+    implementation ("com.google.guava:guava:31.0.1-android")
+
+    implementation ("androidx.camera:camera-core:$camerax_version")
+    implementation ("androidx.camera:camera-camera2:$camerax_version")
+    implementation ("androidx.camera:camera-lifecycle:$camerax_version")
+    implementation ("androidx.camera:camera-view:1.0.0-alpha31")
+
 }

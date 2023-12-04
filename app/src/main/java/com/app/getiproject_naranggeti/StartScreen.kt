@@ -116,7 +116,7 @@ fun StartScreen(navController: NavController) {
             ) {
                 Text(
                     text = "START",
-                    fontSize = 40.sp,
+                    fontSize = 35.sp,
                     fontFamily = elice,
                     fontWeight = FontWeight.Bold,
 
@@ -312,6 +312,7 @@ fun SignupScreen(navController: NavController) {
     var password by remember { mutableStateOf("") }
     var signupErrorMessage by remember { mutableStateOf("") }
     val auth: FirebaseAuth = Firebase.auth
+    val CustomColor = Color(0xFF608EBD)
 
     Column(
         modifier = Modifier
@@ -398,7 +399,7 @@ fun SignupScreen(navController: NavController) {
                 .fillMaxWidth()
                 .padding(8.dp),
             colors = ButtonDefaults.buttonColors(
-                Color.Black,
+                CustomColor,
                 contentColor = Color.White
             )
         ) {

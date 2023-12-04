@@ -35,7 +35,7 @@ fun Navi() {
         ) {
 
             val navController = rememberNavController()
-            NavHost(navController = navController, startDestination = "start") {
+            NavHost(navController = navController, startDestination = "camera") {
                 composable("start") {
                     StartScreen(navController)
                 }
@@ -54,16 +54,21 @@ fun Navi() {
                 composable("grade") {
                     GradeScreen(navController)
                 }
-                composable("description"){
+                composable("description") {
                     DescriptionScreen(navController)
                 }
-                composable("customerReviews"){
+                composable("customerReviews") {
                     CustomerReviewScreen(navController)
                 }
-                composable("menu"){
+                composable("menu") {
                     MenuScreen(navController)
                 }
-
+                composable("test") {
+                    ExampleDropdown(navController)
+                }
+                composable("camera") {
+                    CameraUI(navController)
+                }
             }
         }
     }

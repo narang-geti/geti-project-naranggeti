@@ -350,6 +350,9 @@ fun DetectScreen(navController: NavController) {
             }
             Spacer(modifier = Modifier.height(16.dp))
 
+
+
+            // detect 버튼 실행시 추론 수행합니당
             Button(
                 onClick = {
                     if (imagef != null && imageb != null) {

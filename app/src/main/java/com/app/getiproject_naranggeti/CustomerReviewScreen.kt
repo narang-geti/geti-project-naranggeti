@@ -1,5 +1,6 @@
 package com.app.getiproject_naranggeti
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,6 +28,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.compose.runtime.*
 
 data class Review(
     val userId: String = "",
@@ -37,12 +40,25 @@ data class Review(
 @Composable
 fun CustomerReviewScreen(navController: NavHostController) {
     val reviews by loadReviews().collectAsState(initial = emptyList())
+    val scrollState = rememberLazyListState()
 
-    LazyColumn {
+
+    LazyColumn (
+        state = scrollState,
+        reverseLayout = true,
+//        verticalArrangement = Arrangement.Top,
+    ){
+
         items(reviews) { review ->
             ReviewItem(review)
         }
     }
+
+//    LaunchedEffect(true) {
+//        // Scroll to the top after the LazyColumn is composed
+//        scrollState.animateScrollToItem(0)
+//    }
+
 }
 
 @Composable
@@ -50,7 +66,7 @@ fun ReviewItem(review: Review) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(7.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
