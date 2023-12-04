@@ -1,6 +1,7 @@
 package com.app.getiproject_naranggeti
 
 import android.util.Log
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,7 +49,9 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
     // 사용자 UID를 가져오기
     val userUid = user?.uid
     // 사용자 데이터 가져오기
-    val userDatas = userDataViewModel.userDatas.collectAsState()
+    val userDatasState = userDataViewModel.userDatas.collectAsState()
+    val userDatas: List<UserData> = userDatasState.value
+    var showUserDetails by remember { mutableStateOf(false) }
 
     if (user != null) {
         user.displayName?.let {
@@ -67,9 +71,19 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
             text = "안녕하세요, $userName 님!",
             style = TextStyle(fontSize = 24.sp, fontWeight = FontWeight.Bold),
         )
-        // 사용자 데이터 표시
-        for (userData in userDatas.value) {
-            UserDetails(navController = navController, userData = userData)
+        Button(
+            onClick = {
+                navController.navigate("UserDetails/${userUid}")
+            },
+            modifier = Modifier.padding(top = 16.dp)
+        ) {
+            Text("판매 목록")
+        }
+
+        if (showUserDetails) {
+            for (userData in userDatas) {
+                UserDetails(navController = navController, userData = userData)
+            }
         }
         // 로그아웃 버튼
         Button(
@@ -83,6 +97,7 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
         }
     }
 }
+//판매 제목 !!!
 @Composable
 fun UserDetails(navController: NavController, userData: UserData) {
     Surface(
@@ -95,12 +110,32 @@ fun UserDetails(navController: NavController, userData: UserData) {
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-            // 사용자 정보 제목
-            Text(
-                text = "Title: ${userData.title}",
-            )
-            Spacer(modifier = Modifier.height(16.dp))
-            // 기타 사용자 정보
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { navController.navigate("UserDetailsText") },
+            ) {
+                Button(onClick = { navController.navigate("UserDetailsText/${userData.uid}") }) {
+                    Text(text = "Title: ${userData.title}")
+                }
+            }
+        }
+    }
+}
+
+//판매 상세 페이지
+@Composable
+fun UserDetailsText(userData: UserData) {
+    Surface(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp)
+        ) {
             Text(text = "Buy Date: ${userData.buydate}")
             Text(text = "Storage: ${userData.storage}")
             Text(text = "Battery Efficiency: ${userData.batteryefficiency}")
@@ -110,13 +145,14 @@ fun UserDetails(navController: NavController, userData: UserData) {
         }
     }
 }
+
+//firebase에서 데이터 가져오기
 class UserDataViewModel : ViewModel() {
     private val db = FirebaseFirestore.getInstance()
     private val userDataCollection = db.collection("userdata")
-    val auth = Firebase.auth
     private val _userDatas = MutableStateFlow<List<UserData>>(emptyList())
     val userDatas: StateFlow<List<UserData>> get() = _userDatas
-    var userName by mutableStateOf("")
+
     init {
         fetchData()
     }

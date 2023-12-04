@@ -1,6 +1,7 @@
 package com.app.getiproject_naranggeti
 
 data class UserData(
+    val uid: String = "",
     val title: String = "",
     val buydate: String = "",
     val storage: String = "",

@@ -27,13 +27,16 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -64,7 +67,8 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Navi() {
-
+    val userDataViewModel = remember { UserDataViewModel() }
+    val userData = userDataViewModel.userDatas.collectAsState()
     GetiProject_naranggetiTheme {
 
         val CustomColor = Color(0xFF608EBD)
@@ -160,11 +164,8 @@ fun Navi() {
                 }
             ) { innerPadding ->
                 Surface(modifier = Modifier.padding(innerPadding)) {
-
-
                 }
 
-//            val navController = rememberNavController()
                 NavHost(navController = navController, startDestination = "login") {
                     composable("start") {
                         StartScreen()
@@ -197,7 +198,7 @@ fun Navi() {
                         ProductRegistration(navController)
                     }
                     composable("info") {
-                        UserDataScreen(navController,UserDataViewModel())
+                        UserDataScreen(navController, UserDataViewModel())
                     }
                     composable("imei") {
                         ImeinScreen(navController)
@@ -205,11 +206,30 @@ fun Navi() {
                     composable("welcome") {
                         WelcomeScreen(navController)
                     }
-
-
+                    composable("UserDetails/{userUid}") { backStackEntry ->
+                        val userUid = backStackEntry.arguments?.getString("userUid")
+                        if (userUid != null) {
+                            val userDataViewModel: UserDataViewModel = viewModel()
+                            val userDatas by userDataViewModel.userDatas.collectAsState()
+                            val userData = userDatas.find { it.uid == userUid }
+                            if (userData != null) {
+                                UserDetails(navController, userData)
+                            }
+                        }
+                    }
+                    composable("UserDetailsText/{userUid}") { backStackEntry ->
+                        val userUid = backStackEntry.arguments?.getString("userUid")
+                        if (userUid != null) {
+                            val userDataViewModel: UserDataViewModel = viewModel()
+                            val userDatas by userDataViewModel.userDatas.collectAsState()
+                            val userData = userDatas.find { it.uid == userUid }
+                            if (userData != null) {
+                                UserDetailsText(userData)
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 }
-
