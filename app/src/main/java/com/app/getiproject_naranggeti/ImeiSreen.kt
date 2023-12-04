@@ -211,14 +211,14 @@ fun ImeinScreen(navController: NavController) {
                 shape = RectangleShape
             ) {
                 Text(
-                    "내 IMEI",
+                    "MY IMEI",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.ExtraBold
                 )
 
             }
 
-            // IMEI 조회 웹사이트 버튼
+            // IMEI 조회 웹사이트로 가는 버튼
             Button(
                 onClick = {
                     val intent = Intent(Intent.ACTION_VIEW).apply {
@@ -235,14 +235,14 @@ fun ImeinScreen(navController: NavController) {
                     .padding(top = 12.dp),
                 shape = RectangleShape
             ) {
-                Text("IMEI 조회 사이트")
+                Text("IMEI 조회")
             }
 
             Button(
                 onClick = {
                     val clipboardManager =
                         context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
-                    val clip = ClipData.newPlainText("번역", imeiText)
+                    val clip = ClipData.newPlainText("imei복사", imeiText)
                     clipboardManager.setPrimaryClip(clip)
 
 
