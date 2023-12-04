@@ -67,8 +67,9 @@ fun Navi() {
                     AddPage(navController)
                 }
                 composable("info"){
-                    UserInfo(navController)
+                    UserDataScreen(navController, UserDataViewModel())
                 }
+
 
             }
         }
