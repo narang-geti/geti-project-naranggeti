@@ -1,12 +1,17 @@
 package com.app.getiproject_naranggeti
 
+import android.content.ClipData
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -29,6 +34,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.ClipboardManager
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.PlatformTextStyle
@@ -58,6 +65,11 @@ fun ImeinScreen(navController: NavController) {
     //15자리 숫자가 인식되면
     //DB에 true false로 넣어준다
     //DB에 true가 들어가 있으면 인증마크를 띄워주는 방식으로 하자
+
+//    val context = LocalContext.current
+//    //클립보드 쓰기 위함
+//    val clipboardManager: ClipboardManager = LocalClipboardManager.current
+
 
 
     //imei 15자리 조회
@@ -101,7 +113,8 @@ fun ImeinScreen(navController: NavController) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val imeiRecognizer = TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
+        val imeiRecognizer =
+            TextRecognition.getClient(KoreanTextRecognizerOptions.Builder().build())
         val context1 = LocalContext.current
         var imeiText by remember { mutableStateOf("") }
 
@@ -109,7 +122,7 @@ fun ImeinScreen(navController: NavController) {
         val context = LocalContext.current
         var trText by remember { mutableStateOf("") }
 
-        //selectUri가 null이 아닐 때 해당 블록 코드 실행함
+        //selectUri가 null X 실행함요
         selectUri1?.let {
             try {
                 val image = InputImage.fromFilePath(context1, it)//선택된 URI를 사용,인스턴스 생성
@@ -176,30 +189,82 @@ fun ImeinScreen(navController: NavController) {
                         )
                     )
                 ),
+
+
             )
 
 
         }
-        Button(
-            onClick = {
-                launcher1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF608DBC)
-            ),
-            modifier = Modifier
-                .width(120.dp)
-                .height(50.dp)
-                .padding(top = 12.dp),
-            shape = RectangleShape
-        ) {
-            Text(
-                "내 IMEI",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.ExtraBold
-            )
 
+        Row {
+            Button(
+                onClick = {
+                    launcher1.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF608DBC)
+                ),
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(50.dp)
+                    .padding(top = 12.dp),
+                shape = RectangleShape
+            ) {
+                Text(
+                    "내 IMEI",
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+
+            }
+
+            // IMEI 조회 웹사이트 버튼
+            Button(
+                onClick = {
+                    val intent = Intent(Intent.ACTION_VIEW).apply {
+                        data = Uri.parse("https://www.imei.kr/user/inquire/lostInquireFree.do")
+                    }
+                    context.startActivity(intent)
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF608DBC)
+                ),
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(50.dp)
+                    .padding(top = 12.dp),
+                shape = RectangleShape
+            ) {
+                Text("IMEI 조회 사이트")
+            }
+
+            Button(
+                onClick = {
+                    val clipboardManager =
+                        context.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager
+                    val clip = ClipData.newPlainText("번역", imeiText)
+                    clipboardManager.setPrimaryClip(clip)
+
+
+                    Toast.makeText(context, "클립 보드에 복사 되었습니다", Toast.LENGTH_SHORT).show()
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF608DBC)
+                ),
+                modifier = Modifier
+                    .width(120.dp)
+                    .height(50.dp)
+                    .padding(top = 12.dp),
+                shape = RectangleShape
+            ) {
+                Text(
+                    text = "복사",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                )
+            }
         }
+
 
 
 
@@ -273,8 +338,6 @@ fun ImeinScreen(navController: NavController) {
                 contentDescription = "IMEI 인증 마크"
             )
         }
-
-
 
 
     }
