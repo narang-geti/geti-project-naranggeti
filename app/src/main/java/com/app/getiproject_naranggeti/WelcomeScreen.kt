@@ -1,5 +1,4 @@
 package com.app.getiproject_naranggeti
-
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -34,6 +33,7 @@ import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.firestore
 import com.google.firebase.firestore.ktx.firestore
 
 @Composable
@@ -42,6 +42,22 @@ fun WelcomeScreen(navController: NavController) {
 
     val auth = Firebase.auth
     val user = auth.currentUser
+    val db = Firebase.firestore
+
+    var userDataList by remember { mutableStateOf<List<UserData>>(emptyList()) }
+
+    LaunchedEffect(key1 = Unit) {
+        db.collection("userdata").get()
+            .addOnSuccessListener { querySnapshot ->
+                userDataList = querySnapshot.documents.mapNotNull { document ->
+                    document.toObject(UserData::class.java)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.w("Firestore", "Error fetching data", e)
+            }
+    }
+
 
     var userName by remember { mutableStateOf("") }
 
@@ -54,7 +70,7 @@ fun WelcomeScreen(navController: NavController) {
     }
 
 
-    val db = com.google.firebase.ktx.Firebase.firestore
+//    val db = com.google.firebase.ktx.Firebase.firestore
     val userUID = com.google.firebase.ktx.Firebase.auth.currentUser?.uid
 
 
@@ -78,35 +94,35 @@ fun WelcomeScreen(navController: NavController) {
             }
     }
 
-    var ipFront by remember { mutableStateOf<String?>(null) }
-    var ipBack by remember { mutableStateOf<String?>(null) }
+//    var ipFront by remember { mutableStateOf<String?>(null) }
+//    var ipBack by remember { mutableStateOf<String?>(null) }
+//
+//
+//    userUID?.let { uid ->
+//        db.collection("user").document(uid).get()
+//            .addOnSuccessListener { document ->
+//                if (document != null) {
+//                    ipFront = document.getString("front")
+//                    ipBack = document.getString("back")
+//                } else {
+//                    Log.d("Firestore", "문서 없음")
+//                }
+//            }
+//            .addOnFailureListener { e ->
+//                Log.w("Firestore", "에러", e)
+//            }
+//    }
 
-
-    userUID?.let { uid ->
-        db.collection("user").document(uid).get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-                    ipFront = document.getString("front")
-                    ipBack = document.getString("back")
-                } else {
-                    Log.d("Firestore", "문서 없음")
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.w("Firestore", "에러", e)
-            }
-    }
-
-    val gradeScores = mapOf("S" to 100, "A" to 80, "B" to 60, "F" to 40)
-
-    val weightedScore = (gradeScores[ipFront] ?: 0) * 0.7 + (gradeScores[ipBack] ?: 0) * 0.3
-
-    val imageResource = when {
-        weightedScore >= 86 -> R.drawable.s_grade
-        weightedScore >= 74 -> R.drawable.a_grade
-        weightedScore >= 58 -> R.drawable.b_grade
-        else -> R.drawable.f_grade
-    }
+//    val gradeScores = mapOf("S" to 100, "A" to 80, "B" to 60, "F" to 40)
+//
+//    val weightedScore = (gradeScores[ipFront] ?: 0) * 0.7 + (gradeScores[ipBack] ?: 0) * 0.3
+//
+//    val imageResource = when {
+//        weightedScore >= 86 -> R.drawable.s_grade
+//        weightedScore >= 74 -> R.drawable.a_grade
+//        weightedScore >= 58 -> R.drawable.b_grade
+//        else -> R.drawable.f_grade
+//    }
 
 
     var userData by remember { mutableStateOf<UserData?>(null) }
@@ -133,7 +149,7 @@ fun WelcomeScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .verticalScroll(scrollState),
-        ) {
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -158,54 +174,85 @@ fun WelcomeScreen(navController: NavController) {
         }
         Column {
 
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp)
-                    .border(1.dp, Color.White, RoundedCornerShape(4.dp)),
-                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-                colors = CardDefaults.cardColors(containerColor = Color(0xBABAD1EB))
-            ){
 
-                Row {
-                    Image(
-                        painter = painterResource(id = imageResource),
-                        contentDescription = "총점 이미지",
-                        modifier = Modifier
-                            .width(80.dp)
-                            .height(100.dp)
-                    )
-                    Column {
+            Row {
 
-                        userData?.let { data ->
-                            Text(text = "제목: ${data.title}\n")
-                            Text(text = "상세 설명: ${data.customertext}\n")
-                            Text(text = "가격: ${data.price}")
-                            //불러올 데이터를 더 추가할거면 여기다가 하면 됩니다
-                        }
-                        if (imeiValid && !isLoading) {
-                            Image(
-                                painter = painterResource(id = R.drawable.imei_mark),
-                                contentDescription = "IMEI 인증 마크",
-                                modifier = Modifier
-                                    .size(32.dp)
-                            )
-                        }
+                Column {
 
 
+                    userDataList.forEach { userData ->
+                        UserDataCard(userData)
+                    }
+
+                    if (imeiValid && !isLoading) {
+                        Image(
+                            painter = painterResource(id = R.drawable.imei_mark),
+                            contentDescription = "IMEI 인증 마크",
+                            modifier = Modifier
+                                .size(32.dp)
+                        )
                     }
 
 
                 }
 
+
             }
 
         }
 
-        Spacer(modifier = Modifier.width(8.dp))
-
-
     }
 
+    Spacer(modifier = Modifier.width(8.dp))
 
+
+}
+
+
+
+
+@Composable
+fun UserDataCard(userData: UserData) {
+
+    val gradeScores = mapOf("S" to 100, "A" to 80, "B" to 60, "F" to 40)
+
+
+    val weightedScore = (gradeScores[userData.front] ?: 0) * 0.7 + (gradeScores[userData.back] ?: 0) * 0.3
+
+
+    val imageResource = when {
+        weightedScore >= 86 -> R.drawable.s_grade
+        weightedScore >= 74 -> R.drawable.a_grade
+        weightedScore >= 58 -> R.drawable.b_grade
+        else -> R.drawable.f_grade
+    }
+
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp)
+            .border(1.dp, Color.White, RoundedCornerShape(4.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xBABAD1EB))
+    ) {
+
+        Row {
+
+            Image(
+                painter = painterResource(id = imageResource),
+                contentDescription = "Grade Image",
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(16.dp)
+            )
+
+            Column(modifier = Modifier.padding(16.dp)) {
+                Text(text = "제목: ${userData.title}")
+                Text(text = "상세 설명: ${userData.customertext}")
+                Text(text = "가격: ${userData.price}")
+            }
+
+        }
+
+    }
 }

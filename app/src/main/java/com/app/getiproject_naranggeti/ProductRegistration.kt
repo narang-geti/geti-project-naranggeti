@@ -137,7 +137,8 @@ fun ProductRegistration(navController: NavHostController, imageResource:Int) {
         weightedScore >= 90 -> R.drawable.s_grade
         weightedScore >= 70 -> R.drawable.a_grade
         weightedScore >= 50 -> R.drawable.b_grade
-        else -> R.drawable.f_grade
+        weightedScore >= 5  -> R.drawable.f_grade
+        else -> R.drawable.question
     }
 
     image = BitmapFactory.decodeResource(resources, imageResource)
