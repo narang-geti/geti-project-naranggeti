@@ -63,6 +63,7 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("com.google.android.libraries.places:places:3.3.0")
     implementation("com.google.mlkit:vision-common:17.3.0")
+    implementation("com.google.android.engage:engage-core:1.3.1")
 //    implementation("com.google.firebase:firebase-ml-vision:24.1.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

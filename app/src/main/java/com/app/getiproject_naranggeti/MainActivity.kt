@@ -119,7 +119,7 @@ fun Navi() {
             Scaffold(
                 bottomBar = {
                     // if문에서 listof에 경로 쓰면 그 경로는 하단바 안 나타납니다!
-                    if (currentRoute !in listOf("login", "detect", "chat1", "chat2", "chat3", "chat4", "chat5")) {
+                    if (currentRoute !in listOf("login", "detect", "grade", "product/{imageResource}", "chat1", "chat2", "chat3", "chat4", "chat5")) {
                         NavigationBar {
                             items.forEachIndexed { index, item ->
                                 NavigationBarItem(
@@ -173,7 +173,7 @@ fun Navi() {
                 }
 
 //            val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = "login") {
+                NavHost(navController = navController, startDestination = "grade") {
                     composable("start") {
                         StartScreen()
                     }
@@ -201,8 +201,11 @@ fun Navi() {
                     composable("menu") {
                         MenuScreen(navController)
                     }
-                    composable("product") {
-                        ProductRegistration(navController)
+                    composable("product/{imageResource}") {backStackEntry ->
+                        val imageResource = backStackEntry.arguments?.getInt("imageResource")
+                        if (imageResource != null) {
+                            ProductRegistration(navController, imageResource)
+                        }
                     }
                     composable("info") {
                         UserDataScreen(navController, UserDataViewModel())
