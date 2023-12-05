@@ -33,6 +33,7 @@ import androidx.compose.material.icons.outlined.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -81,7 +82,7 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
     val userDatasState = userDataViewModel.userDatas.collectAsState()
     val userDatas: List<UserData> = userDatasState.value
     var showUserDetails by remember { mutableStateOf(false) }
-
+    val CustomColor = Color(0xFF608EBD)
     if (showUserDetails) {
         UserDetails(navController = navController, userDatas = userDatas, userUid = userUid)
     }
@@ -133,7 +134,7 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
                     color = Color.LightGray,
                     shape = RoundedCornerShape(10.dp)
                 ),
-            verticalArrangement = Arrangement.Center
+            horizontalAlignment = Alignment.CenterHorizontally  // 가운데 정렬 설정
         ) {
             Image(
                 painter = painterResource(id = R.drawable.somac_logo),
@@ -145,9 +146,13 @@ fun UserDataScreen(navController: NavController, userDataViewModel: UserDataView
                 text = "0원",
                 fontFamily = elice,
                 fontWeight = FontWeight.Bold,
-                modifier = Modifier.padding(top = 40.dp)
-
             )
+            Spacer(modifier = Modifier.height(10.dp))
+
+            Row {
+                ICardButton("충전", onClick = {}, CustomColor)
+                ICardButton("계좌이체", onClick = {}, CustomColor)
+            }
         }
         Spacer(modifier = Modifier.height(30.dp))
 
@@ -376,6 +381,33 @@ class UserDataViewModel : ViewModel() {
             } catch (e: Exception) {
                 Log.e("Firestore", "Error fetching data", e)
             }
+        }
+    }
+}
+@Composable
+fun ICardButton(text: String, onClick: () -> Unit, backgroundColor: Color) {
+    Card(
+        modifier = Modifier
+            .width(150.dp)
+            .height(65.dp)
+            .padding(8.dp)
+            .border(1.dp, Color.White, RoundedCornerShape(4.dp)),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
+        colors = CardDefaults.cardColors(containerColor = Color(0xFF608DBC))
+
+    ) {
+        Button(
+            onClick = onClick,
+            colors = ButtonDefaults.buttonColors(backgroundColor, contentColor = Color.White),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+        ) {
+            Text(
+                text = text,
+                fontFamily = elice,
+                fontWeight = FontWeight.Medium
+            )
         }
     }
 }
