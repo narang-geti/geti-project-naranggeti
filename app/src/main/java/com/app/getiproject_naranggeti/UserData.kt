@@ -11,6 +11,8 @@ data class UserData(
     val customertext: String = "",
     val front: String = "",
     val back: String = "",
+    val lateral: String = "",
+    val down: String = "",
     val imeiValid: Boolean = false
 )
 

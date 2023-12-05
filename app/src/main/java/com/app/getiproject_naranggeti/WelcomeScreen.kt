@@ -1,4 +1,5 @@
 package com.app.getiproject_naranggeti
+
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -15,6 +16,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -27,8 +30,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.google.firebase.Firebase
 import com.google.firebase.auth.auth
@@ -172,31 +178,64 @@ fun WelcomeScreen(navController: NavController) {
                 modifier = Modifier.align(Alignment.CenterVertically)
             )
         }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Start
+        ) {
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF608DBC)
+                ),
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(30.dp),
+                shape = RectangleShape
+            ) {
+                Text(text = "아이폰",
+                    fontSize = 10.sp)
+
+            }
+
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF608DBC)
+                ),
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(30.dp),
+                shape = RectangleShape
+            ) {
+                Text(text = "맥북",
+                    fontSize = 10.sp)
+
+            }
+            Spacer(modifier = Modifier.width(4.dp))
+
+            Button(onClick = { /*TODO*/ },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color(0xFF608DBC)
+                ),
+                modifier = Modifier
+                    .width(80.dp)
+                    .height(30.dp),
+                shape = RectangleShape
+            ) {
+                Text(text = "아이패드",
+                    fontSize = 8.sp,)
+
+            }
+        }
+
         Column {
 
-
-            Row {
-
-                Column {
-
-
-                    userDataList.forEach { userData ->
-                        UserDataCard(userData)
-                    }
-
-                    if (imeiValid && !isLoading) {
-                        Image(
-                            painter = painterResource(id = R.drawable.imei_mark),
-                            contentDescription = "IMEI 인증 마크",
-                            modifier = Modifier
-                                .size(32.dp)
-                        )
-                    }
-
-
-                }
-
-
+            userDataList.forEach { userData ->
+                UserDataCard(userData)
             }
 
         }
@@ -209,23 +248,27 @@ fun WelcomeScreen(navController: NavController) {
 }
 
 
-
-
 @Composable
 fun UserDataCard(userData: UserData) {
 
     val gradeScores = mapOf("S" to 100, "A" to 80, "B" to 60, "F" to 40)
 
+//    val weightedScore = (gradeScores[ipFront] ?: 0) * 0.4 + (gradeScores[ipBack]
+//        ?: 0) * 0.3 + (gradeScores[ipLateral] ?: 0) * 0.2 + (gradeScores[ipDown] ?: 0) * 0.1
 
-    val weightedScore = (gradeScores[userData.front] ?: 0) * 0.7 + (gradeScores[userData.back] ?: 0) * 0.3
+    val weightedScore =
+        (gradeScores[userData.front] ?: 0) * 0.4 + (gradeScores[userData.back] ?: 0) * 0.3+ (gradeScores[userData.lateral] ?: 0) * 0.2+(gradeScores[userData.down] ?: 0) * 0.1
+
 
 
     val imageResource = when {
-        weightedScore >= 86 -> R.drawable.s_grade
-        weightedScore >= 74 -> R.drawable.a_grade
-        weightedScore >= 58 -> R.drawable.b_grade
+        weightedScore >= 80 -> R.drawable.s_grade
+        weightedScore >= 60 -> R.drawable.a_grade
+        weightedScore >= 40 -> R.drawable.b_grade
+//        weightedScore >= 0 -> R.drawable.f_grade
         else -> R.drawable.f_grade
     }
+
 
     Card(
         modifier = Modifier
@@ -243,13 +286,28 @@ fun UserDataCard(userData: UserData) {
                 contentDescription = "Grade Image",
                 modifier = Modifier
                     .size(100.dp)
-                    .padding(16.dp)
+                    .padding(2.dp)
             )
 
+            if (userData.imeiValid == true) {
+                Image(
+                    painter = painterResource(id = R.drawable.imei_certificate),
+                    contentDescription = "IMEI 인증 마크",
+                    modifier = Modifier
+                        .size(100.dp)
+                        .padding(2.dp)
+                )
+            }
+
             Column(modifier = Modifier.padding(16.dp)) {
-                Text(text = "제목: ${userData.title}")
-                Text(text = "상세 설명: ${userData.customertext}")
-                Text(text = "가격: ${userData.price}")
+                Text(text = "제목: ${userData.title}",
+                    fontSize = 14.sp)
+                Text(text = "상세 설명: ${userData.customertext}",
+                    fontSize = 14.sp)
+                Text(text = "가격: ${userData.price}",
+                    fontSize = 14.sp)
+                Text(text = "배터리 성능: ${userData.batteryefficiency}",
+                    fontSize = 14.sp)
             }
 
         }

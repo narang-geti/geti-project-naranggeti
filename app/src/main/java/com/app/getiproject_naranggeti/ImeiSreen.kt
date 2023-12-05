@@ -10,13 +10,16 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -168,9 +171,12 @@ fun ImeinScreen(navController: NavController) {
             }
         }
         Card(
-            shape = MaterialTheme.shapes.medium,
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 12.dp
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .border(1.dp, Color.White, RoundedCornerShape(4.dp)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xBABAD1EB)
             )
         ) {
             Text(
@@ -211,11 +217,12 @@ fun ImeinScreen(navController: NavController) {
             ) {
                 Text(
                     "MY IMEI",
-                    fontSize = 16.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp,
                 )
 
             }
+            Spacer(modifier = Modifier.width(4.dp))
 
             // IMEI 조회 웹사이트로 가는 버튼
             Button(
@@ -234,9 +241,11 @@ fun ImeinScreen(navController: NavController) {
                     .padding(top = 12.dp),
                 shape = RectangleShape
             ) {
-                Text("IMEI 조회")
+                Text("IMEI 조회",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp,)
             }
-
+            Spacer(modifier = Modifier.width(4.dp))
 
             Button(
                 onClick = {
@@ -258,39 +267,20 @@ fun ImeinScreen(navController: NavController) {
                 shape = RectangleShape
             ) {
                 Text(
-                    text = "복사",
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 16.sp,
+                    text = "IMEI 복사",
+                    fontWeight = FontWeight.Medium,
+                    fontSize = 12.sp,
                 )
             }
         }
 
-        Button(
-            onClick = {
-                val intent = Intent(Intent.ACTION_VIEW).apply {
-                    data = Uri.parse("http://10.0.2.2:8080/board/start")
-                }
-                context.startActivity(intent)
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Color(0xFF608DBC)
-            ),
-            modifier = Modifier
-                .width(120.dp)
-                .height(50.dp)
-                .padding(top = 12.dp),
-            shape = RectangleShape
-        ) {
-            Text("spring 조회")
-        }
-
-
-
-
         Card(
-            shape = MaterialTheme.shapes.medium,
-            elevation = CardDefaults.cardElevation(
-                defaultElevation = 12.dp
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .border(1.dp, Color.White, RoundedCornerShape(4.dp)),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = Color(0xBABAD1EB)
             )
         ) {
             Text(
@@ -326,7 +316,7 @@ fun ImeinScreen(navController: NavController) {
             shape = RectangleShape
         ) {
             Text(
-                "IMEI 인증",
+                "IMEI 인증서",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.ExtraBold
             )

@@ -52,7 +52,7 @@ fun GradeScreen(navController: NavController) {
 
 
     userUID?.let { uid ->
-        db.collection("userClassification").document(uid).get()
+        db.collection("userdata").document(uid).get()
             .addOnSuccessListener { document ->
                 if (document != null) {
                     ipFront = document.getString("front")
@@ -75,9 +75,10 @@ fun GradeScreen(navController: NavController) {
         ?: 0) * 0.3 + (gradeScores[ipLateral] ?: 0) * 0.2 + (gradeScores[ipDown] ?: 0) * 0.1
 
     val imageResource = when {
-        weightedScore >= 90 -> R.drawable.s_grade
-        weightedScore >= 70 -> R.drawable.a_grade
-        weightedScore >= 50 -> R.drawable.b_grade
+        weightedScore >= 80 -> R.drawable.s_grade
+        weightedScore >= 60 -> R.drawable.a_grade
+        weightedScore >= 40 -> R.drawable.b_grade
+//        weightedScore >= 0 -> R.drawable.f_grade
         else -> R.drawable.f_grade
     }
 

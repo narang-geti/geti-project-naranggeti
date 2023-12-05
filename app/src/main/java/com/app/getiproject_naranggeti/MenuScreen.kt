@@ -77,9 +77,10 @@ fun MenuScreen(navController: NavController) {
         CardButton("올라온 상품", onClick = { navController.navigate("welcome") }, CustomColor)
         CardButton("상품 등록", onClick = { navController.navigate("product/{imageResource}") }, CustomColor)
         CardButton("IMEI 인증 마크", onClick = { navController.navigate("imei") }, CustomColor)
-//        CardButton("등급 분류 서비스", onClick = { navController.navigate("detect") }, CustomColor)
+        CardButton("상품 등급 확인", onClick = { navController.navigate("grade") }, CustomColor)
         CardButton("등급 분류 기준", onClick = { navController.navigate("description") }, CustomColor)
         CardButton("고객 만족 평가", onClick = { navController.navigate("customer") }, CustomColor)
+        CardButton("고객 리뷰 사이트", onClick = { navController.navigate("info") }, CustomColor)
         CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
     }
 }

@@ -114,7 +114,7 @@ fun DetectScreen(navController: NavController) {
             "down" to predictiond
         )
 
-        db.collection("userClassification").document(uid)
+        db.collection("userdata").document(uid)
             .set(userData, SetOptions.merge())
             .addOnSuccessListener { Log.d("Firestore", "성공") }
             .addOnFailureListener { e -> Log.w("Firestore", "에러", e) }
