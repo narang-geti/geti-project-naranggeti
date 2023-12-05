@@ -1,5 +1,7 @@
 package com.app.getiproject_naranggeti
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -75,12 +77,21 @@ fun MenuScreen(navController: NavController) {
         }
 
         CardButton("올라온 상품", onClick = { navController.navigate("welcome") }, CustomColor)
-        CardButton("상품 등록", onClick = { navController.navigate("product/{imageResource}") }, CustomColor)
+        CardButton(
+            "상품 등록",
+            onClick = { navController.navigate("product/{imageResource}") },
+            CustomColor
+        )
         CardButton("IMEI 인증 마크", onClick = { navController.navigate("imei") }, CustomColor)
         CardButton("상품 등급 확인", onClick = { navController.navigate("grade") }, CustomColor)
         CardButton("등급 분류 기준", onClick = { navController.navigate("description") }, CustomColor)
         CardButton("고객 만족 평가", onClick = { navController.navigate("customer") }, CustomColor)
-        CardButton("고객 리뷰 사이트", onClick = { navController.navigate("info") }, CustomColor)
+        CardButton("고객 리뷰 사이트", onClick = {
+            val intent = Intent(Intent.ACTION_VIEW).apply {
+                data = Uri.parse("http://10.0.2.2:8080/board/start")
+            }
+            context.startActivity(intent)
+        }, CustomColor)
         CardButton("고객 리뷰 모음", onClick = { navController.navigate("info") }, CustomColor)
     }
 }
@@ -96,7 +107,7 @@ fun CardButton(text: String, onClick: () -> Unit, backgroundColor: Color) {
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(containerColor = Color(0xFF608DBC))
 
-        ) {
+    ) {
         Button(
             onClick = onClick,
             colors = ButtonDefaults.buttonColors(backgroundColor, contentColor = Color.White),
