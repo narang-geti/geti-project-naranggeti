@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,7 @@ fun MenuScreen(navController: NavController) {
     val scrollState = rememberScrollState()
     val CustomColor = Color(0xFF608EBD)
     var shouldAnimate by remember { mutableStateOf(true) }
+    val context = LocalContext.current
 
     LaunchedEffect(shouldAnimate) {
         if (shouldAnimate) {

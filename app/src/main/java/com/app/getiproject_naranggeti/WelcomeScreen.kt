@@ -33,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -186,50 +187,55 @@ fun WelcomeScreen(navController: NavController) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Start
         ) {
-            Button(onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF608DBC)
-                ),
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(30.dp),
-                shape = RectangleShape
+            Card(
+                shape = RoundedCornerShape(10.dp),
+                elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
+                modifier = Modifier.padding(8.dp)
             ) {
-                Text(text = "아이폰",
-                    fontSize = 10.sp)
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF608DBC)
+                        ),
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(30.dp),
+                        shape = RectangleShape
+                    ) {
+                        Text(text = "아이폰", fontSize = 10.sp,fontWeight = FontWeight.Bold)
+                    }
 
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF608DBC)
+                        ),
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(30.dp),
+                        shape = RectangleShape
+                    ) {
+                        Text(text = "맥북", fontSize = 10.sp,fontWeight = FontWeight.Bold)
+                    }
+
+                    Button(
+                        onClick = { /*TODO*/ },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFF608DBC)
+                        ),
+                        modifier = Modifier
+                            .width(80.dp)
+                            .height(30.dp),
+                        shape = RectangleShape
+                    ) {
+                        Text(text = "아이패드", fontSize = 8.sp,fontWeight = FontWeight.Bold)
+                    }
+                }
             }
 
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Button(onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF608DBC)
-                ),
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(30.dp),
-                shape = RectangleShape
-            ) {
-                Text(text = "맥북",
-                    fontSize = 10.sp)
-
-            }
-            Spacer(modifier = Modifier.width(4.dp))
-
-            Button(onClick = { /*TODO*/ },
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFF608DBC)
-                ),
-                modifier = Modifier
-                    .width(80.dp)
-                    .height(30.dp),
-                shape = RectangleShape
-            ) {
-                Text(text = "아이패드",
-                    fontSize = 8.sp,)
-
-            }
         }
 
         Column {
