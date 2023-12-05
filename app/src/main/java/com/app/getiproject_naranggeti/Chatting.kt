@@ -238,7 +238,7 @@ fun Chatting1(onNavigateToChatview: () -> Unit) {
                                     }
 
                                     if (isCurrentUserMessage) {
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp)
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp)
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
                                     }
 
@@ -260,7 +260,7 @@ fun Chatting1(onNavigateToChatview: () -> Unit) {
 
                                     if (!isCurrentUserMessage) {
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
                                     }
                                 }
                                 Spacer(modifier = Modifier.size(0.dp, 8.dp))
@@ -506,7 +506,7 @@ fun Chatting2(onNavigateToChatview: () -> Unit) {
                                     }
 
                                     if (isCurrentUserMessage) {
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp)
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp)
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
                                     }
 
@@ -528,7 +528,7 @@ fun Chatting2(onNavigateToChatview: () -> Unit) {
 
                                     if (!isCurrentUserMessage) {
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
                                     }
                                 }
                                 Spacer(modifier = Modifier.size(0.dp, 8.dp))
@@ -774,7 +774,7 @@ fun Chatting3(onNavigateToChatview: () -> Unit) {
                                     }
 
                                     if (isCurrentUserMessage) {
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp)
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp)
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
                                     }
 
@@ -796,7 +796,7 @@ fun Chatting3(onNavigateToChatview: () -> Unit) {
 
                                     if (!isCurrentUserMessage) {
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
                                     }
                                 }
                                 Spacer(modifier = Modifier.size(0.dp, 8.dp))
@@ -1042,7 +1042,7 @@ fun Chatting4(onNavigateToChatview: () -> Unit) {
                                     }
 
                                     if (isCurrentUserMessage) {
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp)
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp)
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
                                     }
 
@@ -1064,7 +1064,7 @@ fun Chatting4(onNavigateToChatview: () -> Unit) {
 
                                     if (!isCurrentUserMessage) {
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
                                     }
                                 }
                                 Spacer(modifier = Modifier.size(0.dp, 8.dp))
@@ -1310,7 +1310,7 @@ fun Chatting5(onNavigateToChatview: () -> Unit) {
                                     }
 
                                     if (isCurrentUserMessage) {
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp)
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp)
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
                                     }
 
@@ -1332,7 +1332,7 @@ fun Chatting5(onNavigateToChatview: () -> Unit) {
 
                                     if (!isCurrentUserMessage) {
                                         Spacer(modifier = Modifier.size(4.dp, 0.dp))
-                                        Text(text = timestampShow, color = Color.LightGray, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
+                                        Text(text = timestampShow, color = Color.White, fontSize = 9.sp, modifier = Modifier.padding(bottom = 4.dp))
                                     }
                                 }
                                 Spacer(modifier = Modifier.size(0.dp, 8.dp))
