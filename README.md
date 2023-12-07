@@ -13,4 +13,10 @@
 이를 위해 keras의 MobileNet 모델을 사용하여 휴대폰 전면 및 후면 외관상태에 대해 S,A,B,F 4개의 등급을 분류함. 이후, keras 파일을 tflite로 변환하여 Firebase에 업로드하고 Android Studio로 연동한 후 모바일 앱으로 구현함.
 
 발표자료
-https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton
+https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
+
+Web    
+https://github.com/snowball9820/bulletinboard.git
+
+ios App    
+https://github.com/snowball9820/somac_project_flutter.git
