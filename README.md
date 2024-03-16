@@ -1,4 +1,4 @@
-# GetiProject_naranggeti
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6d44f3fe-86da-4674-a79a-9cf77aee98a9)# GetiProject_naranggeti
 ### CNN-MobileNet을 활용한 중고 전자제품 등급 분류 서비스 
 멤버: 황인선 이수빈 민형준 여효진 김영규 문세희
 ## 프로젝트 소개
@@ -15,8 +15,35 @@
 발표자료
 https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
 
-Web    
-https://github.com/snowball9820/bulletinboard.git
-
 ios App    
 https://github.com/snowball9820/somac_project_flutter.git
+
+### Geti Project (2023.11.08 ~ 11.21)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/25a09a5b-76d0-4ca9-93e0-1d2312cae734)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c1e23b14-7a45-4d78-bf5e-dcbee90066f6)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/21864a1f-e3a3-4235-8413-fd3588f3adb6)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/34a0b63c-1d1a-4b3e-ba26-d4e307596afb)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/1d5f02c7-7334-4336-b190-eeac3f0b240c)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6e0b7ed8-7e44-4db0-930a-1355362ae235)
+
+### Openvino Project (
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f4882427-5da1-4622-a5b4-42348d942345)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f61f50df-346d-4a04-b82a-0bf399e17761)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/aa3c7538-0618-499a-9746-8d56ee7c1f99)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/0b54359b-942e-4838-a236-e4aebef16b13)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/ddb6099a-70a3-4c33-a7e4-12bd954e1a74)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c36a2d28-52a2-4e17-9756-10d8f8e81ea6)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/70be4b1a-4ac8-4fd0-9a5a-3efed6f8e743)
+
+
+
+
+
+
+
+
+
+
+
+
+
