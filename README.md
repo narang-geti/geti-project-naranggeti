@@ -1,4 +1,3 @@
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6d44f3fe-86da-4674-a79a-9cf77aee98a9)# GetiProject_naranggeti
 ### CNN-MobileNet을 활용한 중고 전자제품 등급 분류 서비스 
 멤버: 황인선 이수빈 민형준 여효진 김영규 문세희
 ## 프로젝트 소개
@@ -26,7 +25,7 @@ https://github.com/snowball9820/somac_project_flutter.git
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/1d5f02c7-7334-4336-b190-eeac3f0b240c)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6e0b7ed8-7e44-4db0-930a-1355362ae235)
 
-### Openvino Project (
+### Openvino Project (2023.11.23 ~ 12.05)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f4882427-5da1-4622-a5b4-42348d942345)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f61f50df-346d-4a04-b82a-0bf399e17761)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/aa3c7538-0618-499a-9746-8d56ee7c1f99)
