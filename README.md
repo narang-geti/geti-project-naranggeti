@@ -17,7 +17,7 @@ https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content
 ios App    
 https://github.com/snowball9820/somac_project_flutter.git
 
-### Geti Project (2023.11.08 ~ 11.21)
+## Geti Project (2023.11.08 ~ 11.21)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/25a09a5b-76d0-4ca9-93e0-1d2312cae734)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c1e23b14-7a45-4d78-bf5e-dcbee90066f6)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/21864a1f-e3a3-4235-8413-fd3588f3adb6)
@@ -25,7 +25,7 @@ https://github.com/snowball9820/somac_project_flutter.git
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/1d5f02c7-7334-4336-b190-eeac3f0b240c)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6e0b7ed8-7e44-4db0-930a-1355362ae235)
 
-### Openvino Project (2023.11.23 ~ 12.05)
+## Openvino Project (2023.11.23 ~ 12.05)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f4882427-5da1-4622-a5b4-42348d942345)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f61f50df-346d-4a04-b82a-0bf399e17761)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/aa3c7538-0618-499a-9746-8d56ee7c1f99)
@@ -34,7 +34,8 @@ https://github.com/snowball9820/somac_project_flutter.git
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c36a2d28-52a2-4e17-9756-10d8f8e81ea6)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/70be4b1a-4ac8-4fd0-9a5a-3efed6f8e743)
 
-
+##시연 영상
+![openvino시연 gif](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/20efee7e-0260-4dee-a977-4520ac8ccf94)
 
 
 
