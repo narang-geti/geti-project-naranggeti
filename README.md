@@ -34,7 +34,7 @@ https://github.com/snowball9820/somac_project_flutter.git
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c36a2d28-52a2-4e17-9756-10d8f8e81ea6)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/70be4b1a-4ac8-4fd0-9a5a-3efed6f8e743)
 
-##시연 영상
+## 시연 영상
 ![openvino시연 gif](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/20efee7e-0260-4dee-a977-4520ac8ccf94)
 
 
