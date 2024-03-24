@@ -37,7 +37,9 @@ Openvino Project (2023.11.23 ~ 12.05)
 
 
 ## 시연 영상
-![openvino시연 gif](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/20efee7e-0260-4dee-a977-4520ac8ccf94)
+<!--![openvino시연 gif](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/20efee7e-0260-4dee-a977-4520ac8ccf94)-->
+https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/d5193dfc-f6a3-4dbf-b075-febda7ab218a
+
 
 ### App&Web Engineers
 |<img src="https://avatars.githubusercontent.com/u/124758100?v=4" width="80">|<img src="https://avatars.githubusercontent.com/u/139526120?v=4"  width="80">|<img src="https://avatars.githubusercontent.com/u/139526041?v=4" width="80">|
@@ -51,12 +53,11 @@ Openvino Project (2023.11.23 ~ 12.05)
 |[여효진](https://github.com/penguinetongtong)|[이수빈](https://github.com/dltnqls3119)|
   <br>
 
-멤버: 황인선 이수빈 민형준 여효진 김영규 문세희
 
-발표자료
-https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
+[발표자료로 이동](https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
-ios App    
-https://github.com/snowball9820/somac_project_flutter.git
+[ios App으로 이동](https://github.com/snowball9820/somac_project_flutter.git)
+
+[review Web으로 이동](https://github.com/narang-geti/somac-review)
 
 
