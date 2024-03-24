@@ -3,7 +3,8 @@
 <br/><br/>
 <h2 align="center">🍻 SOMAC - 애플사의 소형 전자제품의 중고거래를 돕기 위한 중고 거래 플랫폼(CNN-MobileNet을 활용) </h2>
 
-'[인텔] AI For Future Workforce를 활용한 인공지능 인재 양성과정'의 팀 프로젝트
+'[인텔] AI For Future Workforce를 활용한 인공지능 인재 양성과정'의 팀 프로젝트  
+
 프로젝트 기간: 2023.11.08 ~ 11.21/2023.11.23 ~ 12.05
 
 ‘이미지 처리(Computer Vision)를 통해 아이폰 중고 제품의 등급을 분류(Classification)해주는 AI 솔루션’을 제공하여 아이폰 중고거래 판매자 및 구매자에게 등급 정보를 제공함.
@@ -17,17 +18,23 @@
 
 ## 2. 시스템 아키텍처
 Geti Project (2023.11.08 ~ 11.21)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/1d5f02c7-7334-4336-b190-eeac3f0b240c)
-Openvino Project (2023.11.23 ~ 12.05)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/0b54359b-942e-4838-a236-e4aebef16b13)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/94f39be0-59e2-4b2e-821c-69a806a1ba5d)
 
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f61f50df-346d-4a04-b82a-0bf399e17761)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/aa3c7538-0618-499a-9746-8d56ee7c1f99)
+Openvino Project (2023.11.23 ~ 12.05)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/3dbbbbfc-1e1a-4d6d-b32b-dcb12c072be3)
+
+----
+##### 기능흐름도
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/3ac44a56-c468-4cd4-9250-6f97690318c2)
+##### 활용 장비 및 재료
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/1f851a74-1c2f-41e0-bb33-dd7763ec8071)
+
 
 ## 3.User Flow
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/ddb6099a-70a3-4c33-a7e4-12bd954e1a74)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c36a2d28-52a2-4e17-9756-10d8f8e81ea6)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/70be4b1a-4ac8-4fd0-9a5a-3efed6f8e743)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/9f398c79-b378-4ab2-aa3e-ed1db16fd3ba)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/427ee208-a386-45c5-bf73-bcef58ba45ca)
+![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/e5f631b4-f1b5-4bad-8093-e4b11b35e394)
+
 
 ## 시연 영상
 ![openvino시연 gif](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/20efee7e-0260-4dee-a977-4520ac8ccf94)
