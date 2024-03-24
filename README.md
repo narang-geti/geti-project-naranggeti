@@ -1,5 +1,5 @@
-<p align="center"><img src="![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6c9ac78e-2266-4a05-b768-a3df235f3caa)
-"  width="800" height="450"/></p>
+<p align="center"><img src="https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/dda6c507-4c1b-4513-920d-112867cb18f1"  width="800" height="450"/></p>
+
 <br/><br/>
 <h2 align="center">🍻 SOMAC - 애플사의 소형 전자제품의 중고거래를 돕기 위한 중고 거래 플랫폼(CNN-MobileNet을 활용) </h2>
 
@@ -21,7 +21,6 @@ Geti Project (2023.11.08 ~ 11.21)
 Openvino Project (2023.11.23 ~ 12.05)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/0b54359b-942e-4838-a236-e4aebef16b13)
 
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f4882427-5da1-4622-a5b4-42348d942345)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f61f50df-346d-4a04-b82a-0bf399e17761)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/aa3c7538-0618-499a-9746-8d56ee7c1f99)
 
