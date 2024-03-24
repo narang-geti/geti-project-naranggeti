@@ -11,19 +11,13 @@
 
 이를 위해 keras의 MobileNet 모델을 사용하여 휴대폰 전면 및 후면 외관상태에 대해 S,A,B,F 4개의 등급을 분류함. 이후, keras 파일을 tflite로 변환하여 Firebase에 업로드하고 Android Studio로 연동한 후 모바일 앱으로 구현함.
 
-발표자료
-https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
-
-ios App    
-https://github.com/snowball9820/somac_project_flutter.git
+## 1. 기술스택
 
 ## Geti Project (2023.11.08 ~ 11.21)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/25a09a5b-76d0-4ca9-93e0-1d2312cae734)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/c1e23b14-7a45-4d78-bf5e-dcbee90066f6)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/21864a1f-e3a3-4235-8413-fd3588f3adb6)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/34a0b63c-1d1a-4b3e-ba26-d4e307596afb)
+
+### 시스템 아키텍처
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/1d5f02c7-7334-4336-b190-eeac3f0b240c)
-![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6e0b7ed8-7e44-4db0-930a-1355362ae235)
 
 ## Openvino Project (2023.11.23 ~ 12.05)
 ![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/f4882427-5da1-4622-a5b4-42348d942345)
@@ -37,10 +31,23 @@ https://github.com/snowball9820/somac_project_flutter.git
 ## 시연 영상
 ![openvino시연 gif](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/20efee7e-0260-4dee-a977-4520ac8ccf94)
 
+### App&Web Engineers
+|<img src="https://avatars.githubusercontent.com/u/124758100?v=4" width="80">|<img src="https://avatars.githubusercontent.com/u/139526120?v=4"  width="80">|<img src="https://avatars.githubusercontent.com/u/139526041?v=4" width="80">|
+|:---:|:---:|:---:|
+|[문세희](https://github.com/snowball9820)|[김영규](https://github.com/CaptinJackLeader)|[민형준](https://github.com/xax219)|
+  <br>
+### AI Engineers
+|<img src="https://avatars.githubusercontent.com/u/139525853?v=4" width="80">|<img src="https://avatars.githubusercontent.com/u/139526149?v=4"  width="80">|<img src="">|
+|:---:|:---:|:---:|
+|[여효진](https://github.com/penguinetongtong)|[이수빈](https://github.com/dltnqls3119)|[황인선]|
+  <br>
 
 
+발표자료
+https://www.canva.com/design/DAF0rZ8KmlE/G-405p392gEhTHk7WyNWOQ/edit?utm_content=DA[…]m_campaign=designshare&utm_medium=link2&utm_source=sharebutton  
 
-
+ios App    
+https://github.com/snowball9820/somac_project_flutter.git
 
 
 
