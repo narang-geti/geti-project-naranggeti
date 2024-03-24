@@ -1,6 +1,7 @@
-<p align="center"><img src="![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/44e9083d-852e-4a2b-95a3-2f9a280b394e)"  width="800" height="450"/></p>
+<p align="center"><img src="![image](https://github.com/narang-geti/geti-project-naranggeti/assets/124758100/6c9ac78e-2266-4a05-b768-a3df235f3caa)
+"  width="800" height="450"/></p>
 <br/><br/>
-<h2 align="center">🍻 SOMAC -  CNN-MobileNet을 활용한 애플사의 소형 전자제품의 중고거래를 돕기 위한 중고 거래 플랫폼 </h2>
+<h2 align="center">🍻 SOMAC - 애플사의 소형 전자제품의 중고거래를 돕기 위한 중고 거래 플랫폼(CNN-MobileNet을 활용) </h2>
 
 '[인텔] AI For Future Workforce를 활용한 인공지능 인재 양성과정'의 팀 프로젝트
 프로젝트 기간: 2023.11.08 ~ 11.21/2023.11.23 ~ 12.05
