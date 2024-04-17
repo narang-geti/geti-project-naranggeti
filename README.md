@@ -16,7 +16,24 @@
 
 ----
 
-## 1. 기술스택
+## 1. 개발 환경 및 도구
+- 개발 언어: Kotlin
+- 개발 환경: Android Studio
+- Java version: 17
+- Kotlin version: 1.8.0
+- Android Gradle Plugin version: 8.0.2
+
+- Compile SDK version: 33
+- Min SDK version: 26
+- Target SDK version: 33
+  
+###### 주요 라이브러리 
+- Jetpack Compose
+- Firebase: Analytics/Firestore/Realtime Database/Authentication/Firebase ML 
+- AndroidX Libraries: coroutine, navigation, camera
+- ML Kit: Text recognition v2 
+- Android Permissions: 카메라 접근, 인터넷 접근
+
 
 ## 2. 시스템 아키텍처
 Geti Project (2023.11.08 ~ 11.21)
